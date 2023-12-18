@@ -1,4 +1,4 @@
-package com.example.sae_trello;
+package com.example.saetrello;
 
 import java.util.Iterator;
 

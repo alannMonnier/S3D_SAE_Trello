@@ -1,4 +1,4 @@
-package com.example.sae_trello;
+package com.example.saetrello;
 
 import com.example.saetrello.Observateur;
 import com.example.saetrello.Sujet;

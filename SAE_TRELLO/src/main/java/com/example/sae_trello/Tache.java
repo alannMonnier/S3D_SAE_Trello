@@ -1,4 +1,4 @@
-package com.example.sae_trello;
+package com.example.saetrello;
 
 // Tache classique qui ne possède pas de sous taches
 
