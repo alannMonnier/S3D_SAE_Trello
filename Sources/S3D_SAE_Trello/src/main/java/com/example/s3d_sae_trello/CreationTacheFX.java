@@ -14,11 +14,13 @@ import javafx.stage.Stage;
 public class CreationTacheFX extends Application {
 
     private ModeleMenu modele;
-    private CompositeTache compotache;
+    private int idColonne;
 
-    public CreationTacheFX(ModeleMenu m){
+    public CreationTacheFX(ModeleMenu m, int idColonne){
         this.modele = m;
+        this.idColonne = idColonne;
     }
+
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -115,8 +117,8 @@ public class CreationTacheFX extends Application {
             RadioButton dependance = (RadioButton) tg.getSelectedToggle();
             String dependencyType = dependance.getText();
 
-            compotache = new Tache(0, nomTache, urg, tempsTache, descriptionTache);
-
+            //compotache = new Tache(0, nomTache, urg, tempsTache, descriptionTache);
+            modele.ajouterCompositeTache(this.idColonne, new Tache(modele.getTacheCompositeNumId(), nomTache, urg, tempsTache, descriptionTache));
             // On ferme la page
             stage.close();
         });
@@ -158,8 +160,8 @@ public class CreationTacheFX extends Application {
         Application.launch(args);
     }
 
-    public CompositeTache lancerApp() throws Exception {
+    public void lancerApp() throws Exception {
         this.start(new Stage());
-        return this.compotache;
+        //return this.compotache;
     }
 }

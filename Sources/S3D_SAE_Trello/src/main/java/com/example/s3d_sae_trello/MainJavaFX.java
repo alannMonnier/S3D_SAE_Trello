@@ -3,15 +3,12 @@ package com.example.s3d_sae_trello;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 public class MainJavaFX extends Application {
@@ -37,19 +34,30 @@ public class MainJavaFX extends Application {
         vtitlemenu.setAlignment(Pos.CENTER);
         vtitlemenu.setSpacing(20);
 
-        MenuBar menuBar = new MenuBar();
-        Menu mtableau = new Menu("Tableau tâche");
-        Menu mListe = new Menu("Liste tâche");
-        Menu mGantt = new Menu("Gantt");
+        HBox menuBar = new HBox();
+        Button mtableau = new Button("Tableau tâche");
+        Button mListe = new Button("Liste tâche");
+        Button mGantt = new Button("Gantt");
 
-        menuBar.getMenus().addAll(mtableau, mListe, mGantt);
+
+        menuBar.getChildren().addAll(mtableau, mListe, mGantt);
+        menuBar.setPadding(new Insets(10));
+        menuBar.setSpacing(20);
+
+        mtableau.setOnAction(new ControleurActionMenu(modele));
+        mListe.setOnAction(new ControleurActionMenu(modele));
+        mGantt.setOnAction(new ControleurActionMenu(modele));
+
 
         vmenu.getChildren().addAll(vtitlemenu, menuBar);
         racine.setTop(vmenu);
 
-        HBox hCOL = new VueTableau(modele);
+
+        HBox hCOL = new VueBureauColonne(modele);
+
         modele.ajouterObservateur((Observateur) hCOL);
         racine.setCenter(hCOL);
+
 
         Scene scene = new Scene(racine, 1000, 600);
         stage.setScene(scene);

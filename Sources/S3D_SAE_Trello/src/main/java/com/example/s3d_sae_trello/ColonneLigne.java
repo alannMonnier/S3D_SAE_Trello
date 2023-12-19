@@ -87,4 +87,7 @@ public class ColonneLigne {
         this.nom = s;
     }
 
+    public String getNom() {
+        return nom;
+    }
 }

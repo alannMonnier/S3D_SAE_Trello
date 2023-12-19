@@ -15,8 +15,9 @@ public class ControleurAjoutTache implements EventHandler<ActionEvent> {
     public void handle(ActionEvent actionEvent) {
         Button b = (Button) actionEvent.getSource();
         try {
-            CompositeTache tache = new CreationTacheFX(this.modele).lancerApp();
-            modele.ajouterCompositeTache(Integer.parseInt(b.getParent().getId()), tache);
+            //CompositeTache tache = new CreationTacheFX(this.modele).lancerApp();
+            new CreationTacheFX(this.modele, Integer.parseInt(b.getParent().getId())).lancerApp();
+            //modele.ajouterCompositeTache(Integer.parseInt(b.getParent().getId()), tache);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
