@@ -3,7 +3,6 @@ package com.example.s3d_sae_trello;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -53,8 +52,7 @@ public class MainJavaFX extends Application {
         racine.setTop(vmenu);
 
 
-        HBox hCOL = new VueBureauColonne(modele);
-
+        HBox hCOL = new VueBureau(modele);
         modele.ajouterObservateur((Observateur) hCOL);
         racine.setCenter(hCOL);
 
