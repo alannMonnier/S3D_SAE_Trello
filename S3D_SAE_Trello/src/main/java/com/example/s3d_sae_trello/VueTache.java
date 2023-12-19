@@ -1,6 +1,4 @@
 package com.example.s3d_sae_trello;
-
-
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.Border;

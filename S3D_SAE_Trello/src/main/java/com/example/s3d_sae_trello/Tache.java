@@ -4,15 +4,13 @@ package com.example.s3d_sae_trello;
 
 public class Tache extends CompositeTache {
 
-    public Tache(int id, String n, int urgence, int tempsEstime, String descr) {
-        super(id, n, urgence, tempsEstime, descr);
-    }
-
     public Tache(int id, String n, int urgence, int tempsEstime) {
         super(id, n, urgence, tempsEstime);
     }
 
-
+    public Tache(int id, String n, int urgence, int tempsEstime, String description) {
+        super(id, n, urgence, tempsEstime, description);
+    }
     @Override
     public void ajouterSousTache(CompositeTache t) {
 

@@ -1,11 +1,16 @@
 @startuml
 
 skinparam class{
-  BackgroundColor<<Nouv>> Pink
-  BorderColor<<Nouv>> Black
+  BackgroundColor<<Iteration1>> Pink
+  BorderColor<<Iteration1>> Black
 }
 
-class  CompositeTache <<Nouv>> <<abstract>>{
+skinparam class{
+  BackgroundColor<<Iteration2>> LightBlue
+  BorderColor<<Iteration2>> Black
+}
+
+class  CompositeTache <<Iteration1>> <<abstract>>{
   - id: int
   - nom: String
   - Description: String
@@ -25,7 +30,7 @@ class  CompositeTache <<Nouv>> <<abstract>>{
   + afficherDependance() : String
 }
 
-class SousTache <<Nouv>> extends CompositeTache {
+class SousTache <<Iteration1>> extends CompositeTache {
     + SousTache(id : int, String n, urgence: int, tempsEstime : int)
     + ajouterSousTache(CompositeTache : ct)) : boolean
     + retirerSousTache(id : int) : boolean
@@ -33,14 +38,14 @@ class SousTache <<Nouv>> extends CompositeTache {
     + equals(Object obj) : boolean
 }
 
-class Tache <<Nouv>> extends CompositeTache{
+class Tache <<Iteration1>> extends CompositeTache{
      + Tache(id : int, String n, urgence: int, tempsEstime : int)
      + ajouterSousTache(CompositeTache : ct)) : boolean
      + retirerSousTache(id : int) : boolean
      + equals(Object obj) : boolean
 }
 
-class Dependance <<Nouv>> {
+class Dependance <<Iteration1>> {
     + Dependance() : void
     + getTachesFilles() : ArrayList<(CompositeTache)>
     + getTachesMeres() : ArrayList<(CompositeTache)>
@@ -53,7 +58,7 @@ class DiagrammeGantt extends ColonneLigne {
     + Gant(s : String), i : int) : void
  }
 
-class ColonneLigne <<Nouv>> {
+class ColonneLigne <<Iteration1>> {
   - numero: int
   - Nom: String
 
@@ -70,36 +75,55 @@ class ColonneLigne <<Nouv>> {
 }
 
 interface Observateur {
-  + actualiser(): void
+  + actualiser(Sujet): void
 }
 
-class VueTache implements Observateur {
-  + VueTache()
-  + actualiser(): void
+class VueTache <<Iteration2>> implements Observateur {
+  + VueTache(CompositeTache)
+  + actualiser(Sujet): void
+}
+
+class VueBureau <<Iteration2>> implements Observateur {
+  + int
+  + VueBureau(ModeleMenu)
+  + actualiser(Sujet): void
+}
+
+class VueBureauColonne <<Iteration2>> implements Observateur {
+  + int
+  + VueBureau(ModeleMenu)
+  + actualiser(Sujet): void
+}
+
+class VueBureauLigne <<Iteration2>> implements Observateur {
+  + int
+  + VueBureau(ModeleMenu)
+  + actualiser(Sujet): void
+}
+
+class VueColonne <<Iteration2>> implements Observateur {
+  + int
+  + VueColonne(ArrayList<CompositeTache>, ModeleMenu, int)
+  + actualiser(Sujet): void
 }
 
 class VueListe implements Observateur {
-  + VueListe()
-  + actualiser(): void
+  + VueListe(ModeleMenu)
+  + actualiser(Sujet): void
 }
 
 class VueArchive implements Observateur {
-  + VueArchive()
-  + actualiser(): void
+  + VueArchive(ModeleMenu)
+  + actualiser(Sujet): void
 }
 
 class VueGantt implements Observateur {
-  + VueGantt()
-  + actualiser(): void
+  + VueGantt(ModeleMenu)
+  + actualiser(Sujet): void
 }
 
 class ControleurTache {
   + ControleurTache(ModeleMenu)
-  + handle(ActionEvent): void
-}
-
-class ControleurCreationTache{
-  + ControleurCreationTache(ModeleMenu)
   + handle(ActionEvent): void
 }
 
@@ -118,17 +142,17 @@ class ControleurSelectionTache{
   + handle(ActionEvent): void
 }
 
-class ControleurAjoutTache{
+class ControleurAjoutTache <<Iteration2>>{
   + ControleurAjoutTache(ModeleMenu)
   + handle(ActionEvent): void
 }
 
-class ControleurAjoutColonne{
+class ControleurAjoutColonne <<Iteration2>>{
   + ControleurAjoutColonne(ModeleMenu)
   + handle(ActionEvent): void
 }
 
-class ModeleMenu <<Nouv>> implements Sujet {
+class ModeleMenu <<Iteration1>> implements Sujet {
   + nbColonnes : int
   + tacheCompositeNumId : int
 
@@ -166,35 +190,11 @@ class Archive extends ColonneLigne {
 }
 
 
-abstract class Tri {
-  +Tri(ListeTache)
-  +next():Integer
-  +hasNext():boolean
-  +suivant():void
-}
-
-class TriDate extends Tri {
-  + TriDate(ListeTache)
-  + suivant():void
-}
-
-class TriAlphabetique extends Tri {
-  + TriAlphabetique(ListeTache)
-  + suivant():void
-}
-
-class TriUrgence extends Tri {
-  + TriUrgence(ListeTache)
-  + suivant():void
-}
-
-
 ModeleMenu "affichages"---> "1" StrategyAffichage
 ModeleMenu "archive"---> "1" Archive
 ModeleMenu "observateurs"--down-> "0..*" Observateur : observateurs
 ModeleMenu "colonnesLignes"--left-> "0..*" ColonneLigne
 ColonneLigne  "\n\n\n\n+ tachesComposites" ---> "0..*"CompositeTache
-ColonneLigne -left-> Tri
 CompositeTache -left--> "0..*" CompositeTache
 CompositeTache "dependance" -left--> "0..1" Dependance
 Dependance "tachesMere" -right--> "0..*" CompositeTache
@@ -206,7 +206,15 @@ ControleurAjoutColonne --> "0..1" ModeleMenu
 ControleurAjoutTache --> "0..1" ModeleMenu
 ControleurBoutonMenu --> "0..1" ModeleMenu
 ControleurColonneLigne --> "0..1" ModeleMenu
-ControleurCreationTache --> "0..1" ModeleMenu
 ControleurSelectionTache --> "0..1" ModeleMenu
+VueColonne --> "0..*"CompositeTache
+VueArchive --> "1"ModeleMenu
+VueGantt --> "1"ModeleMenu
+VueListe --> "1"ModeleMenu
+VueBureau --> "1"ModeleMenu
+VueBureauColonne --> "1"ModeleMenu
+VueBureauLigne --> "1"ModeleMenu
+VueTache --> "1"ModeleMenu
+
 
 @enduml
