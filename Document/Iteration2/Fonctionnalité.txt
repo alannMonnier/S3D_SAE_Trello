@@ -1,0 +1,13 @@
+-- Itération 2
+
+Farid: 
+	- Développement de l'interface javaFX pour l'affichage des tâches sous forme de liste et de sous listes
+
+Fabien: 
+	- Implémentation de l'architecture MVC 
+	- Développement en JavaFX
+
+Alann: 
+ 	- Implémentation de l'architecture MVC 
+	- Développement en JavaFX
+

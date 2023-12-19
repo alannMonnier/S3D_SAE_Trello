@@ -1,0 +1,212 @@
+@startuml
+
+skinparam class{
+  BackgroundColor<<Nouv>> Pink
+  BorderColor<<Nouv>> Black
+}
+
+class  CompositeTache <<Nouv>> <<abstract>>{
+  - id: int
+  - nom: String
+  - Description: String
+  - LocalDate: Date
+  - degreUrgence: int
+  - tempsEstime: int
+  - tacheRealise: boolean
+  - DateDebutReal: LocalDate
+  - dependance : Dependance
+
+  + CompositeTache(String, int, int)
+  + abstract ajouterSousTache(CompositeTache)) : void
+  + abstract retirerSousTache(CompositeTache)) : void
+  + getAttributs() : TypeAttributs
+  + ajouterDependanceMere(CompositeTache) t) : void
+  + ajouterDependanceFille(CompositeTache) t) : void
+  + afficherDependance() : String
+}
+
+class SousTache <<Nouv>> extends CompositeTache {
+    + SousTache(id : int, String n, urgence: int, tempsEstime : int)
+    + ajouterSousTache(CompositeTache : ct)) : boolean
+    + retirerSousTache(id : int) : boolean
+    + getSousTaches() : ArrayList<CompositeTache>
+    + equals(Object obj) : boolean
+}
+
+class Tache <<Nouv>> extends CompositeTache{
+     + Tache(id : int, String n, urgence: int, tempsEstime : int)
+     + ajouterSousTache(CompositeTache : ct)) : boolean
+     + retirerSousTache(id : int) : boolean
+     + equals(Object obj) : boolean
+}
+
+class Dependance <<Nouv>> {
+    + Dependance() : void
+    + getTachesFilles() : ArrayList<(CompositeTache)>
+    + getTachesMeres() : ArrayList<(CompositeTache)>
+    + addDependanceFille(CompositeTache) ct) : void
+    + addDependanceMeres(CompositeTache) ct) : void
+    + afficherDependance(CompositeTache) ct) : String
+}
+
+class DiagrammeGantt extends ColonneLigne {
+    + Gant(s : String), i : int) : void
+ }
+
+class ColonneLigne <<Nouv>> {
+  - numero: int
+  - Nom: String
+
+  + ColonneLigne(String, int)
+  + ajouterTache(CompositeTache): void
+  + supprimerTache(CompositeTache) : void
+  + trierDate() : void
+  + trierUrgence() : void
+  + trierAlphabetique() : void
+  + trouverTache(i : int) : void
+  + getTacheList() : List<CompositeTache>
+  + getNumero() : int
+  + setNom(s : String) : void
+}
+
+interface Observateur {
+  + actualiser(): void
+}
+
+class VueTache implements Observateur {
+  + VueTache()
+  + actualiser(): void
+}
+
+class VueListe implements Observateur {
+  + VueListe()
+  + actualiser(): void
+}
+
+class VueArchive implements Observateur {
+  + VueArchive()
+  + actualiser(): void
+}
+
+class VueGantt implements Observateur {
+  + VueGantt()
+  + actualiser(): void
+}
+
+class ControleurTache {
+  + ControleurTache(ModeleMenu)
+  + handle(ActionEvent): void
+}
+
+class ControleurCreationTache{
+  + ControleurCreationTache(ModeleMenu)
+  + handle(ActionEvent): void
+}
+
+class ControleurBoutonMenu{
+  + ControleurBoutonMenu(ModeleMenu)
+  + handle(ActionEvent): void
+}
+
+class ControleurColonneLigne{
+  + ControleurColonneLigne(ModeleMenu)
+  + handle(ActionEvent): void
+}
+
+class ControleurSelectionTache{
+  + ControleurSelectionTache(ModeleMenu)
+  + handle(ActionEvent): void
+}
+
+class ControleurAjoutTache{
+  + ControleurAjoutTache(ModeleMenu)
+  + handle(ActionEvent): void
+}
+
+class ControleurAjoutColonne{
+  + ControleurAjoutColonne(ModeleMenu)
+  + handle(ActionEvent): void
+}
+
+class ModeleMenu <<Nouv>> implements Sujet {
+  + nbColonnes : int
+  + tacheCompositeNumId : int
+
+  + ModeleMenu()
+  + ajouterColonneLigne() : void
+  + ajouterCompositeTache(int, (CompositeTache) ct) : void
+  + deplacerCompositeTache(idColonneLigne : int, idNewColonneLigne : int, CompositeTache ct) : void
+  + trierColonneLigne(idColonne: int, typeTri: String) : void
+  + afficherListe() : void
+  + afficherColonne() : void
+  + afficherGant() : void
+  + archiverToutesTache(idColonneLigne : int) : void
+  + archiverTache(idColonneLigne : int, idTache : int) : void
+  + supprimerTache(idColonneLigne : int), idTache: int) : void
+  + supprimerColonneLigne(idColonneLigne : int)): void
+  + ajouterObservateur(Observateur): void
+  + supprimerObservateur(Observateur) : void
+  + notifierObservateurs(): void
+}
+
+interface StrategyAffichage {
+}
+
+class StrategyColonne implements StrategyAffichage {
+  + StrategyColonne()
+}
+
+class StrategyLigne implements StrategyAffichage {
+  + StrategyLigne()
+}
+
+class Archive extends ColonneLigne {
+  - Singleton()
+  + getInstance():Archive
+}
+
+
+abstract class Tri {
+  +Tri(ListeTache)
+  +next():Integer
+  +hasNext():boolean
+  +suivant():void
+}
+
+class TriDate extends Tri {
+  + TriDate(ListeTache)
+  + suivant():void
+}
+
+class TriAlphabetique extends Tri {
+  + TriAlphabetique(ListeTache)
+  + suivant():void
+}
+
+class TriUrgence extends Tri {
+  + TriUrgence(ListeTache)
+  + suivant():void
+}
+
+
+ModeleMenu "affichages"---> "1" StrategyAffichage
+ModeleMenu "archive"---> "1" Archive
+ModeleMenu "observateurs"--down-> "0..*" Observateur : observateurs
+ModeleMenu "colonnesLignes"--left-> "0..*" ColonneLigne
+ColonneLigne  "\n\n\n\n+ tachesComposites" ---> "0..*"CompositeTache
+ColonneLigne -left-> Tri
+CompositeTache -left--> "0..*" CompositeTache
+CompositeTache "dependance" -left--> "0..1" Dependance
+Dependance "tachesMere" -right--> "0..*" CompositeTache
+Dependance "tachesFilles" --right--> "0..*" CompositeTache
+Archive "instance"---> "1" Archive
+SousTache -right--> "0..*"CompositeTache
+ControleurTache --> "0..1" ModeleMenu
+ControleurAjoutColonne --> "0..1" ModeleMenu
+ControleurAjoutTache --> "0..1" ModeleMenu
+ControleurBoutonMenu --> "0..1" ModeleMenu
+ControleurColonneLigne --> "0..1" ModeleMenu
+ControleurCreationTache --> "0..1" ModeleMenu
+ControleurSelectionTache --> "0..1" ModeleMenu
+
+@enduml

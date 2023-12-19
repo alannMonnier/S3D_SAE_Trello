@@ -1,0 +1,7 @@
+
+/vendor/
+*.xml
+*.class
+*.out
+*.iml
+*.idea

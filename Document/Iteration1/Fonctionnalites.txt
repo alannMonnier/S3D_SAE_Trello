@@ -1,0 +1,18 @@
+-- Itération 1
+
+Farid: 
+	- Classe SousTache, Tache, CompositeTache implémentation des méthodes pour la mise en place du patron Composite.
+	- Création de dépendances entre les sous taches
+	- Création des tests associés
+
+Fabien: 
+	- Implémentation d'une partie des méthodes de la classe ModeleMenu
+	- Implémentation de la classe ColonneLigne
+	- Implémentation des différents tris
+
+Alann: 
+	- Création des gestions des dépendances (tâches mère et tache filles) (Classe Dependance)
+	- Déploiement de tests et création d'un main
+	- Début développement javaFX
+	
+
