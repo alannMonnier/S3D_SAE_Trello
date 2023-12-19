@@ -1,0 +1,14 @@
+Lors de cette seconde itération nous avons commencé l'implémentation de l'architecture MVC et du patron observateur afin de pouvoir intéragir avec l'interface javaFX ainsi nous avons notamment:
+
+Compléter la classe ControleurAjoutTache
+Compléter la classe ControleurAjoutColonne
+Compléter la classe VueColonne
+Compléter la classe VueTach
+Créer la classe VueBureau
+
+En plus de ces classes, nous avons créer un main javaFX, ainsi que plusieurs classes javaFX notamment CreationColonneFX et CreationTacheFX qui permettent à l'utilisateur de saisir les données correspondants à une nouvelle colonne ou une nouvelle tâche.
+Une nouvelle interface s'ouvre dans laquelle il peut alors saisir ces informations, lorsqu'il les valide, la page se ferme et nous les traitons alors afin d'ajouter les différents éléments lors de l'actualisation des vues.
+
+Nous avons également encontré énormément de problème vis à vis de Git qui nous bloquait totalement dans notre progression. Nous avons donc beaucoup travaillé avec de l'échange de fichier direct afin de ne pas être freiné.
+Le diagramme de classe a également été actualisé et un diagramme de séquence pour l'ajout d'une colonne dans l'interface a été réalisé.
+Le trello a été réorganisé selon l'exemple présenté afin qu'il convienne à ce qui était attendu.

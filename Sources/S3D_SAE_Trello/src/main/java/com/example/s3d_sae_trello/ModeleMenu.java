@@ -1,6 +1,8 @@
 package com.example.s3d_sae_trello;
 
 
+import javafx.scene.Node;
+
 import java.util.ArrayList;
 
 public class ModeleMenu implements Sujet {
@@ -14,6 +16,7 @@ public class ModeleMenu implements Sujet {
     private DiagrammeGantt gantt;
     private int nbColonnes; // Nombre de colonnes crée
     private int tacheCompositeNumId; // Numéro de la tâcheComposite
+    private String typeVue;
 
 
     /**
@@ -25,8 +28,17 @@ public class ModeleMenu implements Sujet {
         gantt = new DiagrammeGantt("", 0);
         observateurs = new ArrayList<>();
         colonneLignes = new ArrayList<>();
+        typeVue = "Colonne";
     }
 
+    public String getTypeVue() {
+        return typeVue;
+    }
+
+    public void setTypeVue(String s){
+        typeVue = s;
+        this.notifierObservateurs();
+    }
 
     public ArrayList<Observateur> getObservateurs() {
         return observateurs;

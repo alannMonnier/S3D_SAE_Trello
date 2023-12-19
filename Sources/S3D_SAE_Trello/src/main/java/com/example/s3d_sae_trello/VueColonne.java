@@ -16,17 +16,19 @@ public class VueColonne extends VBox implements Observateur {
     private ArrayList<CompositeTache> taches;
     private ModeleMenu modele;
     private int idColonne;
+    private String nom;
 
 
-    public VueColonne(ArrayList<CompositeTache> taches, ModeleMenu m, int id){
+    public VueColonne(ArrayList<CompositeTache> taches, ModeleMenu m, int id, String nom){
         this.taches = taches;
         this.modele = m;
         this.idColonne = id;
+        this.nom = nom;
 
         // création header de la colonne
         VBox vTitreCol = new VBox();
         BorderPane bpHeader = new BorderPane();
-        Label lTitreCol = new Label("Titre");
+        Label lTitreCol = new Label(this.nom);
         MenuBar paramCol = new MenuBar();
         Menu menuParamCol = new Menu("...");
         MenuItem tUrgence = new MenuItem("Trier tâche par urgence");
@@ -47,8 +49,10 @@ public class VueColonne extends VBox implements Observateur {
 
         // -------Création des taches ------------
         for (CompositeTache ct : this.taches){
-            VBox tache = new VueTache(ct);
-            this.getChildren().addAll(tache);
+            if(ct != null){
+                VBox tache = new VueTache(ct);
+                this.getChildren().addAll(tache);
+            }
         }
         //CompositeTache t = new Tache(7, "Tache 7", 2, 3);
 
