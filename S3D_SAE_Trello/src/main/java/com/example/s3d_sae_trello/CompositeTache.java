@@ -8,6 +8,8 @@ import java.util.Date;
 public abstract class CompositeTache {
     protected int id;
     private String nom;
+
+    private String descript;
     private LocalDate date;
     private int degreUrgence;
     private int tempsEstime;
@@ -25,6 +27,19 @@ public abstract class CompositeTache {
         this.tacheRealise = false;
         this.dateDebutReal = null;
         this.dependance = new Dependance();
+        this.descript = "";
+    }
+
+    public CompositeTache(int id, String n, int urgence, int tempsEstime, String descr) {
+        this.id = id;
+        this.nom = n;
+        this.date = LocalDate.now();
+        this.degreUrgence = urgence;
+        this.tempsEstime = tempsEstime;
+        this.tacheRealise = false;
+        this.dateDebutReal = null;
+        this.dependance = new Dependance();
+        this.descript = descr;
     }
 
     public abstract void ajouterSousTache(CompositeTache t);

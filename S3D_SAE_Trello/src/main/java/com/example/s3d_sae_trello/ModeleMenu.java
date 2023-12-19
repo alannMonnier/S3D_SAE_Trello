@@ -153,7 +153,11 @@ public class ModeleMenu implements Sujet {
     @Override
     public void notifierObservateurs() {
         for (Observateur o: this.observateurs){
-            o.actualiser();
+            o.actualiser(this);
         }
+    }
+
+    public int getTacheCompositeNumId(){
+        return this.getTacheCompositeNumId();
     }
 }

@@ -1,8 +1,18 @@
 package com.example.s3d_sae_trello;
 
-public class VueListe implements Observateur{
+import javafx.scene.layout.VBox;
+
+public class VueListe extends VBox implements Observateur{
+
+    private ModeleMenu modele;
+
+    public VueListe(){
+    }
+
     @Override
-    public void actualiser() {
+    public void actualiser(Sujet s) {
+
+        ModeleMenu modele = (ModeleMenu) s;
 
     }
 }
