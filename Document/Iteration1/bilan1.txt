@@ -1,0 +1,9 @@
+Au cours de cette première itération, nous avons mis en place le principe de  sous-tâches ainsi que les relations de dépendances entre tâches 
+(dépendance mère ou fille). Pour implémenter le principe de sous tâche nous avons utilisés le patron Composite même si nous ferons évoluer 
+celui-ci dans nos prochaines itérations. 
+Suite à notre oral, nous avons décider de modifier les classes CompositeTache, Tache, Dependance pour éviter les redondances inutiles et avoir 
+un code plus clair. 
+
+Pour l'instant nous n'avons pas encore rencontrés de problème dans l'avancement de notre projet. 
+
+Pour la seconde itération nous allons nous pencher sur l'affichage en liste ou en tableau des tâches. 
