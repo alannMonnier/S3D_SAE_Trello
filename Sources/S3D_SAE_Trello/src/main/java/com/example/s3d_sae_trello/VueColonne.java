@@ -3,9 +3,7 @@ package com.example.s3d_sae_trello;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -13,13 +11,20 @@ import java.util.ArrayList;
 
 public class VueColonne extends VBox implements Observateur {
 
+    BorderStroke borderStroke = new BorderStroke(Color.BLACK,
+            BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY,
+            BorderWidths.DEFAULT);
+
+    private Border border = new Border(borderStroke);
+
     private ArrayList<CompositeTache> taches;
     private ModeleMenu modele;
     private int idColonne;
     private String nom;
 
 
-    public VueColonne(ArrayList<CompositeTache> taches, ModeleMenu m, int id, String nom){
+    public VueColonne(ArrayList<CompositeTache> taches, ModeleMenu m, int id, String nom) {
         this.taches = taches;
         this.modele = m;
         this.idColonne = id;
@@ -48,8 +53,8 @@ public class VueColonne extends VBox implements Observateur {
         this.getChildren().addAll(vTitreCol);
 
         // -------Création des taches ------------
-        for (CompositeTache ct : this.taches){
-            if(ct != null){
+        for (CompositeTache ct : this.taches) {
+            if (ct != null) {
                 VBox tache = new VueTache(ct);
                 this.getChildren().addAll(tache);
             }
@@ -57,13 +62,12 @@ public class VueColonne extends VBox implements Observateur {
         //CompositeTache t = new Tache(7, "Tache 7", 2, 3);
 
 
-
         // Ajouter une tâche
         Button laddtache = new Button("+ Ajouter une tâche");
         laddtache.setOnAction(new ControleurAjoutTache(modele));
 
         this.getChildren().addAll(laddtache);
-        this.setBorder(Border.stroke(Color.BLACK));
+        this.setBorder(border);
         this.setPadding(new Insets(5));
         this.setSpacing(20);
         this.setAlignment(Pos.TOP_CENTER);
