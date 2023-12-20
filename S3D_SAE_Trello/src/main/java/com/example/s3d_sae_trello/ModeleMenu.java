@@ -1,7 +1,11 @@
 package com.example.s3d_sae_trello;
 
 
+import javafx.scene.Node;
+
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ModeleMenu implements Sujet {
 
@@ -14,6 +18,7 @@ public class ModeleMenu implements Sujet {
     private DiagrammeGantt gantt;
     private int nbColonnes; // Nombre de colonnes crée
     private int tacheCompositeNumId; // Numéro de la tâcheComposite
+    private String typeVue;
 
 
     /**
@@ -25,8 +30,18 @@ public class ModeleMenu implements Sujet {
         gantt = new DiagrammeGantt("", 0);
         observateurs = new ArrayList<>();
         colonneLignes = new ArrayList<>();
+        typeVue = "Colonne";
+        this.archive = Archive.getInstance();
     }
 
+    public String getTypeVue() {
+        return typeVue;
+    }
+
+    public void setTypeVue(String s){
+        typeVue = s;
+        this.notifierObservateurs();
+    }
 
     public ArrayList<Observateur> getObservateurs() {
         return observateurs;
@@ -135,25 +150,34 @@ public class ModeleMenu implements Sujet {
     }
 
     public void archiverToutesTaches(int idColonneLigne){
-        for(CompositeTache t : this.colonneLignes.get(idColonneLigne).getTacheList()){
+        List<CompositeTache> taches = this.colonneLignes.get(idColonneLigne).getTacheList();
+        Iterator<CompositeTache> iterator = taches.iterator();
+        while (iterator.hasNext()) {
+            CompositeTache t = iterator.next();
             archive.ajouterTache(t);
-            this.colonneLignes.get(idColonneLigne).supprimerTache(t);
+            iterator.remove();
         }
+        System.out.println(this.archive);
+        this.notifierObservateurs();
     }
 
     public void archiverTache(int idColonneLigne, int idTache){
         CompositeTache t = this.colonneLignes.get(idColonneLigne).trouverTache(idTache);
         archive.ajouterTache(t);
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
+        this.notifierObservateurs();
     }
 
     public void supprimerTache(int idColonneLigne, int idTache){
         CompositeTache t = this.colonneLignes.get(idColonneLigne).trouverTache(idTache);
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
+        this.notifierObservateurs();
     }
 
     public void supprimerColonneLigne(int idColonneLigne){
         this.colonneLignes.remove(this.colonneLignes.get(idColonneLigne));
+        this.nbColonnes--;
+        this.notifierObservateurs();
     }
 
     /**
@@ -179,7 +203,10 @@ public class ModeleMenu implements Sujet {
      */
     @Override
     public void notifierObservateurs() {
-        for (Observateur o: this.observateurs){
+        //Nécessaire pour éviter les conflits lors de la modification de la liste et du parcours de celle ci
+        List<Observateur> obs = new ArrayList<>(this.observateurs);
+
+        for (Observateur o : obs) {
             o.actualiser(this);
         }
     }

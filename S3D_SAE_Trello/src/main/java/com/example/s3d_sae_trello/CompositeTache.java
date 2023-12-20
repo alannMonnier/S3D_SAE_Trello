@@ -3,6 +3,7 @@ package com.example.s3d_sae_trello;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 
 public abstract class CompositeTache {
@@ -16,6 +17,7 @@ public abstract class CompositeTache {
     private boolean tacheRealise;
     private LocalDate dateDebutReal;
     private Dependance dependance; // Contient dépendance Mere et Fille de la tâche
+
 
 
     public CompositeTache(int id, String n, int urgence, int tempsEstime) {
@@ -41,6 +43,8 @@ public abstract class CompositeTache {
         this.dependance = new Dependance();
         this.descript = descr;
     }
+
+
 
     public abstract void ajouterSousTache(CompositeTache t);
 
@@ -104,5 +108,9 @@ public abstract class CompositeTache {
      */
     public String  afficherDependance(){
         return this.dependance.afficherDependance(this);
+    }
+
+    public String toString(){
+        return "ID : "+this.id+" | Nom: "+this.nom+" | Date création: "+this.date+" | Degré d'urgence : "+this.degreUrgence+" | Temps estimé : "+this.tempsEstime+" | Réalisée : "+this.tacheRealise+"\n";
     }
 }

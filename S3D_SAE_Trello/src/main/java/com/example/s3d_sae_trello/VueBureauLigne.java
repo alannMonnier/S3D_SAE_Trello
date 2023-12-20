@@ -8,11 +8,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class VueTableau extends HBox implements Observateur {
+public class VueBureauLigne extends HBox implements Observateur {
 
     private ModeleMenu modele;
     private int id;
-    public VueTableau(ModeleMenu modele){
+    public VueBureauLigne(ModeleMenu modele){
         this.modele = modele;
         this.id = 0;
 
@@ -37,11 +37,14 @@ public class VueTableau extends HBox implements Observateur {
         // Création des colonnes du trello
         for(int i=0; i< modele.getNbColonnes(); i++){
             // Création de la première colonne du Trello
-            VBox col = new VueColonne(modele.getColonneLignes().get(i).getTacheList(), modele, i);
+            ColonneLigne cl = modele.getColonneLignes().get(i);
+            VBox col = new VueColonne(cl.getTacheList(), modele, i, cl.getNom());
             //modele.ajouterObservateur((Observateur) col);
             this.getChildren().addAll(col);
             this.id++;
         }
+
+
         HBox hvide = new HBox();
         BorderPane bp = new BorderPane();
         Label lbp = new Label("+ Ajouter une nouvelle colonne");
