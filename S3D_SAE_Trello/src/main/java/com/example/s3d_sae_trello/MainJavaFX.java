@@ -19,6 +19,7 @@ public class MainJavaFX extends Application {
     @Override
     public void init() throws Exception {
         super.init();
+
     }
 
     @Override
