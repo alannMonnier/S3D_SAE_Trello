@@ -95,10 +95,10 @@ public class ModeleMenu implements Sujet {
      * @param t tache ou sous tache
      */
     public void deplacerCompositeTache(int idColonneLigne, int idNewColonneLigne, CompositeTache t){
+        // Ajoute la tâche dans la nouvelle colonneLigne
+        this.colonneLignes.get(idNewColonneLigne).ajouterTache(t);
         // Supprime la tâche présente dans la colonneLigne actuel
         this.colonneLignes.get(idColonneLigne).getTacheList().remove(t);
-        // Ajoute la tâche dans la nouvelle colonneLigne
-        //this.colonneLignes.get(idNewColonneLigne).ajouterTache(t);
 
         this.notifierObservateurs();
     }
@@ -161,15 +161,19 @@ public class ModeleMenu implements Sujet {
         this.notifierObservateurs();
     }
 
-    public void archiverTache(int idColonneLigne, int idTache){
-        CompositeTache t = this.colonneLignes.get(idColonneLigne).trouverTache(idTache);
+    public void archiverTache(int idColonneLigne, CompositeTache t){
         archive.ajouterTache(t);
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
         this.notifierObservateurs();
     }
 
-    public void supprimerTache(int idColonneLigne, int idTache){
-        CompositeTache t = this.colonneLignes.get(idColonneLigne).trouverTache(idTache);
+    public void desarchiverTache(CompositeTache t){
+        this.ajouterCompositeTache(0, t);
+        this.archive.supprimerTache(t);
+        this.notifierObservateurs();
+    }
+
+    public void supprimerTache(int idColonneLigne, CompositeTache t){
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
         this.notifierObservateurs();
     }

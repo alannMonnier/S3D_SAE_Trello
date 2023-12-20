@@ -78,6 +78,8 @@ public abstract class CompositeTache {
         return dateDebutReal;
     }
 
+    public String getDescription(){ return descript; }
+
 
     /**
      * Récupère les dépendances de la classe

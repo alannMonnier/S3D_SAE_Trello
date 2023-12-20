@@ -1,5 +1,6 @@
 package com.example.s3d_sae_trello;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
@@ -7,6 +8,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class VueTache extends VBox implements Observateur {
 
@@ -16,14 +20,25 @@ public class VueTache extends VBox implements Observateur {
         MenuBar paramTache = new MenuBar();
         Menu menuParamTache = new Menu("...");
         MenuItem supprimer = new MenuItem("Supprimer tâche");
-        MenuItem archiver = new MenuItem("Archiver");
         MenuItem creerDependance = new MenuItem("Ajouter dépendance");
-        MenuItem deplacer = new MenuItem("Déplacer Tâche");
         MenuItem ajouterSousTache = new MenuItem("Ajouter sous tâche");
-        ajouterSousTache.setOnAction(new ControleurSousTache(t, modeleMenu, idColonne));
-        menuParamTache.getItems().addAll(supprimer, archiver, creerDependance, deplacer, ajouterSousTache);
+        if(modeleMenu.getTypeVue().equals("Archive")){
+            MenuItem desarchiver = new MenuItem("Enlever des archives");
+            desarchiver.setOnAction(e -> modeleMenu.desarchiverTache(t));
+            menuParamTache.getItems().addAll(supprimer, creerDependance, ajouterSousTache, desarchiver);
+        }else{
+            MenuItem archiver = new MenuItem("Archiver");
+            MenuItem deplacer = new MenuItem("Déplacer Tâche");
+            archiver.setOnAction(e -> modeleMenu.archiverTache(idColonne, t));
+            deplacer.setOnAction(e -> DeplacerTacheFX.afficher(t, modeleMenu, idColonne));
+            menuParamTache.getItems().addAll(supprimer, creerDependance, deplacer, ajouterSousTache, archiver);
+        }
+
         paramTache.getMenus().add(menuParamTache);
         Button bSelect = new Button("+");
+
+        supprimer.setOnAction(e -> modeleMenu.supprimerTache(idColonne, t));
+        ajouterSousTache.setOnAction(new ControleurSousTache(t, modeleMenu, idColonne));
 
         HBox hb2 = new HBox();
         Label nbHeures = new Label(""+t.getTempsEstime()+"h");
@@ -40,11 +55,14 @@ public class VueTache extends VBox implements Observateur {
         }
         Label df = new Label(t.getDate().toString());
         Button bsoustache = new Button("↓");
+        Button details = new Button("Détails");
+
+        details.setOnAction(e -> afficherDetails(t));
 
 
         hb1.getChildren().addAll(text, bSelect, paramTache);
         hb2.getChildren().addAll(nbHeures);
-        hb3.getChildren().addAll(circle, df, bsoustache);
+        hb3.getChildren().addAll(circle, df, bsoustache, details);
 
         hb1.setSpacing(10);
         hb2.setSpacing(10);
@@ -101,6 +119,35 @@ public class VueTache extends VBox implements Observateur {
         this.setPadding(new Insets(5));
         this.setBorder(Border.stroke(Color.BLACK));
         this.setSpacing(5);
+    }
+
+    private void afficherDetails(CompositeTache t) {
+        Stage detailStage = new Stage();
+        //Permet d'obliger l'utilisateur à choisir avant de changer de fenetre
+        detailStage.initModality(Modality.APPLICATION_MODAL);
+        detailStage.initStyle(StageStyle.UTILITY);
+        detailStage.setTitle("Détails de la tâche");
+
+        VBox detail = new VBox();
+        detail.setPadding(new Insets(10));
+
+        Label titleLabel = new Label("Détails de la tâche");
+        Label nomLabel = new Label("Nom: " + t.getNom());
+        Label dateLabel = new Label("Date: " + t.getDate());
+        Label urgenceLabel = new Label("Degré d'urgence: " + t.getDegreUrgence());
+        Label tempsEstimeLabel = new Label("Temps estimé: " + t.getTempsEstime() + "h");
+        Label realiseLabel = new Label("Réalisée: " + t.getTacheRealise());
+        Label dateDebutRealLabel = new Label("Date début réalisation: " + t.getDateDebutReal());
+        Label descriptionLabel = new Label("Description: " + t.getDescription());
+
+        detail.getChildren().addAll(
+                titleLabel, nomLabel, dateLabel, urgenceLabel, tempsEstimeLabel, realiseLabel,
+                dateDebutRealLabel, descriptionLabel
+        );
+
+        Scene detailScene = new Scene(detail, 300, 400);
+        detailStage.setScene(detailScene);
+        detailStage.show();
     }
 
     @Override
