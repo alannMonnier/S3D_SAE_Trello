@@ -8,16 +8,18 @@ public class SousTache extends CompositeTache {
 
     private ArrayList<CompositeTache> sousTaches;
 
-    public SousTache(int id, String n, int urgence, int tempsEstime) {
-        super(id, n, urgence, tempsEstime);
-        sousTaches = new ArrayList<>();
+    public SousTache(int id, String nomTache, String nomUtilisateur, String prenomUtilisateur, int urgence, int tempsEstime, String description) {
+        super(id, nomTache, nomUtilisateur, prenomUtilisateur, urgence, tempsEstime, description);
+        this.sousTaches = new ArrayList<>();
     }
 
-    public void ajouterSousTache(CompositeTache t){
+    public boolean ajouterSousTache(CompositeTache t){
         sousTaches.add(t);
+        return true;
     }
 
-    public void retirerSousTache(int id){
+    public boolean retirerSousTache(int id){
+        boolean retire = false;
         int indice = -1;
         for(CompositeTache t : sousTaches){
             if(t.getId() == id){
@@ -27,7 +29,10 @@ public class SousTache extends CompositeTache {
 
         if(indice != -1){
             sousTaches.remove(indice);
+            retire = true;
         }
+
+        return retire;
     }
 
     public ArrayList<CompositeTache> getSousTaches() {
