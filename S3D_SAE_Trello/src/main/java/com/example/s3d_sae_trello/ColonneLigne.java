@@ -31,14 +31,11 @@ public class ColonneLigne {
         Collections.sort(tachelist, new Comparator<CompositeTache>() {
             @Override
             public int compare(CompositeTache t1, CompositeTache t2) {
-                if(t1 != null && t2 != null) {
-                    if (t1.getDate().equals(t2.getDate())) {
-                        return 0;
-                    }
-                    return t1.getDate().isAfter(t2.getDate()) ? -1 : 1;
-                    //return t1.getDate().compareTo(t2.getDate());
+                if(t1.getDate().equals(t2.getDate())){
+                    return 0;
                 }
-                return 0;
+                return t1.getDate().isAfter(t2.getDate()) ? -1 : 1;
+                //return t1.getDate().compareTo(t2.getDate());
             }
         });
     }
@@ -48,12 +45,10 @@ public class ColonneLigne {
         Collections.sort(tachelist, new Comparator<CompositeTache>() {
             @Override
             public int compare(CompositeTache t1, CompositeTache t2) {
-                if(t1 != null && t2 != null) {
-                    if (t1.getDegreUrgence() > t2.getDegreUrgence()) {
-                        return -1;
-                    } else if (t1.getDegreUrgence() < t2.getDegreUrgence()) {
-                        return 1;
-                    }
+                if(t1.getDegreUrgence() > t2.getDegreUrgence()){
+                    return -1;
+                }else if(t1.getDegreUrgence() < t2.getDegreUrgence()){
+                    return 1;
                 }
                 return 0;
             }
@@ -65,10 +60,7 @@ public class ColonneLigne {
         Collections.sort(tachelist, new Comparator<CompositeTache>() {
             @Override
             public int compare(CompositeTache t1, CompositeTache t2) {
-                if(t1 != null && t2 != null) {
-                    return t1.getNom().compareTo(t2.getNom());
-                }
-                return 0;
+                return t1.getNom().compareTo(t2.getNom());
             }
         });
     }
@@ -95,4 +87,24 @@ public class ColonneLigne {
         this.nom = s;
     }
 
+    public String getNom() {
+        return nom;
+    }
+
+    public CompositeTache getCompositeTache(int idCompositeTache){
+        for (CompositeTache ct : this.tachelist){
+            if(ct.id == idCompositeTache){
+                return ct;
+            }
+        }
+        return null;
+    }
+
+    public String toString(){
+        String res = "La liste est composée des tâches suivantes:\n";
+        for(CompositeTache t : this.tachelist){
+            res += t.toString();
+        }
+        return res;
+    }
 }

@@ -14,11 +14,13 @@ import javafx.stage.Stage;
 public class CreationTacheFX extends Application {
 
     private ModeleMenu modele;
-    private CompositeTache compotache;
+    private int idColonne;
 
-    public CreationTacheFX(ModeleMenu m){
+    public CreationTacheFX(ModeleMenu m, int idColonne){
         this.modele = m;
+        this.idColonne = idColonne;
     }
+
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -27,11 +29,11 @@ public class CreationTacheFX extends Application {
         GridPane gp = new GridPane();
 
         // Entrez nom tâche
-        Label text = new Label("Entrez le nom correspondant à la tâche:");
+        Label text = new Label("Entrez le titre correspondant à la tâche:");
         TextField tft = new TextField();
 
         // Entrez temps consacré à la tâche
-        Label temps = new Label("Entrez le temps consacré à la tâche:");
+        Label temps = new Label("Entrez le temps consacré à la tâche (en Heures):");
         Spinner spinner = new Spinner<Integer>();
         SpinnerValueFactory svf = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 72, 1);
         spinner.setValueFactory(svf);
@@ -47,7 +49,7 @@ public class CreationTacheFX extends Application {
         RadioButton cU = new RadioButton("Urgent");
         cU.setToggleGroup(turg);
         RadioButton cTU = new RadioButton("Très Urgent");
-        cU.setToggleGroup(turg);
+        cTU.setToggleGroup(turg);
 
         vUrg.getChildren().addAll(cN, cU, cTU);
 
@@ -110,13 +112,17 @@ public class CreationTacheFX extends Application {
             }else{
                 urg = 3;
             }
+            System.out.println(urg);
 
             // Get the selected dependency
             RadioButton dependance = (RadioButton) tg.getSelectedToggle();
             String dependencyType = dependance.getText();
 
-            compotache = new Tache(0, nomTache, urg, tempsTache, descriptionTache);
+            Tache t = new Tache(modele.getTacheCompositeNumId(), nomTache, urg, tempsTache, descriptionTache);
+            System.out.println(t.getDate());
 
+            //compotache = new Tache(0, nomTache, urg, tempsTache, descriptionTache);
+            modele.ajouterCompositeTache(this.idColonne, new Tache(modele.getTacheCompositeNumId(), nomTache, urg, tempsTache, descriptionTache));
             // On ferme la page
             stage.close();
         });
@@ -158,8 +164,8 @@ public class CreationTacheFX extends Application {
         Application.launch(args);
     }
 
-    public CompositeTache lancerApp() throws Exception {
+    public void lancerApp() throws Exception {
         this.start(new Stage());
-        return this.compotache;
+        //return this.compotache;
     }
 }
