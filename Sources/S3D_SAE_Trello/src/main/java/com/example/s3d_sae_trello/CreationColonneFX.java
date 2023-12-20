@@ -15,7 +15,7 @@ public class CreationColonneFX extends Application {
     private ModeleMenu modele;
     private int idColonne;
 
-    public CreationColonneFX(ModeleMenu modele, int idColonne){
+    public CreationColonneFX(ModeleMenu modele, int idColonne) {
         this.modele = modele;
         this.idColonne = idColonne;
     }
@@ -37,10 +37,8 @@ public class CreationColonneFX extends Application {
         });
 
 
-
-
         gp.add(l, 0, 0);
-        gp.add(tf,1, 0);
+        gp.add(tf, 1, 0);
         gp.add(b, 0, 1);
 
         Scene scene = new Scene(gp);

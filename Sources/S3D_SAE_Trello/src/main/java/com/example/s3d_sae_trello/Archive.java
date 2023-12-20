@@ -9,8 +9,8 @@ public class Archive extends ColonneLigne {
         super(s, i);
     }
 
-    public Archive getInstance(){
-        if(instance == null){
+    public Archive getInstance() {
+        if (instance == null) {
             instance = new Archive("Archive", 0);
         }
         return instance;

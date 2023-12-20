@@ -14,6 +14,7 @@ public class MainJavaFX extends Application {
 
     /**
      * Initilisation du modèle avec des données de base à chaque lancement
+     *
      * @throws Exception
      */
     @Override

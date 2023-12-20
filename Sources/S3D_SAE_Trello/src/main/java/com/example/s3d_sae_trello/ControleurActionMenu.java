@@ -10,7 +10,7 @@ public class ControleurActionMenu implements EventHandler<ActionEvent> {
 
     private ModeleMenu modele;
 
-    public ControleurActionMenu(ModeleMenu modele){
+    public ControleurActionMenu(ModeleMenu modele) {
         this.modele = modele;
     }
 
@@ -20,7 +20,7 @@ public class ControleurActionMenu implements EventHandler<ActionEvent> {
         // Récupérer nom menuBar cliqué puis changer type affichage avec methode setTypeVue
         Button b = (Button) actionEvent.getSource();
         System.out.println(b.getText());
-        switch ( b.getText() ){
+        switch (b.getText()) {
             case "Gantt":
                 this.modele.setTypeVue("Gantt");
                 break;

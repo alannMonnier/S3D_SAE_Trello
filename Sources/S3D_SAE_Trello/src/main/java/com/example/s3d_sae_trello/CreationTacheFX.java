@@ -16,7 +16,7 @@ public class CreationTacheFX extends Application {
     private ModeleMenu modele;
     private int idColonne;
 
-    public CreationTacheFX(ModeleMenu m, int idColonne){
+    public CreationTacheFX(ModeleMenu m, int idColonne) {
         this.modele = m;
         this.idColonne = idColonne;
     }
@@ -54,7 +54,6 @@ public class CreationTacheFX extends Application {
         vUrg.getChildren().addAll(cN, cU, cTU);
 
 
-
         // Entrez la description de la tâche
         Label td = new Label("Entrez la description de la tâche:");
         TextArea ta = new TextArea();
@@ -88,7 +87,6 @@ public class CreationTacheFX extends Application {
         hDep.getChildren().addAll(v);
 
 
-
         // Bouton validé
         Button b = new Button("Valider");
 
@@ -105,11 +103,11 @@ public class CreationTacheFX extends Application {
             RadioButton urgence = (RadioButton) turg.getSelectedToggle();
             String urgenceTache = urgence.getText();
             int urg = 1;
-            if(urgenceTache.equals("Normal")){
+            if (urgenceTache.equals("Normal")) {
                 urg = 1;
             } else if (urgenceTache.equals("Urgent")) {
                 urg = 2;
-            }else{
+            } else {
                 urg = 3;
             }
 
@@ -118,7 +116,7 @@ public class CreationTacheFX extends Application {
             String dependencyType = dependance.getText();
 
             //compotache = new Tache(0, nomTache, urg, tempsTache, descriptionTache);
-            modele.ajouterCompositeTache(this.idColonne, new Tache(modele.getTacheCompositeNumId(), nomTache, urg, tempsTache, descriptionTache));
+            modele.ajouterCompositeTache(this.idColonne, new Tache(modele.getTacheCompositeNumId(), nomTache, "Robert", "Anne", urg, tempsTache, descriptionTache));
             // On ferme la page
             stage.close();
         });

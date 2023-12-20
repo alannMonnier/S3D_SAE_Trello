@@ -22,7 +22,7 @@ public class ModeleMenu implements Sujet {
     /**
      * Constructeur de modèle initialise les attributs
      */
-    public ModeleMenu(){
+    public ModeleMenu() {
         nbColonnes = 0;
         tacheCompositeNumId = 0;
         gantt = new DiagrammeGantt("", 0);
@@ -35,7 +35,7 @@ public class ModeleMenu implements Sujet {
         return typeVue;
     }
 
-    public void setTypeVue(String s){
+    public void setTypeVue(String s) {
         typeVue = s;
         this.notifierObservateurs();
     }
@@ -66,9 +66,10 @@ public class ModeleMenu implements Sujet {
 
     /**
      * Ajoute d'une nouvelle colonneLigne
+     *
      * @param nom de la nouvelle colonneLigne
      */
-    public void ajouterColonneLigne(String nom, int id){
+    public void ajouterColonneLigne(String nom, int id) {
         this.colonneLignes.add(new ColonneLigne(nom, id));
         nbColonnes++;
         this.notifierObservateurs();
@@ -76,10 +77,11 @@ public class ModeleMenu implements Sujet {
 
     /**
      * Ajoute une nouvelle tache ou sous tache dans la colonneLigne récupéré
+     *
      * @param idColonneLigne indice dans la liste
-     * @param t tache ou sous tache
+     * @param t              tache ou sous tache
      */
-    public void ajouterCompositeTache(int idColonneLigne, CompositeTache t){
+    public void ajouterCompositeTache(int idColonneLigne, CompositeTache t) {
         this.colonneLignes.get(idColonneLigne).ajouterTache(t);
         tacheCompositeNumId++;
         this.notifierObservateurs();
@@ -87,11 +89,12 @@ public class ModeleMenu implements Sujet {
 
     /**
      * Déplace une tache ou sous tache
-     * @param idColonneLigne index colonneLigne courante
+     *
+     * @param idColonneLigne    index colonneLigne courante
      * @param idNewColonneLigne index nouvelle colonneLigne
-     * @param t tache ou sous tache
+     * @param t                 tache ou sous tache
      */
-    public void deplacerCompositeTache(int idColonneLigne, int idNewColonneLigne, CompositeTache t){
+    public void deplacerCompositeTache(int idColonneLigne, int idNewColonneLigne, CompositeTache t) {
         // Supprime la tâche présente dans la colonneLigne actuel
         this.colonneLignes.get(idColonneLigne).getTacheList().remove(t);
         // Ajoute la tâche dans la nouvelle colonneLigne
@@ -102,12 +105,13 @@ public class ModeleMenu implements Sujet {
 
     /**
      * Methode qui trie la colonneLigne en fonction d'un paramètre donnée
+     *
      * @param idColonneLigne index colonneLigne à trier
-     * @param typeTri type de tri à utiliser
+     * @param typeTri        type de tri à utiliser
      */
-    public void trierColonneLigne(int idColonneLigne, String typeTri){
+    public void trierColonneLigne(int idColonneLigne, String typeTri) {
         ColonneLigne cl = this.colonneLignes.get(idColonneLigne);
-        switch (typeTri){
+        switch (typeTri) {
             case "date":
                 cl.trierDate();
                 break;
@@ -130,46 +134,49 @@ public class ModeleMenu implements Sujet {
     /**
      * MVC
      */
-    public void afficherColonne(){
+    public void afficherColonne() {
 
     }
+
     /**
      * MVC
      */
-    public void afficherListe(){
+    public void afficherListe() {
 
     }
+
     /**
      * MVC
      */
-    public void afficherGantt(){
+    public void afficherGantt() {
 
     }
 
-    public void archiverToutesTaches(int idColonneLigne){
-        for(CompositeTache t : this.colonneLignes.get(idColonneLigne).getTacheList()){
+    public void archiverToutesTaches(int idColonneLigne) {
+        for (CompositeTache t : this.colonneLignes.get(idColonneLigne).getTacheList()) {
             archive.ajouterTache(t);
             this.colonneLignes.get(idColonneLigne).supprimerTache(t);
         }
     }
 
-    public void archiverTache(int idColonneLigne, int idTache){
+    public void archiverTache(int idColonneLigne, int idTache) {
         CompositeTache t = this.colonneLignes.get(idColonneLigne).trouverTache(idTache);
         archive.ajouterTache(t);
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
     }
 
-    public void supprimerTache(int idColonneLigne, int idTache){
+    public void supprimerTache(int idColonneLigne, int idTache) {
         CompositeTache t = this.colonneLignes.get(idColonneLigne).trouverTache(idTache);
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
     }
 
-    public void supprimerColonneLigne(int idColonneLigne){
+    public void supprimerColonneLigne(int idColonneLigne) {
         this.colonneLignes.remove(this.colonneLignes.get(idColonneLigne));
     }
 
     /**
      * Ajoute un nouvel observateur
+     *
      * @param o observateur
      */
     @Override
@@ -179,6 +186,7 @@ public class ModeleMenu implements Sujet {
 
     /**
      * Supprime un observateur
+     *
      * @param o observateur
      */
     @Override
@@ -191,7 +199,7 @@ public class ModeleMenu implements Sujet {
      */
     @Override
     public void notifierObservateurs() {
-        for (Observateur o: this.observateurs){
+        for (Observateur o : this.observateurs) {
             o.actualiser(this);
         }
     }

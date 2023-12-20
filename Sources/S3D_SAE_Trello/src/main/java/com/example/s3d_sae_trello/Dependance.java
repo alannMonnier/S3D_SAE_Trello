@@ -16,7 +16,7 @@ public class Dependance {
     /**
      * Constructeur de lc classe Dependance. Initialise les listes
      */
-    public Dependance(){
+    public Dependance() {
         this.tachesMere = new ArrayList<>();
         this.tachesFille = new ArrayList<>();
     }
@@ -37,37 +37,40 @@ public class Dependance {
 
     /**
      * Ajoute une dépendance mère dans la liste tachesMere
+     *
      * @param t Tache ou SousTache
      */
-    public void addDependanceMere(CompositeTache t){
+    public void addDependanceMere(CompositeTache t) {
         this.tachesMere.add(0, t);
     }
 
     /**
      * Ajoute une dépendance fille dans la liste tachesFille
+     *
      * @param t Tache ou SousTache
      */
-    public void addDependanceFille(CompositeTache t){
+    public void addDependanceFille(CompositeTache t) {
         this.tachesFille.add(0, t);
     }
 
     /**
      * Affiche les dépendances de la tâche ou sous tâche passée en paramètre
+     *
      * @param t tâche ou sous tâche
      * @return uen chaine contenant les dépendances
      */
-    public String afficherDependance(CompositeTache t){
+    public String afficherDependance(CompositeTache t) {
         StringBuilder sb = new StringBuilder();
         // Ajout des dépendances mères
         sb.append("Taches ou sous taches à réaliser avant la tâche " + t.getNom() + "\n");
         int i = 0;
-        for (CompositeTache ct: this.tachesMere){
+        for (CompositeTache ct : this.tachesMere) {
             sb.append(i + ". => " + ct.getNom() + "\n");
         }
         // Ajout des dépendances filles
         sb.append("Taches ou sous taches à réaliser après la tâche " + t.getNom() + "\n");
         i = 0;
-        for (CompositeTache ct: this.tachesFille){
+        for (CompositeTache ct : this.tachesFille) {
             sb.append(i + ". => " + ct.getNom() + "\n");
         }
         return sb.toString();

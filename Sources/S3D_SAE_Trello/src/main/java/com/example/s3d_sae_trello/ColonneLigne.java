@@ -12,17 +12,17 @@ public class ColonneLigne {
     public int numero;
     public String nom;
 
-    public ColonneLigne(String s, int i){
+    public ColonneLigne(String s, int i) {
         this.numero = i;
         this.nom = s;
         this.tachelist = new ArrayList<CompositeTache>();
     }
 
-    public void ajouterTache(CompositeTache t){
+    public void ajouterTache(CompositeTache t) {
         this.tachelist.add(t);
     }
 
-    public void supprimerTache(CompositeTache t){
+    public void supprimerTache(CompositeTache t) {
         this.tachelist.remove(t);
     }
 
@@ -31,7 +31,7 @@ public class ColonneLigne {
         Collections.sort(tachelist, new Comparator<CompositeTache>() {
             @Override
             public int compare(CompositeTache t1, CompositeTache t2) {
-                if(t1.getDate().equals(t2.getDate())){
+                if (t1.getDate().equals(t2.getDate())) {
                     return 0;
                 }
                 return t1.getDate().isAfter(t2.getDate()) ? -1 : 1;
@@ -40,14 +40,14 @@ public class ColonneLigne {
         });
     }
 
-    public void trierUrgence(){
+    public void trierUrgence() {
 
         Collections.sort(tachelist, new Comparator<CompositeTache>() {
             @Override
             public int compare(CompositeTache t1, CompositeTache t2) {
-                if(t1.getDegreUrgence() > t2.getDegreUrgence()){
+                if (t1.getDegreUrgence() > t2.getDegreUrgence()) {
                     return -1;
-                }else if(t1.getDegreUrgence() < t2.getDegreUrgence()){
+                } else if (t1.getDegreUrgence() < t2.getDegreUrgence()) {
                     return 1;
                 }
                 return 0;
@@ -55,7 +55,7 @@ public class ColonneLigne {
         });
     }
 
-    public void trierAlphabetique(){
+    public void trierAlphabetique() {
 
         Collections.sort(tachelist, new Comparator<CompositeTache>() {
             @Override
@@ -65,9 +65,9 @@ public class ColonneLigne {
         });
     }
 
-    public CompositeTache trouverTache(int i){
-        for(CompositeTache t : this.tachelist){
-            if(t.getId() == i){
+    public CompositeTache trouverTache(int i) {
+        for (CompositeTache t : this.tachelist) {
+            if (t.getId() == i) {
                 return t;
             }
         }
@@ -75,15 +75,15 @@ public class ColonneLigne {
         return null;
     }
 
-    public ArrayList<CompositeTache> getTacheList(){
+    public ArrayList<CompositeTache> getTacheList() {
         return (ArrayList<CompositeTache>) tachelist;
     }
 
-    public int getNumero(){
+    public int getNumero() {
         return numero;
     }
 
-    public void setNom(String s){
+    public void setNom(String s) {
         this.nom = s;
     }
 
