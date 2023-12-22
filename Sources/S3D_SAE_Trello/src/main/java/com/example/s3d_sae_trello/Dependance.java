@@ -1,6 +1,8 @@
 package com.example.s3d_sae_trello;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Classe qui contient des dépendances Mère et Fille
@@ -10,69 +12,42 @@ public class Dependance {
     /**
      * Déclarations des attributs
      */
-    private ArrayList<CompositeTache> tachesMere;
-    private ArrayList<CompositeTache> tachesFille;
+    private Map<Tache, ArrayList<Tache>> tachesDependande;  // Key => Tache Mere, Val => List<Tache Fille>
 
-    /**
-     * Constructeur de lc classe Dependance. Initialise les listes
-     */
-    public Dependance() {
-        this.tachesMere = new ArrayList<>();
-        this.tachesFille = new ArrayList<>();
+    public Dependance(){
+        this.tachesDependande = new TreeMap<>();
     }
 
-    /**
-     * Récupère la liste contenant les tâches Filles
-     */
-    public ArrayList<CompositeTache> getTachesFille() {
-        return tachesFille;
+
+    public void ajouterDependanceFilles(Tache tache, ArrayList<Tache> tachesFilles){
+        this.tachesDependande.put(tache, tachesFilles);
     }
 
-    /**
-     * Récupère la liste contenant les tâches Mères
-     */
-    public ArrayList<CompositeTache> getTachesMere() {
-        return tachesMere;
-    }
-
-    /**
-     * Ajoute une dépendance mère dans la liste tachesMere
-     *
-     * @param t Tache ou SousTache
-     */
-    public void addDependanceMere(CompositeTache t) {
-        this.tachesMere.add(0, t);
-    }
-
-    /**
-     * Ajoute une dépendance fille dans la liste tachesFille
-     *
-     * @param t Tache ou SousTache
-     */
-    public void addDependanceFille(CompositeTache t) {
-        this.tachesFille.add(0, t);
-    }
-
-    /**
-     * Affiche les dépendances de la tâche ou sous tâche passée en paramètre
-     *
-     * @param t tâche ou sous tâche
-     * @return uen chaine contenant les dépendances
-     */
-    public String afficherDependance(CompositeTache t) {
-        StringBuilder sb = new StringBuilder();
-        // Ajout des dépendances mères
-        sb.append("Taches ou sous taches à réaliser avant la tâche " + t.getNom() + "\n");
-        int i = 0;
-        for (CompositeTache ct : this.tachesMere) {
-            sb.append(i + ". => " + ct.getNom() + "\n");
+    public void ajouterDependanceMere(Tache tache, ArrayList<Tache> tachesMeres){
+        // Cherche si on a déjà une clé dans parmi les taches meres
+        for (Tache t : tachesMeres){
+            if(this.tachesDependande.containsKey(t)){
+                // Récupère la liste de la clé t
+                ArrayList<Tache> tachesFilles = this.tachesDependande.get(t);
+                // Ajoute notre tache dans la liste des taches filles
+                tachesFilles.add(tache);
+                this.tachesDependande.put(t, tachesFilles);
+            }
+            // La clé n'existe pas encore on va créer une clé mère et ajouter dans listeFille notre tache
+            else{
+                ArrayList<Tache> tachesFille = new ArrayList<>();
+                tachesFille.add(tache);
+                this.ajouterDependanceFilles(t, tachesFille);
+            }
         }
-        // Ajout des dépendances filles
-        sb.append("Taches ou sous taches à réaliser après la tâche " + t.getNom() + "\n");
-        i = 0;
-        for (CompositeTache ct : this.tachesFille) {
-            sb.append(i + ". => " + ct.getNom() + "\n");
-        }
-        return sb.toString();
     }
+
+
+    public ArrayList<Tache> getTachesFilles(Tache tacheMere){
+        if(this.tachesDependande.containsKey(tacheMere)){
+            return this.tachesDependande.get(tacheMere);
+        }
+        return null;
+    }
+
 }
