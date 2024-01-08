@@ -1,0 +1,13 @@
+Lors de cette quatrième itération nous nous sommes occupés du drag and drop des colonnes, des tâches, des sous tâches ainsi que des listes et sous listes. 
+Puis nous avons également mis en place l'ajout de dépendance Mère et Fille et nous avons commencé à réfléchir à la manière de réaliser le diagramme de Gantt. 
+
+
+Il est maintenant possible d'intervertir deux colonnes ou listes entre elles. De même on peut déplacer une tache d'une colonne ou d'une liste à une autre? Egalement une sous tache ou sous listes peut être déplacé vers une autre tache ou une autre sous tache. 
+
+
+Sur cette itération nous avons eu des difficultés à effectuer le débuggage sur le drag and drop car les erreurs n'étaient pas implicites et n'indicaient pas clairement ou se situait l'erreur. 
+
+Nous avons également mis à jour notre diagramme de classe, avons créer un diagramme de séquence et mis à jour notre trello.
+ 
+
+Demain lors de la dernière itération de 8 heures nous allons mettre en place le diagramme de Gantt et si nous avons le temps ajouter du CSS à notre projet. 

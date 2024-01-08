@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 -- Itération 3
 
 Farid: 
@@ -19,25 +18,4 @@ Alann:
 	- Restructuration des classes Taches, TacheComposite, SousTache
 	- Continuer l'implémentation de l'architecture MVC
 
-=======
--- Itération 3
 
-Farid: 
-	- Continuer développement de l'interface javaFX pour l'affichage des 	tâches sous forme de liste et de sous listes
-	- Continuer l'implémentation de l'architecture MVC
-	- Restructuration des classes Taches, TacheComposite, SousTache
-
-Fabien: 
-	- Implémentation de l'architecture MVC 
-	- Développement en JavaFX
-	- Implémentation des tris
-	- Implémentation déplacer et supprimer tâche
-	- Gestion de l'archivage
-	- Affichage détail dès qu'on clique sur bouton détails de la tâche
-
-Alann: 
-	- Gestion dépendance
-	- Restructuration des classes Taches, TacheComposite, SousTache
-	- Continuer l'implémentation de l'architecture MVC
-
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b

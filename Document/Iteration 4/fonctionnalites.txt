@@ -1,0 +1,17 @@
+-- Itération 4
+
+Farid: 
+	- Ajout du drag and drop sur les listes et les sous listes
+	- Début développement digramme de Gantt
+
+Fabien: 
+	- Ajout des dépendances Mères et Filles entre les tâches et les sous tâches
+	- Début développement digramme de Gantt
+
+Alann: 
+	- Ajout du drag and drop sur les colonnes, les taches et les sous taches
+	- Début développement digramme de Gantt
+	- Création fichiers explication itération 4
+
+
+
