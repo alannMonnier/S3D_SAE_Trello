@@ -207,32 +207,24 @@ public class VueTache extends VBox implements Observateur {
             public void handle(DragEvent dragEvent) {
                 Dragboard db = dragEvent.getDragboard();
                 boolean success = false;
-                // Condition pour les sous taches
-                if(dragEvent.getGestureSource().getClass().toString().contains("VBox")){
-                    // Récupère la sous tâche que l'on déplace dans une tâche
-                    VBox vb = (VBox) dragEvent.getGestureSource();
-                    Label l = (Label) vb.getChildren().get(0);
-                    String txtSousTache = l.getText();
-                    // Supprimer l'ancienne sous taches
-                    Tache st = modeleMenu.supprimerSousTache(ancienneTache, txtSousTache);
 
-                    // Ajouter la sous tâche à la nouvelle tâche
-                    t.ajouterSousTache(st);
-                    modeleMenu.notifierObservateurs();
-
-                }
-                else if(db.hasString() && dragEvent.getGestureSource().getClass().toString().contains("VueTache")){
+                if (db.hasString() && dragEvent.getGestureSource().getClass().toString().contains("VueTache")) {
                     // Récupère le conteneur de la tâche
                     VueTache hdepla = (VueTache) dragEvent.getGestureSource();
                     // Récupère le texte déplacé
-                    String texteTacheDepl =  ((Label)((HBox)hdepla.getChildren().get(0)).getChildren().get(0)).getText();
-                    // Récupère la tâche ou on a déplacé
-                    Tache tache = modeleMenu.getColonneLignes().get(idAncienneColonne).getTache(texteTacheDepl);
-                    t.ajouterSousTache(tache);
-                    success = true;
-                    // supprime la vbox contenant la tâche
-                    modeleMenu.supprimerTache(idAncienneColonne, tache);
+                    String texteTacheDepl = ((Label) ((HBox) hdepla.getChildren().get(0)).getChildren().get(0)).getText();
+
+                    // Vérifie si la tâche source est différente de la tâche cible
+                    if (!texteTacheDepl.equals(tacheCourante.getNom())) {
+                        // Récupère la tâche ou on a déplacé
+                        Tache tache = modeleMenu.getColonneLignes().get(idAncienneColonne).getTache(texteTacheDepl);
+                        t.ajouterSousTache(tache);
+                        success = true;
+                        // supprime la vbox contenant la tâche
+                        modeleMenu.supprimerTache(idAncienneColonne, tache);
+                    }
                 }
+
                 dragEvent.setDropCompleted(success);
                 dragEvent.consume();
             }

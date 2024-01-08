@@ -12,7 +12,6 @@ public class VueArchive extends VBox implements Observateur {
 
     public VueArchive(ModeleMenu modele) {
         this.modele = modele;
-        this.modele.ajouterObservateur(this);
         creerAffichage();
     }
 
