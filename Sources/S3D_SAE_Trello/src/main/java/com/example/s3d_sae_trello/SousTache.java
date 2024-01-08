@@ -8,10 +8,9 @@ public class SousTache extends Tache{
 
     private int idSousTache;
 
-    public SousTache(int id, String nom, String descr, int degreUrgence, int tempsEstime, LocalDate dateDebutReal, int idSousTache){
-        super(id, nom, descr, degreUrgence, tempsEstime, dateDebutReal);
+    public SousTache(int id, String nom, String description, int degreUrgence, int tempsEstime, LocalDate dateDebutReal, int idSousTache){
+        super(id, nom, description, degreUrgence, tempsEstime, dateDebutReal);
     }
-
 
 
     @Override
