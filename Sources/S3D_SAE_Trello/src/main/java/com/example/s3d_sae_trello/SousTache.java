@@ -11,9 +11,47 @@ public class SousTache extends Tache{
     public SousTache(int id, String nom, int degreUrgence, int tempsEstime, LocalDate dateDebutReal, int idSousTache){
         super(id, nom, "", degreUrgence, tempsEstime, dateDebutReal);
 
+<<<<<<< HEAD
     }
 
 
+=======
+    public SousTache(int id, String nomTache, String nomUtilisateur, String prenomUtilisateur, int urgence, int tempsEstime, String description) {
+        super(id, nomTache, nomUtilisateur, prenomUtilisateur, urgence, tempsEstime, description);
+        this.sousTaches = new ArrayList<>();
+    }
+
+    public boolean ajouterSousTache(CompositeTache t){
+        sousTaches.add(t);
+        return true;
+    }
+
+    public boolean retirerSousTache(int id){
+        boolean retire = false;
+        int indice = -1;
+        for(CompositeTache t : sousTaches){
+            if(t.getId() == id){
+                indice = t.getId();
+            }
+        }
+
+        if(indice != -1){
+            sousTaches.remove(indice);
+            retire = true;
+        }
+
+        return retire;
+    }
+
+    public ArrayList<CompositeTache> getSousTaches() {
+        return sousTaches;
+    }
+
+    /**
+     * Compare deux objets SousTache
+     * @return true s'ils sont égaux false sinon
+     */
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
     @Override
     public boolean equals(Object obj) {
         if(this == obj) {return true;}

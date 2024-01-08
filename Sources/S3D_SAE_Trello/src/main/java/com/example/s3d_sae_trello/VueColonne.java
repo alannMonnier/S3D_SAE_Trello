@@ -5,11 +5,15 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
+<<<<<<< HEAD
 import javafx.scene.input.*;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+=======
+import javafx.scene.layout.*;
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -17,7 +21,18 @@ import java.util.ArrayList;
 
 public class VueColonne extends VBox implements Observateur {
 
+<<<<<<< HEAD
     private ArrayList<Tache> taches;
+=======
+    BorderStroke borderStroke = new BorderStroke(Color.BLACK,
+            BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY,
+            BorderWidths.DEFAULT);
+
+    private Border border = new Border(borderStroke);
+
+    private ArrayList<CompositeTache> taches;
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
     private ModeleMenu modele;
     private int idColonne;
     private String nom;
@@ -27,7 +42,11 @@ public class VueColonne extends VBox implements Observateur {
     private Tache ancienneTache;
 
 
+<<<<<<< HEAD
     public VueColonne(ArrayList<Tache> taches, ModeleMenu m, int id, String nom){
+=======
+    public VueColonne(ArrayList<CompositeTache> taches, ModeleMenu m, int id, String nom) {
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
         this.taches = taches;
         this.modele = m;
         this.idColonne = id;
@@ -67,14 +86,22 @@ public class VueColonne extends VBox implements Observateur {
         this.getChildren().addAll(vTitreCol);
 
         // -------Création des taches ------------
+<<<<<<< HEAD
         for (Tache ct : this.taches){
             if(ct != null){
                 VueTache vbTache = new VueTache(ct, modele, id);
                 this.getChildren().addAll(vbTache);
+=======
+        for (CompositeTache ct : this.taches) {
+            if (ct != null) {
+                VBox tache = new VueTache(ct);
+                this.getChildren().addAll(tache);
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
             }
         }
 
 
+<<<<<<< HEAD
 
         // Récupère l'objet à déplacer ainsi qu'une image qui apparaît au déplacement
         this.setOnDragDetected(new EventHandler<MouseEvent>() {
@@ -181,12 +208,14 @@ public class VueColonne extends VBox implements Observateur {
         });
 
 
+=======
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
         // Ajouter une tâche
         Button laddtache = new Button("+ Ajouter une tâche");
         laddtache.setOnAction(new ControleurAjoutTache(modele));
 
         this.getChildren().addAll(laddtache);
-        this.setBorder(Border.stroke(Color.BLACK));
+        this.setBorder(border);
         this.setPadding(new Insets(5));
         this.setSpacing(20);
         this.setAlignment(Pos.TOP_CENTER);

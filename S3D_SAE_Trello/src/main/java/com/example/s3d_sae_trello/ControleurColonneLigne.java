@@ -10,7 +10,7 @@ public class ControleurColonneLigne implements EventHandler<MouseEvent> {
     private ModeleMenu modeleMenu;
     private int idColonne;
 
-    public ControleurColonneLigne(ModeleMenu modele, int idColonne) {
+    public ControleurColonneLigne(ModeleMenu modele, int idColonne){
         this.modeleMenu = modele;
         this.idColonne = idColonne;
     }

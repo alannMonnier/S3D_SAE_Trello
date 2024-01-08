@@ -1,15 +1,23 @@
 package com.example.s3d_sae_trello;
+<<<<<<< HEAD
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+=======
+
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
+<<<<<<< HEAD
 import javafx.scene.input.*;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+=======
+import javafx.scene.layout.*;
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -19,6 +27,7 @@ import javafx.stage.StageStyle;
 
 public class VueTache extends VBox implements Observateur {
 
+<<<<<<< HEAD
     private ModeleMenu modeleMenu;
     private int idColonne;
     private int idAncienneColonne;
@@ -36,6 +45,16 @@ public class VueTache extends VBox implements Observateur {
 
 
 
+=======
+    BorderStroke borderStroke = new BorderStroke(Color.BLACK,
+            BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY,
+            BorderWidths.DEFAULT);
+
+    private Border border = new Border(borderStroke);
+
+    public VueTache(CompositeTache t) {
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
         HBox hb1 = new HBox();
         Label text = new Label(t.getNom());
         MenuBar paramTache = new MenuBar();
@@ -78,16 +97,20 @@ public class VueTache extends VBox implements Observateur {
         ajouterSousTache.setOnAction(new ControleurSousTache(t, modeleMenu, idColonne));
 
         HBox hb2 = new HBox();
+<<<<<<< HEAD
         Label nbHeures = new Label(""+t.getTempsEstime()+"h");
+=======
+        Label nbHeures = new Label("" + t.getTempsEstime() + "");
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
 
         HBox hb3 = new HBox();
         int urg = t.getDegreUrgence();
         Circle circle;
-        if(urg == 1){
+        if (urg == 1) {
             circle = new Circle(10, Color.BLUE);
         } else if (urg == 2) {
             circle = new Circle(10, Color.ORANGE);
-        }else{
+        } else {
             circle = new Circle(10, Color.RED);
         }
 
@@ -115,6 +138,7 @@ public class VueTache extends VBox implements Observateur {
         hb3.setSpacing(10);
 
 
+<<<<<<< HEAD
         this.getChildren().addAll(hb1,new Line(0, 0, 200, 0), hb2, hb3);
 
 
@@ -231,8 +255,11 @@ public class VueTache extends VBox implements Observateur {
 
 
         //this.getChildren().addAll(vb);
+=======
+        this.getChildren().addAll(hb1, new Line(0, 0, 200, 0), hb2, hb3);
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
         this.setPadding(new Insets(5));
-        this.setBorder(Border.stroke(Color.BLACK));
+        this.setBorder(border);
         this.setSpacing(5);
 
     }

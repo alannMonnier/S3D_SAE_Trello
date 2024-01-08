@@ -22,7 +22,7 @@ public class ModeleMenu implements Sujet {
     /**
      * Constructeur de modèle initialise les attributs
      */
-    public ModeleMenu(){
+    public ModeleMenu() {
         nbColonnes = 0;
         tacheCompositeNumId = 0;
         gantt = new DiagrammeGantt("", 0);
@@ -38,7 +38,7 @@ public class ModeleMenu implements Sujet {
         return typeVue;
     }
 
-    public void setTypeVue(String s){
+    public void setTypeVue(String s) {
         typeVue = s;
         this.notifierObservateurs();
     }
@@ -69,9 +69,10 @@ public class ModeleMenu implements Sujet {
 
     /**
      * Ajoute d'une nouvelle colonneLigne
+     *
      * @param nom de la nouvelle colonneLigne
      */
-    public void ajouterColonneLigne(String nom, int id){
+    public void ajouterColonneLigne(String nom, int id) {
         this.colonneLignes.add(new ColonneLigne(nom, id));
         nbColonnes++;
         this.notifierObservateurs();
@@ -93,10 +94,15 @@ public class ModeleMenu implements Sujet {
 
     /**
      * Ajoute une nouvelle tache ou sous tache dans la colonneLigne récupéré
+     *
      * @param idColonneLigne indice dans la liste
-     * @param t tache ou sous tache
+     * @param t              tache ou sous tache
      */
+<<<<<<< HEAD
     public void ajouterCompositeTache(int idColonneLigne, Tache t){
+=======
+    public void ajouterCompositeTache(int idColonneLigne, CompositeTache t) {
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
         this.colonneLignes.get(idColonneLigne).ajouterTache(t);
         if(!(t.getId() < tacheCompositeNumId)){
             tacheCompositeNumId++;
@@ -106,13 +112,18 @@ public class ModeleMenu implements Sujet {
 
     /**
      * Déplace une tache ou sous tache
-     * @param idColonneLigne index colonneLigne courante
+     *
+     * @param idColonneLigne    index colonneLigne courante
      * @param idNewColonneLigne index nouvelle colonneLigne
-     * @param t tache ou sous tache
+     * @param t                 tache ou sous tache
      */
+<<<<<<< HEAD
     public void deplacerCompositeTache(int idColonneLigne, int idNewColonneLigne, Tache t){
         // Ajoute la tâche dans la nouvelle colonneLigne
         this.colonneLignes.get(idNewColonneLigne).ajouterTache(t);
+=======
+    public void deplacerCompositeTache(int idColonneLigne, int idNewColonneLigne, CompositeTache t) {
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
         // Supprime la tâche présente dans la colonneLigne actuel
         this.colonneLignes.get(idColonneLigne).getTacheList().remove(t);
         this.notifierObservateurs();
@@ -120,12 +131,13 @@ public class ModeleMenu implements Sujet {
 
     /**
      * Methode qui trie la colonneLigne en fonction d'un paramètre donnée
+     *
      * @param idColonneLigne index colonneLigne à trier
-     * @param typeTri type de tri à utiliser
+     * @param typeTri        type de tri à utiliser
      */
-    public void trierColonneLigne(int idColonneLigne, String typeTri){
+    public void trierColonneLigne(int idColonneLigne, String typeTri) {
         ColonneLigne cl = this.colonneLignes.get(idColonneLigne);
-        switch (typeTri){
+        switch (typeTri) {
             case "date":
                 cl.trierDate();
                 break;
@@ -145,6 +157,7 @@ public class ModeleMenu implements Sujet {
         this.notifierObservateurs();
     }
 
+<<<<<<< HEAD
 
 
     public void archiverToutesTaches(int idColonneLigne){
@@ -152,18 +165,49 @@ public class ModeleMenu implements Sujet {
         Iterator<Tache> iterator = taches.iterator();
         while (iterator.hasNext()) {
             Tache t = iterator.next();
+=======
+    /**
+     * MVC
+     */
+    public void afficherColonne() {
+
+    }
+
+    /**
+     * MVC
+     */
+    public void afficherListe() {
+
+    }
+
+    /**
+     * MVC
+     */
+    public void afficherGantt() {
+
+    }
+
+    public void archiverToutesTaches(int idColonneLigne) {
+        for (CompositeTache t : this.colonneLignes.get(idColonneLigne).getTacheList()) {
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
             archive.ajouterTache(t);
             iterator.remove();
         }
         this.notifierObservateurs();
     }
 
+<<<<<<< HEAD
     public void archiverTache(int idColonneLigne, Tache t){
+=======
+    public void archiverTache(int idColonneLigne, int idTache) {
+        CompositeTache t = this.colonneLignes.get(idColonneLigne).trouverTache(idTache);
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
         archive.ajouterTache(t);
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
         this.notifierObservateurs();
     }
 
+<<<<<<< HEAD
     public void desarchiverTache(Tache t){
         this.ajouterCompositeTache(0, t);
         this.archive.supprimerTache(t);
@@ -171,11 +215,15 @@ public class ModeleMenu implements Sujet {
     }
 
     public void supprimerTache(int idColonneLigne, Tache t){
+=======
+    public void supprimerTache(int idColonneLigne, int idTache) {
+        CompositeTache t = this.colonneLignes.get(idColonneLigne).trouverTache(idTache);
+>>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
         this.notifierObservateurs();
     }
 
-    public void supprimerColonneLigne(int idColonneLigne){
+    public void supprimerColonneLigne(int idColonneLigne) {
         this.colonneLignes.remove(this.colonneLignes.get(idColonneLigne));
         this.nbColonnes--;
         this.notifierObservateurs();
@@ -183,6 +231,7 @@ public class ModeleMenu implements Sujet {
 
     /**
      * Ajoute un nouvel observateur
+     *
      * @param o observateur
      */
     @Override
@@ -192,6 +241,7 @@ public class ModeleMenu implements Sujet {
 
     /**
      * Supprime un observateur
+     *
      * @param o observateur
      */
     @Override
@@ -204,7 +254,7 @@ public class ModeleMenu implements Sujet {
      */
     @Override
     public void notifierObservateurs() {
-        for (Observateur o: this.observateurs){
+        for (Observateur o : this.observateurs) {
             o.actualiser(this);
         }
     }

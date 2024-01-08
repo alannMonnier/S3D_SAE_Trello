@@ -14,12 +14,12 @@ public class MainJavaFX extends Application {
 
     /**
      * Initilisation du modèle avec des données de base à chaque lancement
-     *
      * @throws Exception
      */
     @Override
     public void init() throws Exception {
         super.init();
+
     }
 
     @Override
@@ -39,6 +39,8 @@ public class MainJavaFX extends Application {
         Button mListe = new Button("Liste tâche");
         Button mGantt = new Button("Gantt");
         Button mArchive = new Button("Archive");
+
+
 
 
         menuBar.getChildren().addAll(mtableau, mListe, mGantt, mArchive);

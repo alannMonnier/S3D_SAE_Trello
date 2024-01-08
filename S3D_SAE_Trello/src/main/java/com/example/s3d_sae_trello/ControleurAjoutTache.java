@@ -1,5 +1,4 @@
 package com.example.s3d_sae_trello;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -9,10 +8,9 @@ public class ControleurAjoutTache implements EventHandler<ActionEvent> {
 
     private ModeleMenu modele;
 
-    public ControleurAjoutTache(ModeleMenu m) {
+    public ControleurAjoutTache(ModeleMenu m){
         this.modele = m;
     }
-
     @Override
     public void handle(ActionEvent actionEvent) {
         Button b = (Button) actionEvent.getSource();

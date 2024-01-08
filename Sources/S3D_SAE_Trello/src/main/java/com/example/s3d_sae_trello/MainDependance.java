@@ -1,7 +1,6 @@
 package com.example.s3d_sae_trello;
 
 
-
 public class MainDependance {
 
     /**
@@ -10,13 +9,13 @@ public class MainDependance {
     public static void main(String[] args) {
         /**
         // Création d'une tâche
-        Tache tache = new Tache(7, "Tache 7", 2, 3);
+        Tache tache = new Tache(7, "Tache 7", "Marie", "Helene", 3, 200, "description_tache7");
 
         // Création d'une tâcheMère
-        Tache tacheMere = new Tache(5, "Tache 5", 1, 2);
+        Tache tacheMere = new Tache(5, "Tache 5", "Jill", "Marc", 1, 150, "description_tache5");
 
         // Création d'une tâche fille
-        Tache tacheFille = new Tache(8, "Tache 8", 3, 7);
+        Tache tacheFille = new Tache(8, "Tache 8", "Marie", "Helene", 2, 400, "description_tache8");
 
         // Ajout de la dépendance Mère
         tache.ajouterDependanceMere(tacheMere);
