@@ -284,17 +284,11 @@ public class ModeleMenu implements Sujet {
         return null;
     }
 
-<<<<<<< HEAD
+
     public Tache supprimerSousTache(Tache ancienneTache, String txtSousTache){
         for (Tache sousTache : ancienneTache.getSousTaches()){
             if(sousTache.getNom().equals(txtSousTache)){
                 ancienneTache.retirerSousTache(sousTache);
-=======
-    public Tache supprimerSousTache(Tache ancienneTache, String txtSousTache) {
-        for (Tache sousTache : ancienneTache.getSousTaches()) {
-            if (sousTache.getNom().equals(txtSousTache)) {
-                ancienneTache.retirerSousTache(sousTache.getId());
->>>>>>> 8ffcf67d9f28992f1a2ceb67248c8e2fbf7f6614
                 return sousTache;
             }
             supprimerSousTache(sousTache, txtSousTache);
