@@ -9,7 +9,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-public class VueBureau extends HBox implements Observateur {
+public class VueBureau extends VBox implements Observateur {
 
     BorderStroke borderStroke = new BorderStroke(Color.BLACK,
             BorderStrokeStyle.SOLID,
@@ -50,9 +50,25 @@ public class VueBureau extends HBox implements Observateur {
 
                 break;
             case "Liste":
+                // Création des listes du trello
+                for (int i = 0; i < modele.getNbColonnes(); i++) {
+                    // obtenir le titre et les taches de chaque colonne à partir du modèle
+                    ColonneLigne cl = modele.getColonneLignes().get(i);
+                    VueListe v = new VueListe(cl.getTacheList(), modele, i, cl.getNom());
+                    this.getChildren().add(v);
+                }
 
-                //n = new VueBureauLigne(modele);
+                // Ajout du bouton pour ajouter une nouvelle colonne
+                Button btnAjouterColonne = new Button("+ Ajouter une nouvelle colonne");
+                btnAjouterColonne.setOnMouseClicked(new ControleurColonneLigne(modele, this.id));
+                btnAjouterColonne.setBorder(border);
+                btnAjouterColonne.setPadding(new Insets(5));
+
+                this.getChildren().add(btnAjouterColonne);
+                this.setPadding(new Insets(5));
+                this.setSpacing(10); // reduire l'espacement si nécessaire
                 break;
+
             case "Archive":
                 VueArchive vueArchive = new VueArchive(modele);
                 this.getChildren().add(vueArchive);
