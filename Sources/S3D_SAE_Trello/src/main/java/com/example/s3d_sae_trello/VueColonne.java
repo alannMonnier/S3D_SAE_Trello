@@ -12,10 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -34,8 +31,15 @@ public class VueColonne extends VBox implements Observateur {
     private Tache ancienneTache;
 
 
+    BorderStroke borderStroke = new BorderStroke(Color.BLACK,
+            BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY,
+            BorderWidths.DEFAULT);
 
-    public VueColonne(ArrayList<Tache> taches, ModeleMenu m, int id, String nom){
+    private Border border = new Border(borderStroke);
+
+
+    public VueColonne(ArrayList<Tache> taches, ModeleMenu m, int id, String nom) {
         this.taches = taches;
         this.modele = m;
         this.idColonne = id;
@@ -76,14 +80,12 @@ public class VueColonne extends VBox implements Observateur {
 
         // -------Création des taches ------------
 
-        for (Tache ct : this.taches){
-            if(ct != null){
+        for (Tache ct : this.taches) {
+            if (ct != null) {
                 VueTache vbTache = new VueTache(ct, modele, id);
                 this.getChildren().addAll(vbTache);
             }
         }
-
-
 
 
         // Récupère l'objet à déplacer ainsi qu'une image qui apparaît au déplacement
@@ -104,7 +106,7 @@ public class VueColonne extends VBox implements Observateur {
         this.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent dragEvent) {
-                if(dragEvent.getGestureSource().getClass().toString().contains("VueColonne")){
+                if (dragEvent.getGestureSource().getClass().toString().contains("VueColonne")) {
                     VueColonne vc = (VueColonne) dragEvent.getGestureSource();
                     VBox vb = (VBox) (vc).getChildren().get(0);
                     BorderPane bp = (BorderPane) (vb).getChildren().get(0);
@@ -112,9 +114,8 @@ public class VueColonne extends VBox implements Observateur {
                     String txt = l.getText();
                     idColonneADeplace = modele.recupererColonneLigneID(txt);
                     dragEvent.acceptTransferModes(TransferMode.MOVE);
-                }
-                else if(dragEvent.getGestureSource() != this && dragEvent.getDragboard().hasString()
-                        && dragEvent.getGestureSource().getClass().toString().contains("VueTache")){
+                } else if (dragEvent.getGestureSource() != this && dragEvent.getDragboard().hasString()
+                        && dragEvent.getGestureSource().getClass().toString().contains("VueTache")) {
                     dragEvent.acceptTransferModes(TransferMode.MOVE);
                     VueTache vt = (VueTache) dragEvent.getGestureSource();
                     VueColonne vb = (VueColonne) (vt).getParent();
@@ -123,12 +124,10 @@ public class VueColonne extends VBox implements Observateur {
                     Label l = (Label) (bp).getChildren().get(0);
                     String txtCol = l.getText();
                     idAncienneColonne = modele.recupererColonneLigneID(txtCol);
-                }
-
-                else if(dragEvent.getGestureSource().getClass().toString().contains("VBox")){
+                } else if (dragEvent.getGestureSource().getClass().toString().contains("VBox")) {
                     dragEvent.acceptTransferModes(TransferMode.MOVE);
                     VBox vmere = (VBox) dragEvent.getGestureSource();
-                    while (!(vmere.getParent().getClass().toString().contains("VueTache"))){
+                    while (!(vmere.getParent().getClass().toString().contains("VueTache"))) {
                         vmere = (VBox) vmere.getParent();
                     }
                     VueTache vt = (VueTache) vmere.getParent();
@@ -155,26 +154,22 @@ public class VueColonne extends VBox implements Observateur {
         });
 
 
-
-
         // Action lorsqu'on dépose la tâche à un autre endroit
         this.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent dragEvent) {
                 Dragboard db = dragEvent.getDragboard();
                 boolean success = false;
-                if(db.hasString() && dragEvent.getGestureSource().getClass().toString().contains("VueTache")){
+                if (db.hasString() && dragEvent.getGestureSource().getClass().toString().contains("VueTache")) {
                     // Récupère le conteneur de la tâche
                     VBox hdepla = (VBox) dragEvent.getGestureSource();
-                    String texteTacheDepl = ((Label)((HBox)hdepla.getChildren().get(0)).getChildren().get(0)).getText();
+                    String texteTacheDepl = ((Label) ((HBox) hdepla.getChildren().get(0)).getChildren().get(0)).getText();
                     Tache tDepl = modele.getColonneLignes().get(idAncienneColonne).getTache(texteTacheDepl);
                     modele.supprimerTache(idAncienneColonne, tDepl);
                     modele.ajouterCompositeTache(idColonne, tDepl);
-                }
-                else if(dragEvent.getGestureSource().getClass().toString().contains("VueColonne")){
+                } else if (dragEvent.getGestureSource().getClass().toString().contains("VueColonne")) {
                     modele.echangerColonneLigne(idColonneADeplace, idColonne);
-                }
-                else if(dragEvent.getGestureSource().getClass().toString().contains("VBox")){
+                } else if (dragEvent.getGestureSource().getClass().toString().contains("VBox")) {
                     // Récupère la sous tâche que l'on déplace dans une tâche
                     VBox vb = (VBox) dragEvent.getGestureSource();
                     Label l = (Label) vb.getChildren().get(0);
@@ -191,13 +186,12 @@ public class VueColonne extends VBox implements Observateur {
         });
 
 
-
         // Ajouter une tâche
         Button laddtache = new Button("+ Ajouter une tâche");
         laddtache.setOnAction(new ControleurAjoutTache(modele));
 
         this.getChildren().addAll(laddtache);
-        this.setBorder(Border.stroke(Color.BLACK));
+        this.setBorder(border);
         this.setPadding(new Insets(5));
         this.setSpacing(20);
         this.setAlignment(Pos.TOP_CENTER);
