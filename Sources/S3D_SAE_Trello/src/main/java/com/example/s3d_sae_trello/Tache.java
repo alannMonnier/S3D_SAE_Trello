@@ -46,8 +46,8 @@ public class Tache implements Comparable<Tache>{
 
     }
 
-    public void retirerSousTache(int id){
-        this.sousTaches.remove(id);
+    public void retirerSousTache(Tache t){
+        this.sousTaches.remove(t);
     }
 
     public int getId() {

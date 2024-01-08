@@ -20,7 +20,7 @@ public class ControleurSousTache implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent actionEvent) {
         try {
-            new VueSousTache(modele, ct).start(new Stage());
+            new CreationTacheFX(this.modele, this.idColonne, this.ct).lancerApp();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

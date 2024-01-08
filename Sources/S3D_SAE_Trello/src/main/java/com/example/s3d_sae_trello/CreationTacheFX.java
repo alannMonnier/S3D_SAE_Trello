@@ -18,9 +18,18 @@ public class CreationTacheFX extends Application {
     private ModeleMenu modele;
     private int idColonne;
 
+    //Utile pour l'ajout de sous tache à une tâche en la créant directement
+    private Tache tache;
+
     public CreationTacheFX(ModeleMenu m, int idColonne) {
         this.modele = m;
         this.idColonne = idColonne;
+    }
+
+    public CreationTacheFX(ModeleMenu m, int idColonne, Tache t) {
+        this.modele = m;
+        this.idColonne = idColonne;
+        this.tache = t;
     }
 
     @Override
@@ -93,9 +102,16 @@ public class CreationTacheFX extends Application {
             LocalDate dateDebutReal = dp.getValue();
 
 
-            // Création de la tâche
-            Tache tache = new Tache(idTache, nomTache, descriptionTache, urg, tempsTache, dateDebutReal);
-            modele.ajouterCompositeTache(this.idColonne, tache);
+            // Création d'une tâche normale si c'est depuis une colonne
+            if(this.tache == null) {
+                Tache tache = new Tache(idTache, nomTache, descriptionTache, urg, tempsTache, dateDebutReal);
+                modele.ajouterCompositeTache(this.idColonne, tache);
+            }else{
+                //Création d'une sous tâche si c'est depuis une tâche
+                SousTache st = new SousTache(idTache, nomTache, descriptionTache, urg, tempsTache, dateDebutReal, tache.getIdSousTache());
+                tache.ajouterSousTache(st);
+                modele.notifierObservateurs();
+            }
 
             // On ferme la page
             stage.close();

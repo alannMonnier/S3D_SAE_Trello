@@ -8,8 +8,8 @@ public class SousTache extends Tache{
 
     private int idSousTache;
 
-    public SousTache(int id, String nom, int degreUrgence, int tempsEstime, LocalDate dateDebutReal, int idSousTache){
-        super(id, nom, "", degreUrgence, tempsEstime, dateDebutReal);
+    public SousTache(int id, String nom, String descr, int degreUrgence, int tempsEstime, LocalDate dateDebutReal, int idSousTache){
+        super(id, nom, descr, degreUrgence, tempsEstime, dateDebutReal);
     }
 
 

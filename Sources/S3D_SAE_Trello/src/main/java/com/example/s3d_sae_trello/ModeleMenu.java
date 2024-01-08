@@ -277,7 +277,7 @@ public class ModeleMenu implements Sujet {
     public Tache supprimerSousTache(Tache ancienneTache, String txtSousTache){
         for (Tache sousTache : ancienneTache.getSousTaches()){
             if(sousTache.getNom().equals(txtSousTache)){
-                ancienneTache.retirerSousTache(sousTache.getId());
+                ancienneTache.retirerSousTache(sousTache);
                 return sousTache;
             }
             supprimerSousTache(sousTache, txtSousTache);
