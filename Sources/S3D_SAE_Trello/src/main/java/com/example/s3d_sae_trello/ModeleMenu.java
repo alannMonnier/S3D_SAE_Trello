@@ -1,9 +1,7 @@
 package com.example.s3d_sae_trello;
 
 
-import javafx.scene.Node;
-
-import java.util.ArrayList;
+import java.util.*;
 
 public class ModeleMenu implements Sujet {
 
@@ -17,6 +15,8 @@ public class ModeleMenu implements Sujet {
     private int nbColonnes; // Nombre de colonnes crée
     private int tacheCompositeNumId; // Numéro de la tâcheComposite
     private String typeVue;
+    private TreeMap<Tache, ArrayList<Tache>> dependance;
+    private ArrayList<Tache> tachesAjouterDependance;
 
 
     /**
@@ -29,6 +29,9 @@ public class ModeleMenu implements Sujet {
         observateurs = new ArrayList<>();
         colonneLignes = new ArrayList<>();
         typeVue = "Colonne";
+        this.dependance = new TreeMap<>();
+        this.archive = Archive.getInstance();
+        this.tachesAjouterDependance = new ArrayList<>();
     }
 
     public String getTypeVue() {
@@ -74,14 +77,30 @@ public class ModeleMenu implements Sujet {
         this.notifierObservateurs();
     }
 
+
+    public int recupererColonneLigneID(String nomColonne){
+        for (int i=0; i<this.colonneLignes.size(); i++){
+            if(colonneLignes.get(i).getNom().equals(nomColonne)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+
+
+
     /**
      * Ajoute une nouvelle tache ou sous tache dans la colonneLigne récupéré
      * @param idColonneLigne indice dans la liste
      * @param t tache ou sous tache
      */
-    public void ajouterCompositeTache(int idColonneLigne, CompositeTache t){
+    public void ajouterCompositeTache(int idColonneLigne, Tache t){
         this.colonneLignes.get(idColonneLigne).ajouterTache(t);
-        tacheCompositeNumId++;
+        if(!(t.getId() < tacheCompositeNumId)){
+            tacheCompositeNumId++;
+        }
         this.notifierObservateurs();
     }
 
@@ -91,12 +110,11 @@ public class ModeleMenu implements Sujet {
      * @param idNewColonneLigne index nouvelle colonneLigne
      * @param t tache ou sous tache
      */
-    public void deplacerCompositeTache(int idColonneLigne, int idNewColonneLigne, CompositeTache t){
+    public void deplacerCompositeTache(int idColonneLigne, int idNewColonneLigne, Tache t){
+        // Ajoute la tâche dans la nouvelle colonneLigne
+        this.colonneLignes.get(idNewColonneLigne).ajouterTache(t);
         // Supprime la tâche présente dans la colonneLigne actuel
         this.colonneLignes.get(idColonneLigne).getTacheList().remove(t);
-        // Ajoute la tâche dans la nouvelle colonneLigne
-        //this.colonneLignes.get(idNewColonneLigne).ajouterTache(t);
-
         this.notifierObservateurs();
     }
 
@@ -127,45 +145,40 @@ public class ModeleMenu implements Sujet {
         this.notifierObservateurs();
     }
 
-    /**
-     * MVC
-     */
-    public void afficherColonne(){
 
-    }
-    /**
-     * MVC
-     */
-    public void afficherListe(){
-
-    }
-    /**
-     * MVC
-     */
-    public void afficherGantt(){
-
-    }
 
     public void archiverToutesTaches(int idColonneLigne){
-        for(CompositeTache t : this.colonneLignes.get(idColonneLigne).getTacheList()){
+        List<Tache> taches = this.colonneLignes.get(idColonneLigne).getTacheList();
+        Iterator<Tache> iterator = taches.iterator();
+        while (iterator.hasNext()) {
+            Tache t = iterator.next();
             archive.ajouterTache(t);
-            this.colonneLignes.get(idColonneLigne).supprimerTache(t);
+            iterator.remove();
         }
+        this.notifierObservateurs();
     }
 
-    public void archiverTache(int idColonneLigne, int idTache){
-        CompositeTache t = this.colonneLignes.get(idColonneLigne).trouverTache(idTache);
+    public void archiverTache(int idColonneLigne, Tache t){
         archive.ajouterTache(t);
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
+        this.notifierObservateurs();
     }
 
-    public void supprimerTache(int idColonneLigne, int idTache){
-        CompositeTache t = this.colonneLignes.get(idColonneLigne).trouverTache(idTache);
+    public void desarchiverTache(Tache t){
+        this.ajouterCompositeTache(0, t);
+        this.archive.supprimerTache(t);
+        this.notifierObservateurs();
+    }
+
+    public void supprimerTache(int idColonneLigne, Tache t){
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
+        this.notifierObservateurs();
     }
 
     public void supprimerColonneLigne(int idColonneLigne){
         this.colonneLignes.remove(this.colonneLignes.get(idColonneLigne));
+        this.nbColonnes--;
+        this.notifierObservateurs();
     }
 
     /**
@@ -194,5 +207,132 @@ public class ModeleMenu implements Sujet {
         for (Observateur o: this.observateurs){
             o.actualiser(this);
         }
+    }
+
+    private void ajouterDependanceMere(Tache t, ArrayList<Tache> tacheMere){
+        for(Tache tMere : tacheMere){
+
+            if(this.dependance.containsKey(tMere)){
+                ArrayList<Tache> tFille = this.dependance.get(tMere);
+                tFille.add(t);
+                this.dependance.put(tMere, tFille);
+            }
+            else{
+                ArrayList<Tache> tFille = new ArrayList<>();
+                tFille.add(t);
+                this.dependance.put(tMere, tFille);
+            }
+        }
+        this.tachesAjouterDependance.clear();
+    }
+
+    private void ajouterDependanceFille(Tache t, ArrayList<Tache> tacheFille){
+        ArrayList<Tache> taches = new ArrayList<>();
+        for (Tache tf : tacheFille){
+            taches.add(tf);
+        }
+        this.dependance.put(t, taches);
+    }
+
+    public void ajouterDependance(Tache t, ArrayList<Tache> taches, String type){
+        if(type.equals("fille")){
+            ajouterDependanceFille(t, taches);
+        }
+        else {
+            ajouterDependanceMere(t, taches);
+        }
+    }
+
+
+
+    public void echangerColonneLigne(int colonneLigne1, int colonneLigne2){
+        ColonneLigne cl = this.colonneLignes.get(colonneLigne1);
+        this.colonneLignes.set(colonneLigne1, this.colonneLignes.get(colonneLigne2));
+        this.colonneLignes.set(colonneLigne2, cl);
+        this.notifierObservateurs();
+    }
+
+
+    public Tache recupererTache(int idAncienneColonne, String txtCol){
+        for (Tache t : this.colonneLignes.get(idAncienneColonne).getTacheList() ){
+            if(t.getNom().equals(txtCol)){
+                return t;
+            }
+        }
+        return null;
+    }
+
+    public Tache supprimerSousTache(Tache ancienneTache, String txtSousTache){
+        for (Tache sousTache : ancienneTache.getSousTaches()){
+            if(sousTache.getNom().equals(txtSousTache)){
+                ancienneTache.retirerSousTache(sousTache.getId());
+                return sousTache;
+            }
+            supprimerSousTache(sousTache, txtSousTache);
+        }
+        return null;
+    }
+
+
+    /**
+     * Récupéré toutes les tâches sans la tache passée en paramètre et les tâches filles déjà existante
+     */
+    public ArrayList<Tache> recupererToutesTachesSansMere(Tache t){
+        ArrayList<Tache> listeTaches = this.recupererToutesTaches();
+
+        for (int i = 0; i < listeTaches.size(); i++){
+            Tache tt = listeTaches.get(i);
+            // Vérifie si la tache t n'est pas dans l'arrayList fille de la tache mère de la Map
+            if(this.dependance.containsKey(tt)){
+                if(this.dependance.get(tt).contains(t)){
+                    listeTaches.remove(tt);
+                    i--;
+                }
+            }
+        }
+        listeTaches.remove(t);
+        return listeTaches;
+    }
+
+
+    /**
+     * Récupéré toutes les tâches sans la tache passée en paramètre et les tâches filles déjà existante
+     */
+    public ArrayList<Tache> recupererToutesTachesSansFille(Tache t){
+        ArrayList<Tache> listeTaches = this.recupererToutesTaches();
+        if(this.dependance.containsKey(t)){
+            for (Tache tacheFille : this.dependance.get(t)){
+                listeTaches.remove(tacheFille);
+            }
+        }
+
+        listeTaches.remove(t);
+        return listeTaches;
+    }
+
+
+    public ArrayList<Tache> recupererToutesTaches(){
+        ArrayList<Tache> listeTaches = new ArrayList<>();
+        for (ColonneLigne cl : this.colonneLignes){
+            for (Tache t : cl.tachelist){
+                listeTaches.add(t);
+                for (Tache sousTache: t.getSousTaches()){
+                    listeTaches.add(sousTache);
+                }
+            }
+        }
+        return listeTaches;
+    }
+
+    public void ajouterTacheListeTacheDependance(Tache tacheDependante){
+        this.tachesAjouterDependance.add(tacheDependante);
+    }
+
+    public void supprimerTacheListeTacheDependance(Tache tacheDependante){
+        this.tachesAjouterDependance.remove(tacheDependante);
+    }
+
+    public ArrayList<Tache> getTachesAjouterDependance() {
+        return tachesAjouterDependance;
     }
 }

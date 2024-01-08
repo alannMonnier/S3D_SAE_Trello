@@ -8,6 +8,7 @@ public class MainDependance {
      * Démonstration utilisation dépendance dans l'itération 1
      */
     public static void main(String[] args) {
+        /**
         // Création d'une tâche
         Tache tache = new Tache(7, "Tache 7", 2, 3);
 
@@ -24,6 +25,6 @@ public class MainDependance {
         tache.ajouterDependanceFille(tacheFille);
 
         // Affiche les dépendances de la tache
-        System.out.println(tache.afficherDependance());
+        System.out.println(tache.afficherDependance());*/
     }
 }

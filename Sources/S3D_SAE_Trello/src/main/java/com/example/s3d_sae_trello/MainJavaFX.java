@@ -37,15 +37,17 @@ public class MainJavaFX extends Application {
         Button mtableau = new Button("Tableau tâche");
         Button mListe = new Button("Liste tâche");
         Button mGantt = new Button("Gantt");
+        Button mArchive = new Button("Archive");
 
 
-        menuBar.getChildren().addAll(mtableau, mListe, mGantt);
+        menuBar.getChildren().addAll(mtableau, mListe, mGantt, mArchive);
         menuBar.setPadding(new Insets(10));
         menuBar.setSpacing(20);
 
         mtableau.setOnAction(new ControleurActionMenu(modele));
         mListe.setOnAction(new ControleurActionMenu(modele));
         mGantt.setOnAction(new ControleurActionMenu(modele));
+        mArchive.setOnAction(new ControleurActionMenu(modele));
 
 
         vmenu.getChildren().addAll(vtitlemenu, menuBar);

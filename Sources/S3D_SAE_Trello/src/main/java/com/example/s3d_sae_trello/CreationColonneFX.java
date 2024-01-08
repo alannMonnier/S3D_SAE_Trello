@@ -24,7 +24,7 @@ public class CreationColonneFX extends Application {
     public void start(Stage stage) throws Exception {
         GridPane gp = new GridPane();
 
-        TextField tf = new TextField();
+        TextField tf = new TextField("Colonne " + this.modele.getNbColonnes());
         Label l = new Label("Entrez le nom de la colonne");
 
 

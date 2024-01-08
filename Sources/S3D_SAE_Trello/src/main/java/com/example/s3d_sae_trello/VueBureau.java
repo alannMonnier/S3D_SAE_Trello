@@ -1,7 +1,11 @@
 package com.example.s3d_sae_trello;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
@@ -15,9 +19,9 @@ public class VueBureau extends HBox implements Observateur {
 
         HBox hvide = new HBox();
         BorderPane bp = new BorderPane();
-        Label lbp = new Label("+ Ajouter une nouvelle colonne");
-        bp.setCenter(lbp);
-        lbp.setOnMouseClicked(new ControleurColonneLigne(modele, this.id));
+        Button btn = new Button("+ Ajouter une nouvelle colonne");
+        bp.setCenter(btn);
+        btn.setOnMouseClicked(new ControleurColonneLigne(modele, this.id));
         hvide.getChildren().addAll(bp);
         hvide.setBorder(Border.stroke(Color.BLACK));
         hvide.setPadding(new Insets(5));
@@ -34,12 +38,16 @@ public class VueBureau extends HBox implements Observateur {
 
         switch (modele.getTypeVue()){
             case "Gantt":
-                //n = new VueGantt();
-                System.out.println("la");
+                VueGantt vg = new VueGantt(modele);
+
                 break;
             case "Liste":
-                System.out.println("lz");
+
                 //n = new VueBureauLigne(modele);
+                break;
+            case "Archive":
+                VueArchive vueArchive = new VueArchive(modele);
+                this.getChildren().add(vueArchive);
                 break;
             default:
                 // Création des colonnes du trello
@@ -53,9 +61,9 @@ public class VueBureau extends HBox implements Observateur {
 
                 HBox hvide = new HBox();
                 BorderPane bp = new BorderPane();
-                Label lbp = new Label("+ Ajouter une nouvelle colonne");
-                bp.setCenter(lbp);
-                lbp.setOnMouseClicked(new ControleurColonneLigne(modele, this.id));
+                Button btn = new Button("+ Ajouter une nouvelle colonne");
+                bp.setCenter(btn);
+                btn.setOnMouseClicked(new ControleurColonneLigne(modele, this.id));
                 hvide.getChildren().addAll(bp);
                 hvide.setBorder(Border.stroke(Color.BLACK));
                 hvide.setPadding(new Insets(5));
@@ -66,8 +74,5 @@ public class VueBureau extends HBox implements Observateur {
                 this.setSpacing(30);
                 break;
         }
-
-
-
     }
 }

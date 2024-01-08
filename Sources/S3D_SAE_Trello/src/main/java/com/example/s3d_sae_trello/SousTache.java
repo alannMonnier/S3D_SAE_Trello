@@ -1,46 +1,29 @@
 package com.example.s3d_sae_trello;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Objects;
 
-// Tache qui possède des sous taches
+public class SousTache extends Tache{
 
-public class SousTache extends CompositeTache {
+    private int idSousTache;
 
-    private ArrayList<CompositeTache> sousTaches;
+    public SousTache(int id, String nom, int degreUrgence, int tempsEstime, LocalDate dateDebutReal, int idSousTache){
+        super(id, nom, "", degreUrgence, tempsEstime, dateDebutReal);
 
-    public SousTache(int id, String n, int urgence, int tempsEstime) {
-        super(id, n, urgence, tempsEstime);
-        sousTaches = new ArrayList<>();
     }
 
-    public void ajouterSousTache(CompositeTache t){
-        sousTaches.add(t);
-    }
 
-    public void retirerSousTache(int id){
-        int indice = -1;
-        for(CompositeTache t : sousTaches){
-            if(t.getId() == id){
-                indice = t.getId();
-            }
-        }
-
-        if(indice != -1){
-            sousTaches.remove(indice);
-        }
-    }
-
-    public ArrayList<CompositeTache> getSousTaches() {
-        return sousTaches;
-    }
-
-    /**
-     * Compare deux objets SousTache
-     * @return true s'ils sont égaux false sinon
-     */
     @Override
     public boolean equals(Object obj) {
-        SousTache st = (SousTache) obj;
-        return st.id == this.id;
+        if(this == obj) {return true;}
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Tache t = (Tache) obj;
+        return this.getId() == t.getId() && Objects.equals(getNom(), t.getNom()) && Objects.equals(getDescription(), t.getDescription())
+                && Objects.equals(getDateCreation(), t.getDateCreation()) && getDegreUrgence() == t.getDegreUrgence()
+                && getTempsEstime() == t.getTempsEstime() && getTacheRealise() == t.getTacheRealise()
+                && Objects.equals(getDateDebutReal(), t.getDateDebutReal()) && getTacheRealise() == t.getTacheRealise()
+                && Objects.equals(getSousTaches(), t.getSousTaches()) && idSousTache == t.getIdSousTache()
+                && isAfficherSousTache() == t.isAfficherSousTache() && isEstSelectionne() == t.isEstSelectionne();
     }
 }
