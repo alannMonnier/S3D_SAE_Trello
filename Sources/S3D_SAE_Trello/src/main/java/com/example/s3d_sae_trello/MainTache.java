@@ -2,6 +2,7 @@ package com.example.s3d_sae_trello;
 
 public class MainTache {
     public static void main(String[] args) {
+        /**
         // Création d'une tâche classique
         Tache tachePrincipale = new Tache(11, "Tache classique", "Alice", "Dupont", 1, 120, "description_tache");
 
@@ -29,5 +30,6 @@ public class MainTache {
 
         // Affichage de la tâche complexe avec ses sous-tâches
         System.out.println(tacheComplexe);
+         */
     }
 }

@@ -82,10 +82,6 @@ public class VueBureau extends HBox implements Observateur {
                 this.setSpacing(30);
                 break;
         }
-<<<<<<< HEAD
-=======
 
-
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
     }
 }

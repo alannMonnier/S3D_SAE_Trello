@@ -18,19 +18,12 @@ public class ColonneLigne {
         this.tachelist = new ArrayList<Tache>();
     }
 
-<<<<<<< HEAD
+
     public void ajouterTache(Tache t){
         this.tachelist.add(t);
     }
 
     public void supprimerTache(Tache t){
-=======
-    public void ajouterTache(CompositeTache t) {
-        this.tachelist.add(t);
-    }
-
-    public void supprimerTache(CompositeTache t) {
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
         this.tachelist.remove(t);
     }
 
@@ -38,13 +31,8 @@ public class ColonneLigne {
 
         Collections.sort(tachelist, new Comparator<Tache>() {
             @Override
-<<<<<<< HEAD
             public int compare(Tache t1, Tache t2) {
                 if(t1.getDateCreation().equals(t2.getDateCreation())){
-=======
-            public int compare(CompositeTache t1, CompositeTache t2) {
-                if (t1.getDate().equals(t2.getDate())) {
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
                     return 0;
                 }
                 return t1.getDateCreation().isAfter(t2.getDateCreation()) ? -1 : 1;
@@ -57,13 +45,10 @@ public class ColonneLigne {
 
         Collections.sort(tachelist, new Comparator<Tache>() {
             @Override
-<<<<<<< HEAD
+
             public int compare(Tache t1, Tache t2) {
                 if(t1.getDegreUrgence() > t2.getDegreUrgence()){
-=======
-            public int compare(CompositeTache t1, CompositeTache t2) {
-                if (t1.getDegreUrgence() > t2.getDegreUrgence()) {
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
+
                     return -1;
                 } else if (t1.getDegreUrgence() < t2.getDegreUrgence()) {
                     return 1;
@@ -83,15 +68,10 @@ public class ColonneLigne {
         });
     }
 
-<<<<<<< HEAD
+
     public Tache trouverTache(int i){
         for(Tache t : this.tachelist){
             if(t.getId() == i){
-=======
-    public CompositeTache trouverTache(int i) {
-        for (CompositeTache t : this.tachelist) {
-            if (t.getId() == i) {
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
                 return t;
             }
         }
@@ -99,7 +79,7 @@ public class ColonneLigne {
         return null;
     }
 
-<<<<<<< HEAD
+
     public ArrayList<Tache> getTacheList(){
         return (ArrayList<Tache>) tachelist;
     }
@@ -111,10 +91,6 @@ public class ColonneLigne {
             }
         }
         return null;
-=======
-    public ArrayList<CompositeTache> getTacheList() {
-        return (ArrayList<CompositeTache>) tachelist;
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
     }
 
     public int getNumero() {

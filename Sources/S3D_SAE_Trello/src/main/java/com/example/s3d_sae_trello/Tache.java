@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
-<<<<<<< HEAD
+
 public class Tache implements Comparable<Tache>{
 
     private int id;
@@ -43,11 +43,7 @@ public class Tache implements Comparable<Tache>{
     public void ajouterSousTache(Tache st){
         this.idSousTache++;
         this.sousTaches.add(st);
-=======
-public class Tache extends CompositeTache {
-    public Tache(int id, String nomTache, String nomUtilisateur, String prenomUtilisateur, int urgence, int tempsEstime, String description) {
-        super(id, nomTache, nomUtilisateur, prenomUtilisateur, urgence, tempsEstime, description);
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
+
     }
 
     public void retirerSousTache(int id){
@@ -116,7 +112,7 @@ public class Tache extends CompositeTache {
 
 
     @Override
-<<<<<<< HEAD
+
     public int compareTo(Tache o) {
         if(this.getDateDebutReal().isBefore(o.dateDebutReal)){
             return -1;
@@ -133,15 +129,6 @@ public class Tache extends CompositeTache {
             }
         }
         return 0;
-=======
-    public boolean ajouterSousTache(CompositeTache t) {
-        return false;
-    }
-
-    @Override
-    public boolean retirerSousTache(int id) {
-        return false;
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
     }
 
 

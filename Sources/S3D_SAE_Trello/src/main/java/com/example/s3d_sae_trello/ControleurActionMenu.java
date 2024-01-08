@@ -18,12 +18,7 @@ public class ControleurActionMenu implements EventHandler<ActionEvent> {
     public void handle(ActionEvent actionEvent) {
         // Récupérer nom menuBar cliqué puis changer type affichage avec methode setTypeVue
         Button b = (Button) actionEvent.getSource();
-<<<<<<< HEAD
         switch ( b.getText() ){
-=======
-        System.out.println(b.getText());
-        switch (b.getText()) {
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
             case "Gantt":
                 this.modele.setTypeVue("Gantt");
                 break;

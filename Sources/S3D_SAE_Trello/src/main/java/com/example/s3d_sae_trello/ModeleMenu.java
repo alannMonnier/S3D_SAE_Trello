@@ -98,11 +98,8 @@ public class ModeleMenu implements Sujet {
      * @param idColonneLigne indice dans la liste
      * @param t              tache ou sous tache
      */
-<<<<<<< HEAD
+
     public void ajouterCompositeTache(int idColonneLigne, Tache t){
-=======
-    public void ajouterCompositeTache(int idColonneLigne, CompositeTache t) {
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
         this.colonneLignes.get(idColonneLigne).ajouterTache(t);
         if(!(t.getId() < tacheCompositeNumId)){
             tacheCompositeNumId++;
@@ -117,13 +114,10 @@ public class ModeleMenu implements Sujet {
      * @param idNewColonneLigne index nouvelle colonneLigne
      * @param t                 tache ou sous tache
      */
-<<<<<<< HEAD
+
     public void deplacerCompositeTache(int idColonneLigne, int idNewColonneLigne, Tache t){
         // Ajoute la tâche dans la nouvelle colonneLigne
         this.colonneLignes.get(idNewColonneLigne).ajouterTache(t);
-=======
-    public void deplacerCompositeTache(int idColonneLigne, int idNewColonneLigne, CompositeTache t) {
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
         // Supprime la tâche présente dans la colonneLigne actuel
         this.colonneLignes.get(idColonneLigne).getTacheList().remove(t);
         this.notifierObservateurs();
@@ -157,7 +151,7 @@ public class ModeleMenu implements Sujet {
         this.notifierObservateurs();
     }
 
-<<<<<<< HEAD
+
 
 
     public void archiverToutesTaches(int idColonneLigne){
@@ -165,49 +159,21 @@ public class ModeleMenu implements Sujet {
         Iterator<Tache> iterator = taches.iterator();
         while (iterator.hasNext()) {
             Tache t = iterator.next();
-=======
-    /**
-     * MVC
-     */
-    public void afficherColonne() {
 
-    }
-
-    /**
-     * MVC
-     */
-    public void afficherListe() {
-
-    }
-
-    /**
-     * MVC
-     */
-    public void afficherGantt() {
-
-    }
-
-    public void archiverToutesTaches(int idColonneLigne) {
-        for (CompositeTache t : this.colonneLignes.get(idColonneLigne).getTacheList()) {
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
             archive.ajouterTache(t);
             iterator.remove();
         }
         this.notifierObservateurs();
     }
 
-<<<<<<< HEAD
+
     public void archiverTache(int idColonneLigne, Tache t){
-=======
-    public void archiverTache(int idColonneLigne, int idTache) {
-        CompositeTache t = this.colonneLignes.get(idColonneLigne).trouverTache(idTache);
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
         archive.ajouterTache(t);
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
         this.notifierObservateurs();
     }
 
-<<<<<<< HEAD
+
     public void desarchiverTache(Tache t){
         this.ajouterCompositeTache(0, t);
         this.archive.supprimerTache(t);
@@ -215,10 +181,6 @@ public class ModeleMenu implements Sujet {
     }
 
     public void supprimerTache(int idColonneLigne, Tache t){
-=======
-    public void supprimerTache(int idColonneLigne, int idTache) {
-        CompositeTache t = this.colonneLignes.get(idColonneLigne).trouverTache(idTache);
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
         this.notifierObservateurs();
     }

@@ -92,18 +92,11 @@ public class CreationTacheFX extends Application {
             int tempsTache = (int) spinner.getValue();
             LocalDate dateDebutReal = dp.getValue();
 
-<<<<<<< HEAD
+
             // Création de la tâche
             Tache tache = new Tache(idTache, nomTache, descriptionTache, urg, tempsTache, dateDebutReal);
             modele.ajouterCompositeTache(this.idColonne, tache);
-=======
-            // Get the selected dependency
-            RadioButton dependance = (RadioButton) tg.getSelectedToggle();
-            String dependencyType = dependance.getText();
 
-            //compotache = new Tache(0, nomTache, urg, tempsTache, descriptionTache);
-            modele.ajouterCompositeTache(this.idColonne, new Tache(modele.getTacheCompositeNumId(), nomTache, "Robert", "Anne", urg, tempsTache, descriptionTache));
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
             // On ferme la page
             stage.close();
         });

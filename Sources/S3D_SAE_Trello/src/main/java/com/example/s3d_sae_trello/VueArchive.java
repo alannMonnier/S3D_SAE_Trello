@@ -1,6 +1,6 @@
 package com.example.s3d_sae_trello;
 
-<<<<<<< HEAD
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -35,11 +35,7 @@ public class VueArchive extends VBox implements Observateur {
         this.setPadding(new Insets(10));
         this.setSpacing(10);
 
-=======
-public class VueArchive implements Observateur {
-    @Override
-    public void actualiser(Sujet s) {
->>>>>>> 21e90624cb961e02791b0f38a6852032422c6b5b
+
 
     }
 
