@@ -1,0 +1,12 @@
+Lors de cette troisième itération nous avons décidé d'inverser l'itération 3 et 4 que nous avions prévu à la base. Pour une raison simple, de base nous devions commencer le déplacement de tâche et de sosu tâche en les déplacent manuellement mais nous n'avons pas fini l'implémentation des différentes vues pour pouvoir faire les tests sur cette nouvelle fonctionnalité. 
+
+
+De ce fait, nous avons donc développer l'archivage, le tri des tâches, la possibilité de voir les détails d'une tâche tout en continuant le développement et l'implémentation de la partie javaFX. 
+
+Maintenant il est maintenant possible de déplacer une colonne ou une tâche en appuyant sur l'option proposé dans la liste contenant '...'. Egalement nous pouvons archiver une ou plusieurs tâches et les visualiser lorsque l'on appuie sur le bouton archive. Dans la vue d'archivage nous pouvons également déarchiver des tâches qui réapparaissent dans les vues sous forme de liste ou de colonne. 
+
+Contrairement à l'itération précédante, nous avons rencontrés moins de problème sur git ce qui nous a permit de mieux avancer que sur les itérations précédentes. 
+
+Nous avons également mis à jour notre diagramme de classe, avons créer un diagramme de séquence et mis à jour notre trello.
+ 
+Au retour des vacances nous nous lancerons sur le déplacement de tâche avec la souris ainsi que la création du digramme de Gantt. 
