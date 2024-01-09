@@ -1,12 +1,13 @@
 package com.example.s3d_sae_trello;
 
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -22,7 +23,51 @@ public class VueTacheListe extends HBox implements Observateur{
     private int id;
     private int ancienId;
     private Tache tache;
+    private int idAncienneColonne;
     private Tache ancienneTache;
+    private Tache tacheCourante;
+
+
+    private Border createElegantBorderRouge() {
+        Color borderColor = Color.RED;
+        BorderStrokeStyle borderStyle = BorderStrokeStyle.SOLID;
+        // Coins arrondis
+        CornerRadii cornerRadii = new CornerRadii(5); // ajuster la valeur pour l'arrondi des coins
+        // Largeur de bordure
+        BorderWidths borderWidths = new BorderWidths(3); // bordure fine
+
+        // créer la bordure (pour éviter l erreur)
+        BorderStroke borderStroke = new BorderStroke(
+                borderColor,
+                borderStyle,
+                cornerRadii,
+                borderWidths
+        );
+        return new Border(borderStroke);
+    }
+
+    private Border borderRED = createElegantBorderRouge();
+
+
+    private Border createElegantBorderBleu() {
+        Color borderColor = Color.BLUE;
+        BorderStrokeStyle borderStyle = BorderStrokeStyle.SOLID;
+        // Coins arrondis
+        CornerRadii cornerRadii = new CornerRadii(5); // ajuster la valeur pour l'arrondi des coins
+        // Largeur de bordure
+        BorderWidths borderWidths = new BorderWidths(3); // bordure fine
+
+        // créer la bordure (pour éviter l erreur)
+        BorderStroke borderStroke = new BorderStroke(
+                borderColor,
+                borderStyle,
+                cornerRadii,
+                borderWidths
+        );
+        return new Border(borderStroke);
+    }
+
+    private Border borderBleu = createElegantBorderBleu();
 
     private Border createElegantBorder() {
         Color borderColor = Color.LIGHTGRAY;
@@ -57,6 +102,7 @@ public class VueTacheListe extends HBox implements Observateur{
         hbooox.setPadding(new Insets(5, 10, 5, 10));
         hbooox.setSpacing(10);
         hbooox.setStyle("-fx-border-color: lightgray; -fx-border-width: 1; -fx-background-color: white;");
+        hbooox.setBorder(borderBleu);
 
         VBox vBox = new VBox();
         vBox.setSpacing(10);
@@ -68,20 +114,25 @@ public class VueTacheListe extends HBox implements Observateur{
 
         // Creer une VBox pour contenir les éléments à l'intérieur du TitledPane
         VBox vBox_sous_taches = new VBox();
-        vBox_sous_taches.setSpacing(5);
+        //vBox_sous_taches.setBorder(borderRED);
+        vBox_sous_taches.setSpacing(40);
+        vBox_sous_taches.setPadding(new Insets(-1));
 
         ArrayList<HBox> liste_SousTaches = this.sousTache(tache, this);
+        int decalage = 0;
 
         System.out.println("entree liste..");
         System.out.println(liste_SousTaches.size());
 
         for (HBox sousTache : liste_SousTaches){
             vBox_sous_taches.getChildren().add(sousTache);
+            vBox_sous_taches.setMargin(sousTache, new Insets(0, 0, 0, 35)); // Ajoute une marge de 20 pixels à gauche du label
+
+            //sousTache.setBorder(borderBleu);
         }
 
         titledPaneSousTaches.setContent(vBox_sous_taches);
-        titledPaneSousTaches.setExpanded(false);
-
+        titledPaneSousTaches.setExpanded(true);
 
         Label titreTache = new Label(tache.getNom());
         titreTache.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
@@ -105,8 +156,7 @@ public class VueTacheListe extends HBox implements Observateur{
 
         // Ajouter les actions aux éléments de menu
         supprimer.setOnAction(e -> modele.supprimerTache(id, tache));
-        //ajouterSousTache.setOnAction(new ControleurSousTache(m, id, tache.getId()));
-
+        ajouterSousTache.setOnAction(new ControleurSousTache(tache, modele, id));
 
         if (modele.getTypeVue().equals("Archive")) {
             MenuItem desarchiver = new MenuItem("Enlever des archives");
@@ -138,9 +188,141 @@ public class VueTacheListe extends HBox implements Observateur{
 
         hbooox.getChildren().addAll(titreTache, separator1, tempsEstime, separator2, dateDuJour, urgenceCircle, spacer, buttonBox);
 
-
         this.getChildren().add(vBox);
+
+        // Récupère l'objet à déplacer ainsi qu'une image qui apparaît au déplacement
+        this.setOnDragDetected(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Dragboard db = startDragAndDrop(TransferMode.MOVE);
+                ClipboardContent content = new ClipboardContent();
+                content.putImage(snapshot(new SnapshotParameters(), null));
+                content.putString("White");
+                db.setContent(content);
+                mouseEvent.consume();
+            }
+        });
+
+        // Permet de déposer la tâche dans cette zone précise
+        this.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                if (event.getGestureSource() != this && event.getDragboard().hasString()) {
+                    event.acceptTransferModes(TransferMode.MOVE);
+                }
+                event.consume();
+            }
+        });
+
+
+        // On survol la VBox de la tâche à l'endroit où on l'a placé
+        this.setOnDragEntered(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                if (dragEvent.getGestureSource().getClass().toString().contains("VBox")) {
+                    VBox vmere = (VBox) dragEvent.getGestureSource();
+                    while (!(vmere.getParent().getClass().toString().contains("VueTacheListe"))) {
+                        vmere = (VBox) vmere.getParent();
+                    }
+                    VueTacheListe vt = (VueTacheListe) vmere.getParent();
+
+                    VueListe vl = (VueListe) (vt).getParent();
+                    VBox vb2 = (VBox) (vl).getChildren().get(0);
+                    BorderPane bp = (BorderPane) (vb2).getChildren().get(0);
+                    Label l = (Label) (bp).getChildren().get(0);
+                    String txtCol = l.getText();
+                    // Récupère l'ancienne colonne de la sous tache
+                    idAncienneColonne = modele.recupererColonneLigneID(txtCol);
+
+                    // Récupère le texte marqué sur la tâche mère
+                    HBox hb = (HBox) vt.getChildren().get(0);
+                    Label lT = (Label) hb.getChildren().get(0);
+                    String txtTache = lT.getText();
+
+
+                    // Récupère l'id de la tâche
+                    ancienneTache = modele.recupererTache(idAncienneColonne, txtTache);
+                } else if (dragEvent.getGestureSource() != this && dragEvent.getDragboard().hasString()) {
+                    VueTacheListe vt = (VueTacheListe) dragEvent.getGestureSource();
+                    VueListe vl = (VueListe) (vt).getParent();
+                    VBox vb2 = (VBox) (vl).getChildren().get(0);
+                    BorderPane bp = (BorderPane) (vb2).getChildren().get(0);
+                    Label l = (Label) (bp).getChildren().get(0);
+                    String txtCol = l.getText();
+                    idAncienneColonne = modele.recupererColonneLigneID(txtCol);
+                }
+                dragEvent.consume();
+            }
+        });
+
+
+
+       /* this.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasString()) {
+                    // Récupérer le nom de la tâche déplacée à partir des données du Dragboard
+                    String nomTache = db.getString();
+
+                    // Trouver la tâche à déplacer dans le modèle
+                    Tache tacheADeplacer = modele.recupererTache(id, nomTache);
+                    if (tacheADeplacer != null) {
+                        // ID de la colonne cible (ici, 'id' est l'ID de la colonne actuelle dans VueTacheListe)
+                        int targetColonneId = id;
+
+                        // Appeler la méthode du modèle pour déplacer la tâche
+                        modele.deplacerCompositeTache(id, targetColonneId, tacheADeplacer);
+
+                        success = true; // Marquer l'opération comme réussie
+                    }
+                }
+                event.setDropCompleted(success);
+                event.consume();
+            }
+        });*/
+
+        // Action lorsqu'on dépose la tâche à un autre endroit
+        this.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                Dragboard db = dragEvent.getDragboard();
+                boolean success = false;
+
+                if (db.hasString() && dragEvent.getGestureSource().getClass().toString().contains("VueTacheListe")) {
+                    // Récupère le conteneur de la tâche
+                    VueTache hdepla = (VueTache) dragEvent.getGestureSource();
+                    // Récupère le texte déplacé
+                    String texteTacheDepl = ((Label) ((HBox) hdepla.getChildren().get(0)).getChildren().get(0)).getText();
+
+                    // Vérifie si la tâche source est différente de la tâche cible
+                    if (!texteTacheDepl.equals(tacheCourante.getNom())) {
+                        // Récupère la tâche ou on a déplacé
+                        Tache tache = modele.getColonneLignes().get(idAncienneColonne).getTache(texteTacheDepl);
+                        t.ajouterSousTache(tache);
+                        success = true;
+                        // supprime la vbox contenant la tâche
+                        modele.supprimerTache(idAncienneColonne, tache);
+                    }
+                }
+
+                dragEvent.setDropCompleted(success);
+                dragEvent.consume();
+            }
+        });
+
+
+        this.setOnDragDone(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                // Nettoyage après le glissement
+                event.consume();
+            }
+        });
     }
+
+
 
     private Color getColorByUrgency(int urgency) {
         switch (urgency) {
@@ -206,6 +388,9 @@ public class VueTacheListe extends HBox implements Observateur{
         detailStage.showAndWait(); // showAndWait pour bloquer les autres fenêtres jusqu'à ce que celle-ci soit fermée
     }
 
+
+
+
     // Méthode pour créer et afficher les sous-tâches
     private ArrayList<HBox> sousTache(Tache tache, HBox vboxParent) {
         ArrayList<HBox> tabSousTaches = new ArrayList<>();
@@ -215,9 +400,6 @@ public class VueTacheListe extends HBox implements Observateur{
 
             // Ajouter la VueTacheListe à la liste de sous-tâches
             tabSousTaches.add(vueSousTache);
-
-            // Ajouter la VueTacheListe à la HBox parent
-            vboxParent.getChildren().add(vueSousTache);
 
             // Récursion pour ajouter des sous-tâches de sous-tâches
             sousTache(sousTache, vueSousTache);
