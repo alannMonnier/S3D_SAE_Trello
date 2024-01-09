@@ -98,10 +98,6 @@ public class ModeleMenu implements Sujet {
         return nbColonnes;
     }
 
-    public TreeMap<Tache, ArrayList<Tache>> getDependance(){
-        return this.dependance;
-    }
-
     /**
      * Recupere l'identifiant de la tache
      */

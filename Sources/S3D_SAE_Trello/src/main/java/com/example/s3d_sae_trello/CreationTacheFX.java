@@ -104,7 +104,6 @@ public class CreationTacheFX extends Application {
 
         b.setOnAction(event -> {
 
-            // Collect data from input fields
             int idTache = modele.getTacheCompositeNumId();
             String nomTache = tft.getText();
             String descriptionTache = ta.getText();
