@@ -111,7 +111,7 @@ public class CreationSousTacheFX extends Application {
             LocalDate dateDebutReal = dp.getValue();
 
             // Création de la tâche
-            Tache tache = new Tache(idTache, nomTache, descriptionTache, urg, tempsTache, dateDebutReal);
+            Tache tache = new Tache(idTache, nomTache, descriptionTache, urg, tempsTache, dateDebutReal, this.idColonne);
 
             modele.ajouterSousTache(this.idColonne, id_tache_mere, tache);
 

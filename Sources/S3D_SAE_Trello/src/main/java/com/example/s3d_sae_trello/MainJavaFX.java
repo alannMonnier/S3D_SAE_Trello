@@ -53,11 +53,9 @@ public class MainJavaFX extends Application {
         Button mListe = new Button("Liste tâche");
         Button mGantt = new Button("Gantt");
         Button mArchive = new Button("Archive");
-        Button mSauvegarder = new Button("Sauvegarder");
-        Button mCharger = new Button("Charger Sauvegarde");
 
 
-        menuBar.getChildren().addAll(mtableau, mListe, mGantt, mArchive, mSauvegarder, mCharger);
+        menuBar.getChildren().addAll(mtableau, mListe, mGantt, mArchive);
         menuBar.setPadding(new Insets(10));
         menuBar.setSpacing(20);
 
@@ -65,44 +63,6 @@ public class MainJavaFX extends Application {
         mListe.setOnAction(new ControleurActionMenu(modele));
         mGantt.setOnAction(new ControleurActionMenu(modele));
         mArchive.setOnAction(new ControleurActionMenu(modele));
-
-        // Sauvegarde les taches sélectionnées
-        mSauvegarder.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                // Récupère les tâches sélectionnée
-                ArrayList<Tache> tacheSelectionee = modele.getTacheSelectionee();
-
-                // Sauvegarde les taches et sous taches sélectionnées dans un fichier en sérialisant
-                try {
-                    modele.sauvegarderTaches(tacheSelectionee);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-                // Supprime les tâches à sauvegarder
-                modele.supprimerListeTaches(tacheSelectionee);
-            }
-        });
-
-        // Méthode de la récupération d'une sauvegarde
-        mCharger.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    Map<Tache, Integer> tacheSelectionee = modele.recupererSauvegarde();
-                    // Ajouter les Taches aux bons endroits
-                    modele.ajouterMapTache(tacheSelectionee);
-                }
-                catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-
 
         vmenu.getChildren().addAll(vtitlemenu, menuBar);
         racine.setTop(vmenu);
@@ -116,6 +76,9 @@ public class MainJavaFX extends Application {
         scrollPane.setFitToHeight(true);
 
         racine.setCenter(scrollPane);
+
+        modele.recupererSauvegardeColonneLigne();
+        modele.recupererSauvegardeTache();
 
 
         double largeur = Screen.getPrimary().getBounds().getWidth();

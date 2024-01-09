@@ -16,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -178,7 +179,11 @@ public class VueColonne extends VBox implements Observateur {
                     String texteTacheDepl = ((Label) ((HBox) hdepla.getChildren().get(0)).getChildren().get(0)).getText();
                     Tache tDepl = modele.getColonneLignes().get(idAncienneColonne).getTache(texteTacheDepl);
                     modele.supprimerTache(idAncienneColonne, tDepl);
-                    modele.ajouterCompositeTache(idColonne, tDepl);
+                    try {
+                        modele.ajouterCompositeTache(tDepl);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 } else if (dragEvent.getGestureSource().getClass().toString().contains("VueColonne")) {
                     modele.echangerColonneLigne(idColonneADeplace, idColonne);
                 } else if (dragEvent.getGestureSource().getClass().toString().contains("VBox")) {
@@ -190,7 +195,11 @@ public class VueColonne extends VBox implements Observateur {
                     Tache st = modele.supprimerSousTache(ancienneTache, txtSousTache);
 
                     // Ajouter la sous tâche à la colonne
-                    modele.ajouterCompositeTache(idColonne, st);
+                    try {
+                        modele.ajouterCompositeTache(st);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 dragEvent.setDropCompleted(success);
                 dragEvent.consume();

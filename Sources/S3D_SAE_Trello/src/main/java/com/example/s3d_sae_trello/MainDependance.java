@@ -1,6 +1,7 @@
 package com.example.s3d_sae_trello;
 
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class MainDependance {
     /**
      * Démonstration utilisation dépendance dans l'itération 1
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         /**
         // Création d'une tâche
         Tache tache = new Tache(7, "Tache 7", "Marie", "Helene", 3, 200, "description_tache7");
@@ -36,16 +37,16 @@ public class MainDependance {
         modeleMenu.ajouterColonneLigne("Test", 1);
 
         // Ajouter des tâches
-        Tache tache1 = new Tache(modeleMenu.getTacheCompositeNumId(), "Tache 1", "", 2, 1, LocalDate.now());
-        modeleMenu.ajouterCompositeTache(0, tache1);
-        Tache tache2 = new Tache(modeleMenu.getTacheCompositeNumId(), "Tache 2", "", 3, 2, LocalDate.now());
-        modeleMenu.ajouterCompositeTache(0, tache2);
-        Tache tache3 = new Tache(modeleMenu.getTacheCompositeNumId(), "Tache 3", "", 1, 3, LocalDate.now());
-        modeleMenu.ajouterCompositeTache(0, tache3);
-        Tache tache4 = new Tache(modeleMenu.getTacheCompositeNumId(), "Tache 4", "", 3, 1, LocalDate.now());
-        modeleMenu.ajouterCompositeTache(0, tache4);
-        Tache tache5 = new Tache(modeleMenu.getTacheCompositeNumId(), "Tache 5", "", 2, 2, LocalDate.now());
-        modeleMenu.ajouterCompositeTache(0, tache5);
+        Tache tache1 = new Tache(modeleMenu.getTacheCompositeNumId(), "Tache 1", "", 2, 1, LocalDate.now(), 0);
+        modeleMenu.ajouterCompositeTache(tache1);
+        Tache tache2 = new Tache(modeleMenu.getTacheCompositeNumId(), "Tache 2", "", 3, 2, LocalDate.now(), 0);
+        modeleMenu.ajouterCompositeTache(tache2);
+        Tache tache3 = new Tache(modeleMenu.getTacheCompositeNumId(), "Tache 3", "", 1, 3, LocalDate.now(), 0);
+        modeleMenu.ajouterCompositeTache(tache3);
+        Tache tache4 = new Tache(modeleMenu.getTacheCompositeNumId(), "Tache 4", "", 3, 1, LocalDate.now(), 0);
+        modeleMenu.ajouterCompositeTache(tache4);
+        Tache tache5 = new Tache(modeleMenu.getTacheCompositeNumId(), "Tache 5", "", 2, 2, LocalDate.now(), 0);
+        modeleMenu.ajouterCompositeTache(tache5);
 
         ArrayList<Tache> meretache1 = new ArrayList<>();
         meretache1.add(tache2);

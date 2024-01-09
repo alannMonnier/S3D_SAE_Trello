@@ -13,7 +13,7 @@ public class ModeleMenu implements Sujet {
      * Declarations des attributs
      */
     private ArrayList<Observateur> observateurs; // Vues
-    private ArrayList<ColonneLigne> colonneLignes; // tableau de tacheComposite
+    private ArrayList<ColonneLigne> colonneLignes;
     private ArrayList<Tache> tacheSelectionee;
     private Archive archive; // Archive
     private DiagrammeGantt gantt;
@@ -117,10 +117,12 @@ public class ModeleMenu implements Sujet {
      *
      * @param nom de la nouvelle colonneLigne
      */
-    public void ajouterColonneLigne(String nom, int id) {
-        this.colonneLignes.add(new ColonneLigne(nom, id));
+    public void ajouterColonneLigne(String nom, int id) throws IOException {
+        ColonneLigne c = new ColonneLigne(nom, id);
+        this.colonneLignes.add(c);
         nbColonnes++;
         this.notifierObservateurs();
+        this.sauvegarderColonneLigne();
     }
 
     /**
@@ -140,19 +142,19 @@ public class ModeleMenu implements Sujet {
     /**
      * Ajoute une nouvelle tache ou sous tache dans la colonneLigne récupéré
      *
-     * @param idColonneLigne indice dans la liste
      * @param t              tache ou sous tache
      */
 
-    public void ajouterCompositeTache(int idColonneLigne, Tache t) {
-        if (idColonneLigne >= 0 && idColonneLigne < colonneLignes.size()) {
-            this.colonneLignes.get(idColonneLigne).ajouterTache(t);
+    public void ajouterCompositeTache(Tache t) throws IOException {
+        if (t.getIdcolonne() >= 0 && t.getIdcolonne() < colonneLignes.size()) {
+            this.colonneLignes.get(t.getIdcolonne()).ajouterTache(t);
             if (!(t.getId() < tacheCompositeNumId)) {
                 tacheCompositeNumId++;
             }
             this.notifierObservateurs();
+            this.sauvegarderTache();
         } else {
-            System.out.println("Mauvais numéro de colonne: " + idColonneLigne);
+            System.out.println("Mauvais numéro de colonne: " + t.getIdcolonne());
         }
     }
 
@@ -247,8 +249,8 @@ public class ModeleMenu implements Sujet {
      * Désarchive la tache donnée
      * @param t tache donnée
      */
-    public void desarchiverTache(Tache t) {
-        this.ajouterCompositeTache(0, t);
+    public void desarchiverTache(Tache t) throws IOException {
+        this.ajouterCompositeTache(t);
         this.archive.supprimerTache(t);
         this.notifierObservateurs();
     }
@@ -519,14 +521,26 @@ public class ModeleMenu implements Sujet {
     /**
      * Sauvegarde les taches données dans un fichier.txt
      */
-    public void sauvegarderTaches(ArrayList<Tache> tacheSelectionee) throws IOException {
+    public void sauvegarderTache() throws IOException {
 
-        FileOutputStream os = new FileOutputStream("fichier.txt");
+        ArrayList<Tache> t = recupererToutesTaches();
+        FileOutputStream os = new FileOutputStream("tache.txt");
         ObjectOutputStream oos = new ObjectOutputStream(os);
-        for (Tache t : tacheSelectionee){
-            // Ecris la tache
-            //oos.write();
-            oos.writeObject(t);
+        // Ecris la tache
+        for(Tache tac : t){
+            oos.writeObject(tac);
+        }
+        oos.close();
+    }
+
+    public void sauvegarderColonneLigne() throws IOException {
+
+        FileOutputStream os = new FileOutputStream("colonne.txt");
+        ObjectOutputStream oos = new ObjectOutputStream(os);
+        ArrayList<ColonneLigne> t = this.colonneLignes;
+        // Ecris la ColonneLigne
+        for(ColonneLigne col : t){
+            oos.writeObject(col);
         }
         oos.close();
     }
@@ -536,16 +550,40 @@ public class ModeleMenu implements Sujet {
      * Récupere Map<Tache, Integer> de tache en fonction de l'id de la colonne comme marqué dans le fichier
      */
     // Integer = numColonneLigne
-    public Map<Tache, Integer> recupererSauvegarde() throws IOException, ClassNotFoundException {
-        TreeMap<Tache, Integer> tacheSelectionee = new TreeMap<>();
-        FileInputStream is = new FileInputStream("fichier.txt");
-        ObjectInputStream ois = new ObjectInputStream(is);
-
-        while (is.available() > 0){
-            Tache t = (Tache)(ois.readObject());
-            tacheSelectionee.put(t, 0);
+    public void recupererSauvegardeTache() throws IOException, ClassNotFoundException {
+        ArrayList<Tache> tacheSelectionee = new ArrayList<>();
+        try (FileInputStream is = new FileInputStream("tache.txt");
+             ObjectInputStream ois = new ObjectInputStream(is)) {
+            while (is.available() > 0) {
+                Tache t = (Tache) (ois.readObject());
+                tacheSelectionee.add(t);
+            }
+            for (Tache t : tacheSelectionee) {
+                System.out.println(t);
+                this.ajouterCompositeTache(t);
+            }
+        } catch (EOFException e) {
+            System.out.println("Aucune donnée dans le fichier, aucun objet chargé");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
-        return tacheSelectionee;
+        notifierObservateurs();
+    }
+
+    public void recupererSauvegardeColonneLigne() throws IOException, ClassNotFoundException {
+        try (FileInputStream is = new FileInputStream("colonne.txt");
+             ObjectInputStream ois = new ObjectInputStream(is)) {
+            while (is.available() > 0) {
+                ColonneLigne t = (ColonneLigne) (ois.readObject());
+                System.out.println(t);
+                this.ajouterColonneLigne(t.getNom(), this.nbColonnes);
+            }
+        } catch (EOFException e) {
+            System.out.println("Aucune donnée dans le fichier, aucun objet chargé");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        notifierObservateurs();
     }
 
     /**

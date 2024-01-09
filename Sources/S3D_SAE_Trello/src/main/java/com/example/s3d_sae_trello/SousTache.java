@@ -17,8 +17,8 @@ public class SousTache extends Tache{
     /**
      * Constructeur
      */
-    public SousTache(int id, String nom, String description, int degreUrgence, int tempsEstime, LocalDate dateDebutReal, int idSousTache){
-        super(id, nom, description, degreUrgence, tempsEstime, dateDebutReal);
+    public SousTache(int id, String nom, String description, int degreUrgence, int tempsEstime, LocalDate dateDebutReal, int idcol){
+        super(id, nom, description, degreUrgence, tempsEstime, dateDebutReal, idcol);
     }
 
 

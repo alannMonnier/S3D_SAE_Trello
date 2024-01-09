@@ -18,6 +18,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.IOException;
+
 public class VueTache extends VBox implements Observateur {
 
 
@@ -55,7 +57,13 @@ public class VueTache extends VBox implements Observateur {
 
         if (modeleMenu.getTypeVue().equals("Archive")) {
             MenuItem desarchiver = new MenuItem("Enlever des archives");
-            desarchiver.setOnAction(e -> modeleMenu.desarchiverTache(t));
+            desarchiver.setOnAction(e -> {
+                try {
+                    modeleMenu.desarchiverTache(t);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
             menuParamTache.getItems().addAll(supprimer, creerDependanceMere, creerDependanceFille, ajouterSousTache, desarchiver);
         } else {
             MenuItem archiver = new MenuItem("Archiver");

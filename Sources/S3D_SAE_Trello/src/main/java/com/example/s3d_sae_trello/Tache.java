@@ -29,6 +29,8 @@ public class Tache implements Comparable<Tache>, Serializable {
     private boolean afficherSousTache;
     private boolean estSelectionne;
 
+    private int idcolonne;
+
 
     /**
      * Constructeur
@@ -39,7 +41,7 @@ public class Tache implements Comparable<Tache>, Serializable {
      * @param tempsEstime temps pour réaliser la tache
      * @param dateDebutReal date début réalisation de la tache
      */
-    public Tache(int id, String nom, String description, int degreUrgence, int tempsEstime, LocalDate dateDebutReal){
+    public Tache(int id, String nom, String description, int degreUrgence, int tempsEstime, LocalDate dateDebutReal, int idcolonne){
         this.id = id;
         this.nom = nom;
         this.description = description;
@@ -53,6 +55,7 @@ public class Tache implements Comparable<Tache>, Serializable {
         this.idSousTache = 0;
         this.afficherSousTache = false;
         this.estSelectionne = false;
+        this.idcolonne = idcolonne;
     }
 
     /**
@@ -84,6 +87,8 @@ public class Tache implements Comparable<Tache>, Serializable {
     public String getNom() {
         return nom;
     }
+
+    public int getIdcolonne(){return this.idcolonne;};
 
     /**
      * Recupere date de création

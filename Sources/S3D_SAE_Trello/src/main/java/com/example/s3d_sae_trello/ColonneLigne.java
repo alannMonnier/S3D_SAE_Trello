@@ -1,6 +1,7 @@
 package com.example.s3d_sae_trello;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,7 +10,7 @@ import java.util.List;
 /**
  * Gestion ColonneLigne
  */
-public class ColonneLigne {
+public class ColonneLigne implements Serializable {
 
     /**
      * Declarations attributs
