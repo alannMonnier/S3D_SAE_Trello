@@ -13,25 +13,45 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 
+/**
+ * Création de la tache en JavaFX
+ */
 public class CreationTacheFX extends Application {
 
+    /**
+     * Declaration attributs
+     */
     private ModeleMenu modele;
     private int idColonne;
 
     //Utile pour l'ajout de sous tache à une tâche en la créant directement
     private Tache tache;
 
+    /**
+     * Constructeur
+     * @param m ModeleMenu
+     * @param idColonne id de la colonne
+     */
     public CreationTacheFX(ModeleMenu m, int idColonne) {
         this.modele = m;
         this.idColonne = idColonne;
     }
 
+    /**
+     * Second Constructeur pour la creation de la sousTache
+     * @param m ModeleMenu
+     * @param idColonne id de la colonne
+     * @param t tache mere
+     */
     public CreationTacheFX(ModeleMenu m, int idColonne, Tache t) {
         this.modele = m;
         this.idColonne = idColonne;
         this.tache = t;
     }
 
+    /**
+     * Lancement de la partie graphique
+     */
     @Override
     public void start(Stage stage) throws Exception {
 

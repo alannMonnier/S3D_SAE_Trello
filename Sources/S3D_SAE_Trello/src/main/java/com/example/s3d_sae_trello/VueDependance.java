@@ -15,6 +15,9 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
+/**
+ * Affichage des dépendances
+ */
 public class VueDependance extends Application {
     private Tache t;
     private ModeleMenu modeleMenu;
@@ -22,6 +25,13 @@ public class VueDependance extends Application {
     private ArrayList<Tache> tachesAjouterDependance;
     private String type;
 
+    /**
+     * Constructeur
+     * @param t tache
+     * @param modeleMenu ModeleMenu
+     * @param taches taches à ajouter dépendance
+     * @param type type de dépandance mere ou fille
+     */
     public VueDependance(Tache t, ModeleMenu modeleMenu, ArrayList<Tache> taches, String type) {
         this.t = t;
         this.modeleMenu = modeleMenu;

@@ -18,9 +18,14 @@ import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
 
+/**
+ * Gestion affichage colonne
+ */
 public class VueColonne extends VBox implements Observateur {
 
-
+    /**
+     * Declaration attributs
+     */
     private ArrayList<Tache> taches;
     private ModeleMenu modele;
     private int idColonne;
@@ -39,6 +44,13 @@ public class VueColonne extends VBox implements Observateur {
     private Border border = new Border(borderStroke);
 
 
+    /**
+     * Constructeur
+     * @param taches taches de la colonne
+     * @param m ModeleMenu
+     * @param id id de la colonne
+     * @param nom nom de la colonne
+     */
     public VueColonne(ArrayList<Tache> taches, ModeleMenu m, int id, String nom) {
         this.taches = taches;
         this.modele = m;

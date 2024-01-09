@@ -4,6 +4,9 @@ package com.example.s3d_sae_trello;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Gestion des données de l'application
+ */
 public class ModeleMenu implements Sujet {
 
     /**
@@ -37,39 +40,66 @@ public class ModeleMenu implements Sujet {
         this.tacheSelectionee = new ArrayList<>();
     }
 
+    /**
+     * Recupere type de la vue
+     */
     public String getTypeVue() {
         return typeVue;
     }
 
+    /**
+     * Change type de vue
+     */
     public void setTypeVue(String s) {
         typeVue = s;
         this.notifierObservateurs();
     }
 
+    /**
+     * Recupere les observateurs
+     */
     public ArrayList<Observateur> getObservateurs() {
         return observateurs;
     }
 
+    /**
+     * Recuere les colonnesLignes
+     */
     public ArrayList<ColonneLigne> getColonneLignes() {
         return colonneLignes;
     }
 
+    /**
+     * Recupere l'archive
+     */
     public Archive getArchive() {
         return archive;
     }
 
+    /**
+     * Recupere le diagramme de Gantt
+     */
     public DiagrammeGantt getGantt() {
         return gantt;
     }
 
+    /**
+     * Recupere le nombre de colonneLigne
+     */
     public int getNbColonnes() {
         return nbColonnes;
     }
 
+    /**
+     * Recupere l'identifiant de la tache
+     */
     public int getTacheCompositeNumId() {
         return tacheCompositeNumId;
     }
 
+    /**
+     * Recupere les taches selectionees
+     */
     public ArrayList<Tache> getTacheSelectionee() {
         return tacheSelectionee;
     }
@@ -85,7 +115,10 @@ public class ModeleMenu implements Sujet {
         this.notifierObservateurs();
     }
 
-
+    /**
+     * Recupere la colonneLigne par rapport au nom de la colonne
+     * @param nomColonne nom de la colonne
+     */
     public int recupererColonneLigneID(String nomColonne) {
         for (int i = 0; i < this.colonneLignes.size(); i++) {
             if (colonneLignes.get(i).getNom().equals(nomColonne)) {
@@ -173,7 +206,10 @@ public class ModeleMenu implements Sujet {
         this.notifierObservateurs();
     }
 
-
+    /**
+     * Archive toutes les taches de la colonneLigne donnée
+     * @param idColonneLigne id de la colonneLigne
+     */
     public void archiverToutesTaches(int idColonneLigne) {
         List<Tache> taches = this.colonneLignes.get(idColonneLigne).getTacheList();
         Iterator<Tache> iterator = taches.iterator();
@@ -186,7 +222,11 @@ public class ModeleMenu implements Sujet {
         this.notifierObservateurs();
     }
 
-
+    /**
+     * Archive la tache donnée
+     * @param idColonneLigne id de la colonneLigne
+     * @param t tache donnée
+     */
     public void archiverTache(int idColonneLigne, Tache t) {
         archive.ajouterTache(t);
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
@@ -194,17 +234,30 @@ public class ModeleMenu implements Sujet {
     }
 
 
+    /**
+     * Désarchive la tache donnée
+     * @param t tache donnée
+     */
     public void desarchiverTache(Tache t) {
         this.ajouterCompositeTache(0, t);
         this.archive.supprimerTache(t);
         this.notifierObservateurs();
     }
 
+    /**
+     * Supprime la tache donée
+     * @param idColonneLigne id de la colonne
+     * @param t tache donnée
+     */
     public void supprimerTache(int idColonneLigne, Tache t) {
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
         this.notifierObservateurs();
     }
 
+    /**
+     * Supprime la colonneLigne
+     * @param idColonneLigne id de la colonneLigne donnée
+     */
     public void supprimerColonneLigne(int idColonneLigne) {
         this.colonneLignes.remove(this.colonneLignes.get(idColonneLigne));
         this.nbColonnes--;
@@ -241,6 +294,11 @@ public class ModeleMenu implements Sujet {
         }
     }
 
+    /**
+     * Ajoute une dépendance Mère
+     * @param t tache sur laquelle on va ajouter des dépendances
+     * @param tacheMere listes de tache mere
+     */
     private void ajouterDependanceMere(Tache t, ArrayList<Tache> tacheMere) {
         for (Tache tMere : tacheMere) {
 
@@ -257,6 +315,11 @@ public class ModeleMenu implements Sujet {
         this.tachesAjouterDependance.clear();
     }
 
+    /**
+     * Ajoute dépendance fille a la tache donnée
+     * @param t tache donnée
+     * @param tacheFille liste taches fille
+     */
     private void ajouterDependanceFille(Tache t, ArrayList<Tache> tacheFille) {
         ArrayList<Tache> taches = new ArrayList<>();
         for (Tache tf : tacheFille) {
@@ -265,6 +328,12 @@ public class ModeleMenu implements Sujet {
         this.dependance.put(t, taches);
     }
 
+    /**
+     * Ajoute une dépendance mère ou fille à la tache donnée
+     * @param t tache donnée
+     * @param taches liste taches mère ou fille
+     * @param type type mere ou fille
+     */
     public void ajouterDependance(Tache t, ArrayList<Tache> taches, String type) {
         if (type.equals("fille")) {
             ajouterDependanceFille(t, taches);
@@ -274,6 +343,11 @@ public class ModeleMenu implements Sujet {
     }
 
 
+    /**
+     * Echange deux colonnesLignes
+     * @param colonneLigne1 colonneLigne 1
+     * @param colonneLigne2 colonneLigne 2
+     */
     public void echangerColonneLigne(int colonneLigne1, int colonneLigne2) {
         ColonneLigne cl = this.colonneLignes.get(colonneLigne1);
         this.colonneLignes.set(colonneLigne1, this.colonneLignes.get(colonneLigne2));
@@ -282,6 +356,11 @@ public class ModeleMenu implements Sujet {
     }
 
 
+    /**
+     * Recupère une tache dans une colonne donnée avec son nom
+     * @param idAncienneColonne id de la colonne
+     * @param txtCol nom de la tache
+     */
     public Tache recupererTache(int idAncienneColonne, String txtCol) {
         for (Tache t : this.colonneLignes.get(idAncienneColonne).getTacheList()) {
             if (t.getNom().equals(txtCol)) {
@@ -292,6 +371,9 @@ public class ModeleMenu implements Sujet {
     }
 
 
+    /**
+     * Supprime sous tache d'une tache grâce à son nom
+     */
     public Tache supprimerSousTache(Tache ancienneTache, String txtSousTache){
         for (Tache sousTache : ancienneTache.getSousTaches()){
             if(sousTache.getNom().equals(txtSousTache)){
@@ -341,6 +423,9 @@ public class ModeleMenu implements Sujet {
     }
 
 
+    /**
+     * Recupere toutes les taches de l'application
+     */
     public ArrayList<Tache> recupererToutesTaches() {
         ArrayList<Tache> listeTaches = new ArrayList<>();
         for (ColonneLigne cl : this.colonneLignes) {
@@ -354,28 +439,46 @@ public class ModeleMenu implements Sujet {
         return listeTaches;
     }
 
+    /**
+     * Ajoute une tache dans la liste de dépendance a ajouter
+     */
     public void ajouterTacheListeTacheDependance(Tache tacheDependante) {
         this.tachesAjouterDependance.add(tacheDependante);
     }
 
+    /**
+     * Supprime une tache dans la liste de dépendance a ajouter
+     */
     public void supprimerTacheListeTacheDependance(Tache tacheDependante) {
         this.tachesAjouterDependance.remove(tacheDependante);
     }
 
 
+    /**
+     * Recupere les taches ou l'on va ajouter des dépendances
+     * @return
+     */
     public ArrayList<Tache> getTachesAjouterDependance() {
         return tachesAjouterDependance;
     }
 
-
+    /**
+     * Ajoute une tache selectionnee a la liste
+     */
     public void ajouterTacheSelectionee(Tache t){
         this.tacheSelectionee.add(t);
     }
 
+    /**
+     * Supprime  une tache selectionnee a la liste
+     */
     public void supprimerTacheSelectionee(Tache t){
         this.tacheSelectionee.remove(t);
     }
 
+    /**
+     * Sauvegarde les taches données dans un fichier.txt
+     */
     public void sauvegarderTaches(ArrayList<Tache> tacheSelectionee) throws IOException {
 
         FileOutputStream os = new FileOutputStream("fichier.txt");
@@ -388,6 +491,10 @@ public class ModeleMenu implements Sujet {
         oos.close();
     }
 
+
+    /**
+     * Récupere Map<Tache, Integer> de tache en fonction de l'id de la colonne comme marqué dans le fichier
+     */
     // Integer = numColonneLigne
     public Map<Tache, Integer> recupererSauvegarde() throws IOException, ClassNotFoundException {
         TreeMap<Tache, Integer> tacheSelectionee = new TreeMap<>();
@@ -401,6 +508,9 @@ public class ModeleMenu implements Sujet {
         return tacheSelectionee;
     }
 
+    /**
+     * Supprime les taches sauvegardées
+     */
     public void supprimerListeTaches(ArrayList<Tache> tacheSelectionee){
         for (int i = 0; i<colonneLignes.size(); i++){
             for (int j = colonneLignes.get(i).getTacheList().size() - 1; j > -1; j--){
@@ -425,7 +535,9 @@ public class ModeleMenu implements Sujet {
         this.notifierObservateurs();
     }
 
-
+    /**
+     * Ajoute une tache à la colonne
+     */
     public void ajouterMapTache(Map<Tache, Integer> tacheSelectionee){
         for (Tache t : tacheSelectionee.keySet()){
             colonneLignes.get(tacheSelectionee.get(t)).tachelist.add(t);

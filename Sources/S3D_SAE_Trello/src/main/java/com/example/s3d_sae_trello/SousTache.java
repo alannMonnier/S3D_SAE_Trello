@@ -4,15 +4,27 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * Gestion des soustaches
+ */
 public class SousTache extends Tache{
 
+    /**
+     * Declaration attributs
+     */
     private int idSousTache;
 
+    /**
+     * Constructeur
+     */
     public SousTache(int id, String nom, String description, int degreUrgence, int tempsEstime, LocalDate dateDebutReal, int idSousTache){
         super(id, nom, description, degreUrgence, tempsEstime, dateDebutReal);
     }
 
 
+    /**
+     * Verifie que deux sous taches soient egales
+     */
     @Override
     public boolean equals(Object obj) {
         if(this == obj) {return true;}

@@ -9,8 +9,17 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * Gestion déplacement en JavaFX
+ */
 public class DeplacerTacheFX {
 
+    /**
+     * Affichage de la partie graphique
+     * @param t tache
+     * @param modeleMenu ModeleMenu
+     * @param idColonne id de la colonne
+     */
     public static void afficher(Tache t, ModeleMenu modeleMenu, int idColonne) {
         Stage stage = new Stage();
         //Permet d'obliger l'utilisateur à choisir avant de changer de fenetre

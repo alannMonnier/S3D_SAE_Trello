@@ -6,27 +6,46 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Gestion ColonneLigne
+ */
 public class ColonneLigne {
 
+    /**
+     * Declarations attributs
+     */
     public List<Tache> tachelist;
     public int numero;
     public String nom;
 
+    /**
+     * Constructeur
+     * @param s Nom colonneLigne
+     * @param i Numéro colonneLigne
+     */
     public ColonneLigne(String s, int i) {
         this.numero = i;
         this.nom = s;
         this.tachelist = new ArrayList<Tache>();
     }
 
-
+    /**
+     * Ajoute une tache à la liste de tache
+     */
     public void ajouterTache(Tache t){
         this.tachelist.add(t);
     }
 
+    /**
+     * Supprime une tache de la liste de tache
+     */
     public void supprimerTache(Tache t){
         this.tachelist.remove(t);
     }
 
+    /**
+     * Tri les taches par date
+     */
     public void trierDate() {
 
         Collections.sort(tachelist, new Comparator<Tache>() {
@@ -41,6 +60,9 @@ public class ColonneLigne {
         });
     }
 
+    /**
+     * Tri les taches par urgence
+     */
     public void trierUrgence() {
 
         Collections.sort(tachelist, new Comparator<Tache>() {
@@ -58,6 +80,9 @@ public class ColonneLigne {
         });
     }
 
+    /**
+     * Tri les taches par ordre alphabétique de nom
+     */
     public void trierAlphabetique() {
 
         Collections.sort(tachelist, new Comparator<Tache>() {
@@ -69,11 +94,16 @@ public class ColonneLigne {
     }
 
 
-
+    /**
+     * Recupere les taches de la colonneLigne
+     */
     public ArrayList<Tache> getTacheList(){
         return (ArrayList<Tache>) tachelist;
     }
 
+    /**
+     * Renvoie une tache grâce à son nom
+     */
     public Tache getTache(String nomTache){
         for (Tache t : this.tachelist){
             if(t.getNom().equals(nomTache)){
@@ -83,25 +113,23 @@ public class ColonneLigne {
         return null;
     }
 
-
-
+    /**
+     * Modifie le nom de la colonne
+     */
     public void setNom(String s) {
         this.nom = s;
     }
 
+    /**
+     * Recupere le nom de la colonne
+     */
     public String getNom() {
         return nom;
     }
 
-    public Tache getCompositeTache(int idCompositeTache){
-        for (Tache ct : this.tachelist){
-            if(ct.getId() == idCompositeTache){
-                return ct;
-            }
-        }
-        return null;
-    }
-
+    /**
+     * Affiche les informations sur les taches contenu dans la colonneLigne
+     */
     public String toString(){
         String res = "La liste est composée des tâches suivantes:\n";
         for(Tache t : this.tachelist){

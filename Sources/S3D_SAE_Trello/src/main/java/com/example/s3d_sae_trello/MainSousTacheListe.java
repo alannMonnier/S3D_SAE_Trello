@@ -18,8 +18,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Création SousTache en forme de liste en JavFX
+ */
 public class MainSousTacheListe extends Application {
 
+    /**
+     * Création des bordures
+     */
     private Border createElegantBorder() {
         // Choix de la couleur
         Color borderColor = Color.LIGHTGRAY;
@@ -52,6 +58,9 @@ public class MainSousTacheListe extends Application {
 
     private Border border = createElegantBorder();
 
+    /**
+     * Lancement de la partie graphique de la sousListe
+     */
     @Override
     public void start(Stage stage) {
         BorderPane racine = new BorderPane();
@@ -115,6 +124,12 @@ public class MainSousTacheListe extends Application {
         stage.show();
     }
 
+    /**
+     * Créer une Tache sous forme d'un Node
+     * @param titreListe nom de la liste
+     * @param titre nom de la tache
+     * @param nomsSousTaches noms sousTaches
+     */
     private Node creerTache(String titreListe, String titre, List<String> nomsSousTaches) {
         VBox contenuTache = new VBox();
         contenuTache.setBorder(border);
@@ -154,6 +169,12 @@ public class MainSousTacheListe extends Application {
         return contenuTache;
     }
 
+    /**
+     * Création des soustaches
+     * @param nomsSousTaches noms des SousTaches
+     * @param conteneur VBox
+     * @param niveauIndentation Niveau de l'indentation
+     */
     private void creerSousTaches(List<String> nomsSousTaches, VBox conteneur, int niveauIndentation) {
         int indentation = niveauIndentation + 20; // indentation de 20 pixels par niveau
         for (String nomSousTache : nomsSousTaches) {
@@ -163,6 +184,12 @@ public class MainSousTacheListe extends Application {
         }
     }
 
+    /**
+     * Créer le détail de chaque sous liste
+     * @param nomSousTache nom de la sousTache
+     * @param indentation niveau d'indentation
+     * @return
+     */
     private VBox creerDetailTache(String nomSousTache, int indentation) {
         VBox detailTache = new VBox();
         detailTache.setPadding(new Insets(5, 5, 5, indentation));

@@ -16,10 +16,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Lancement de l'application
+ */
 public class MainJavaFX extends Application {
 
     /**
-     * Initilisation du modèle avec des données de base à chaque lancement
+     * Initialisation du modèle avec des données de base à chaque lancement
      *
      * @throws Exception
      */
@@ -28,6 +31,9 @@ public class MainJavaFX extends Application {
         super.init();
     }
 
+    /**
+     * Lancemnt affichage de l'application
+     */
     @Override
     public void start(Stage stage) throws Exception {
         BorderPane racine = new BorderPane();
@@ -57,6 +63,8 @@ public class MainJavaFX extends Application {
         mListe.setOnAction(new ControleurActionMenu(modele));
         mGantt.setOnAction(new ControleurActionMenu(modele));
         mArchive.setOnAction(new ControleurActionMenu(modele));
+
+        // Sauvegarde les taches sélectionnées
         mSauvegarder.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -75,6 +83,7 @@ public class MainJavaFX extends Application {
             }
         });
 
+        // Méthode de la récupération d'une sauvegarde
         mCharger.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {

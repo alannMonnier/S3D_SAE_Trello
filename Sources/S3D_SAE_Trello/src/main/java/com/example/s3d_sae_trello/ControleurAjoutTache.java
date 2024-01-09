@@ -5,14 +5,27 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+/**
+ * Action ajout Tache
+ */
 public class ControleurAjoutTache implements EventHandler<ActionEvent> {
 
+    /**
+     * Declaration attributs
+     */
     private ModeleMenu modele;
 
+    /**
+     * Constructeur
+     * @param m ModeleMenu
+     */
     public ControleurAjoutTache(ModeleMenu m) {
         this.modele = m;
     }
 
+    /**
+     * Action qui propose la création d'une tache au moment du click
+     */
     @Override
     public void handle(ActionEvent actionEvent) {
         Button b = (Button) actionEvent.getSource();

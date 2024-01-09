@@ -10,16 +10,30 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+/**
+ * Création d'une colonneLigne en Javafx
+ */
 public class CreationColonneFX extends Application {
 
+    /**
+     * Declaration attributs
+     */
     private ModeleMenu modele;
     private int idColonne;
 
+    /**
+     * Constructeur
+     * @param modele ModeleMenu
+     * @param idColonne id de la colonne
+     */
     public CreationColonneFX(ModeleMenu modele, int idColonne) {
         this.modele = modele;
         this.idColonne = idColonne;
     }
 
+    /**
+     * Lancement de la partie graphique
+     */
     @Override
     public void start(Stage stage) throws Exception {
         GridPane gp = new GridPane();
