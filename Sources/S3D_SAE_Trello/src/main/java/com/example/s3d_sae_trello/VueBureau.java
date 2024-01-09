@@ -9,7 +9,10 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-public class VueBureau extends VBox implements Observateur {
+/**
+ * Gestion affichage bureau
+ */
+public class VueBureau extends HBox implements Observateur {
 
     BorderStroke borderStroke = new BorderStroke(Color.BLACK,
             BorderStrokeStyle.SOLID,
@@ -21,6 +24,10 @@ public class VueBureau extends VBox implements Observateur {
     private ModeleMenu modele;
     private int id;
 
+    /**
+     * Constructeur
+     * @param modele ModeleMenu
+     */
     public VueBureau(ModeleMenu modele) {
         this.modele = modele;
         this.id = 0;

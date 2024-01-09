@@ -13,18 +13,33 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 
+/**
+ * Création de la SousTache en javaFX
+ */
 public class CreationSousTacheFX extends Application {
 
+    /**
+     * Declaration des attributs
+     */
     private ModeleMenu modele;
     private int idColonne;
     private int id_tache_mere;
 
+    /**
+     * Constructeur
+     * @param m ModeleMenu
+     * @param idColonne id de la colonne
+     * @param id_tache_mere id de la tache mere
+     */
     public CreationSousTacheFX(ModeleMenu m, int idColonne, int id_tache_mere) {
         this.modele = m;
         this.idColonne = idColonne;
         this.id_tache_mere = id_tache_mere;
     }
 
+    /**
+     * Lancement de la partie graphique
+     */
     @Override
     public void start(Stage stage) throws Exception {
 

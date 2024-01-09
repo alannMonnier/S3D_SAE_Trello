@@ -1,13 +1,20 @@
 package com.example.s3d_sae_trello;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
 
-public class Tache implements Comparable<Tache>{
+/**
+ * Gestion d'une tache
+ */
+public class Tache implements Comparable<Tache>, Serializable {
 
+    /**
+     * Declaration des attributs
+     */
     private int id;
     private String nom;
     private String description;
@@ -23,6 +30,15 @@ public class Tache implements Comparable<Tache>{
     private boolean estSelectionne;
 
 
+    /**
+     * Constructeur
+     * @param id id tache
+     * @param nom nom tache
+     * @param description description tache
+     * @param degreUrgence degre urgence
+     * @param tempsEstime temps pour réaliser la tache
+     * @param dateDebutReal date début réalisation de la tache
+     */
     public Tache(int id, String nom, String description, int degreUrgence, int tempsEstime, LocalDate dateDebutReal){
         this.id = id;
         this.nom = nom;
@@ -39,80 +55,127 @@ public class Tache implements Comparable<Tache>{
         this.estSelectionne = false;
     }
 
-
+    /**
+     * Ajoute une sous tache à la tache
+     */
     public void ajouterSousTache(Tache st){
         this.idSousTache++;
         this.sousTaches.add(st);
 
     }
 
+    /**
+     * Retirer une sousTache de la liste
+     */
     public void retirerSousTache(Tache t){
         this.sousTaches.remove(t);
     }
 
+    /**
+     * Recupere l'id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Recupere le nom de la tache
+     */
     public String getNom() {
         return nom;
     }
 
+    /**
+     * Recupere date de création
+     */
     public LocalDate getDateCreation() {
         return dateCreation;
     }
 
+    /**
+     * Recuepre degré urgence
+     */
     public int getDegreUrgence() {
         return degreUrgence;
     }
 
+    /**
+     * Récupère temps estimé
+     */
     public int getTempsEstime() {
         return tempsEstime;
     }
 
+    /**
+     * Récupère si tache est réalisé
+     */
     public boolean getTacheRealise() {
         return tacheRealise;
     }
 
+    /**
+     * Récupère date début réalisation
+     */
     public LocalDate getDateDebutReal() {
         return dateDebutReal;
     }
 
 
+    /**
+     * Récupère id sous tache
+     */
     public int getIdSousTache() {
         return idSousTache;
     }
 
+    /**
+     * Récupère description
+     */
     public String getDescription() {
         return description;
     }
 
 
-
+    /**
+     * Récupère liste soustache
+     */
     public ArrayList<Tache> getSousTaches() {
         return sousTaches;
     }
 
+    /**
+     * Récupère si on peut afficher la soustache
+     */
     public boolean isAfficherSousTache() {
         return afficherSousTache;
     }
 
+    /**
+     * Récupère si la tache est selectionée
+     */
     public boolean isEstSelectionne() {
         return estSelectionne;
     }
 
+    /**
+     * Valide ou interdit l'affichage sous tache
+     */
     public void setAfficherSousTache(boolean afficherSousTache) {
         this.afficherSousTache = afficherSousTache;
     }
 
+    /**
+     * Valide ou supprime la validation d'une tache
+     */
     public void setEstSelectionne(boolean estSelectionne) {
         this.estSelectionne = estSelectionne;
     }
 
 
-
+    /**
+     * Compare de tache par rapport à la date de réalisation puis l'id
+     */
     @Override
-
     public int compareTo(Tache o) {
         if(this.getDateDebutReal().isBefore(o.dateDebutReal)){
             return -1;
@@ -132,7 +195,9 @@ public class Tache implements Comparable<Tache>{
     }
 
 
-
+    /**
+     * Compare deux taches entre elles
+     */
     @Override
     public boolean equals(Object obj) {
         if(this == obj) {return true;}
@@ -146,14 +211,10 @@ public class Tache implements Comparable<Tache>{
                 && afficherSousTache == t.afficherSousTache && estSelectionne == t.estSelectionne;
     }
 
-    public boolean isTacheRealise() {
-        return tacheRealise;
-    }
 
-    public boolean isSousTacheComplete() {
-        return sousTacheComplete;
-    }
-
+    /**
+     * Hashcode de la tache
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, nom, description, dateCreation, degreUrgence, tempsEstime, tacheRealise,

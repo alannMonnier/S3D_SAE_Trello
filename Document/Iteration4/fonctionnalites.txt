@@ -1,7 +1,7 @@
 -- Itération 4
 
 Farid: 
-	- Ajout du drag and drop sur les listes et les sous listes
+	- Début Ajout du drag and drop sur les listes et les sous listes
 	- Début développement digramme de Gantt
 
 Fabien: 

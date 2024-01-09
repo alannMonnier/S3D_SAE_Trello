@@ -5,6 +5,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+/**
+ * Affichage en BureauLigne
+ */
 public class VueBureauLigne extends HBox implements Observateur {
 
     BorderStroke borderStroke = new BorderStroke(Color.BLACK,
@@ -17,6 +20,10 @@ public class VueBureauLigne extends HBox implements Observateur {
     private ModeleMenu modele;
     private int id;
 
+    /**
+     * Constructeur
+     * @param modele ModeleMenu
+     */
     public VueBureauLigne(ModeleMenu modele) {
         this.modele = modele;
         this.id = 0;

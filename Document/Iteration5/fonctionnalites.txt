@@ -1,0 +1,19 @@
+-- Itération 5
+
+Farid: 
+	- Finit Ajout du drag and drop sur les listes et les sous listes
+	- Développement digramme de Gantt
+	- Ajouter le CSS
+
+Fabien: 
+ 	- Développement digramme de Gantt
+	- Ajouter le CSS
+	- Restructurer Vue Principale
+
+Alann: 
+	- Gestion des sauvegardes 
+	- Trello, explication itération 5
+	- Restructurer Vue Principale
+
+
+

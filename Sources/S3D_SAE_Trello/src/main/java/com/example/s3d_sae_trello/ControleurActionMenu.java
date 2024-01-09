@@ -5,16 +5,27 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * Action engendrée sur les boutons du Menu
+ */
 public class ControleurActionMenu implements EventHandler<ActionEvent> {
 
-
+    /**
+     * Declarations attributs
+     */
     private ModeleMenu modele;
 
+    /**
+     * Constructeur
+     * @param modele ModeleMenu
+     */
     public ControleurActionMenu(ModeleMenu modele) {
         this.modele = modele;
     }
 
-
+    /**
+     * Action a réalisé au click sur le bouton
+     */
     public void handle(ActionEvent actionEvent) {
         // Récupérer nom menuBar cliqué puis changer type affichage avec methode setTypeVue
         Button b = (Button) actionEvent.getSource();

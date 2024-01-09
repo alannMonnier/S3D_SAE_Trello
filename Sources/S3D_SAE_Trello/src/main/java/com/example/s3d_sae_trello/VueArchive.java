@@ -6,15 +6,28 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+/**
+ * Affichage VueArchive
+ */
 public class VueArchive extends VBox implements Observateur {
 
+    /**
+     * Declaration attributs
+     */
     private ModeleMenu modele;
 
+    /**
+     * Constructeur
+     * @param modele ModeleMenu
+     */
     public VueArchive(ModeleMenu modele) {
         this.modele = modele;
         creerAffichage();
     }
 
+    /**
+     * Creer l'affichage
+     */
     private void creerAffichage() {
         this.getChildren().clear();
 

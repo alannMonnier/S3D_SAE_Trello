@@ -1,0 +1,9 @@
+Lors de cette cinquième itération de 8 heures, nous allons finaliser toute les fonctionnalité pour pouvoir se consacrer lors de la dernière itération au nettoyage du code, l'ajout du CSS et la création du rapport du projet pour la soutenance finale. 
+
+A la fin de cette itération nous avons finit d'implémenter le drag and drop des listes et des sous listes, développer le système de sauvegarde ainsi que le développement du diagramme de Gantt. 
+
+Les difficultés que nous avons rencontrés sont la mise en place graphique du diagramme de Gantt. 
+
+
+Nous avons également mis à jour notre diagramme de classe, avons créer un diagramme de séquence et mis à jour notre trello.
+ 

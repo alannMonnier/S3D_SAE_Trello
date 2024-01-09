@@ -21,7 +21,6 @@ import javafx.stage.StageStyle;
 public class VueTache extends VBox implements Observateur {
 
 
-
     BorderStroke borderStroke = new BorderStroke(Color.BLACK,
             BorderStrokeStyle.SOLID,
             CornerRadii.EMPTY,
@@ -78,6 +77,12 @@ public class VueTache extends VBox implements Observateur {
             @Override
             public void handle(ActionEvent actionEvent) {
                 t.setEstSelectionne(!t.isEstSelectionne());
+                if(t.isEstSelectionne()){
+                    modeleMenu.ajouterTacheSelectionee(t);
+                }
+                else{
+                    modeleMenu.supprimerTacheSelectionee(t);
+                }
                 modeleMenu.notifierObservateurs();
             }
         });
@@ -318,9 +323,29 @@ public class VueTache extends VBox implements Observateur {
             Button details = new Button("Détails");
             details.setOnAction(e -> afficherDetails(sousTache));
 
+            String select = "+";
+            if (sousTache.isEstSelectionne()) {
+                select = "✓";
+            }
+            Button bSelect = new Button(select);
+            bSelect.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    sousTache.setEstSelectionne(!sousTache.isEstSelectionne());
+                    if(sousTache.isEstSelectionne()){
+                        modeleMenu.ajouterTacheSelectionee(sousTache);
+                    }
+                    else{
+                        modeleMenu.supprimerTacheSelectionee(sousTache);
+                    }
+
+                    modeleMenu.notifierObservateurs();
+                }
+            });
+
             HBox hb = new HBox();
             hb.setSpacing(10);
-            hb.getChildren().addAll(paramTache, circle, bsoustache, details);
+            hb.getChildren().addAll(paramTache, circle, bsoustache, details, bSelect);
 
             vsousTache.getChildren().addAll(l, hb);
             vsousTache.setPadding(new Insets(5));
