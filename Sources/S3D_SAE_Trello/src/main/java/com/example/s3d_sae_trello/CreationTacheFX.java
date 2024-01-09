@@ -175,8 +175,6 @@ public class CreationTacheFX extends Application {
     }
 
     public void lancerApp() throws Exception {
-        Stage stage = new Stage();
-        stage.initStyle(StageStyle.UNDECORATED);
-        this.start(stage);
+        this.start(new Stage());
     }
 }
