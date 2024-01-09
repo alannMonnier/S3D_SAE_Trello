@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.time.LocalDate;
 
@@ -175,6 +176,8 @@ public class CreationTacheFX extends Application {
     }
 
     public void lancerApp() throws Exception {
-        this.start(new Stage());
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        this.start(stage);
     }
 }

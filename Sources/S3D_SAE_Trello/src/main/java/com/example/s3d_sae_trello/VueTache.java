@@ -273,7 +273,6 @@ public class VueTache extends VBox implements Observateur {
 
     @Override
     public void actualiser(Sujet s) {
-
     }
 
     public void vBoxSousTache(Tache st, VBox vb){

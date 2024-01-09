@@ -90,6 +90,10 @@ public class ModeleMenu implements Sujet {
         return nbColonnes;
     }
 
+    public TreeMap<Tache, ArrayList<Tache>> getDependance(){
+        return this.dependance;
+    }
+
     /**
      * Recupere l'identifiant de la tache
      */
@@ -137,11 +141,15 @@ public class ModeleMenu implements Sujet {
      */
 
     public void ajouterCompositeTache(int idColonneLigne, Tache t) {
-        this.colonneLignes.get(idColonneLigne).ajouterTache(t);
-        if (!(t.getId() < tacheCompositeNumId)) {
-            tacheCompositeNumId++;
+        if (idColonneLigne >= 0 && idColonneLigne < colonneLignes.size()) {
+            this.colonneLignes.get(idColonneLigne).ajouterTache(t);
+            if (!(t.getId() < tacheCompositeNumId)) {
+                tacheCompositeNumId++;
+            }
+            this.notifierObservateurs();
+        } else {
+            System.out.println("Mauvais numéro de colonne: " + idColonneLigne);
         }
-        this.notifierObservateurs();
     }
 
 
@@ -441,22 +449,33 @@ public class ModeleMenu implements Sujet {
 
     //Permet de récupérer les "premières mères" soit les taches qui ne possède pas de tache mère afin de créer le diagramme
     //à partir de celles ci, en descendant petit à petit l'arborescence
-    public ArrayList<Tache> recupererPremieresMere(){
+    public ArrayList<Tache> recupererTachesSansMere() {
 
         TreeMap<Tache, ArrayList<Tache>> map = this.dependance;
 
-        ArrayList<Tache> merepremiere = new ArrayList<>();
+        // On stock les taches sans mere ici pour retour
+        ArrayList<Tache> tachessansmere = new ArrayList<>();
 
-        //On verifie pour chaque tache mere si elle a une dependance mere en vérifiant dans la treemap
-        for(Tache mere : map.keySet()){
-            ArrayList<Tache> fille = map.get(mere);
-            for(Tache t : map.keySet()){
-                if(!fille.contains(t)){
-                    merepremiere.add(t);
+        // On parcourt les taches pour trier celles sans mère
+        for (Tache tache : map.keySet()) {
+
+            boolean amere = false;
+
+            // On itère dans les taches dont dépend une tache mere
+            for (ArrayList<Tache> filles : map.values()) {
+                if (filles.contains(tache)) {
+                    amere = true;
+                    break;
                 }
             }
+
+            //Si elle n'a pas de mere alors on l'ajoute
+            if (!amere) {
+                tachessansmere.add(tache);
+            }
         }
-        return merepremiere;
+
+        return tachessansmere;
     }
 
     /**

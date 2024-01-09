@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -110,8 +111,17 @@ public class MainJavaFX extends Application {
         modele.ajouterObservateur((Observateur) hCOL);
         racine.setCenter(hCOL);
 
+        ScrollPane scrollPane = new ScrollPane(hCOL);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
 
-        Scene scene = new Scene(racine, 1000, 600);
+        racine.setCenter(scrollPane);
+
+
+        double largeur = Screen.getPrimary().getBounds().getWidth();
+        double hauteur = Screen.getPrimary().getBounds().getHeight();
+
+        Scene scene = new Scene(racine, largeur-10, hauteur-60);
         stage.setScene(scene);
         stage.show();
 

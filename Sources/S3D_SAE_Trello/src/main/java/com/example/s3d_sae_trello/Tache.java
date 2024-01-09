@@ -221,4 +221,21 @@ public class Tache implements Comparable<Tache>, Serializable {
                 dateDebutReal, sousTacheComplete, sousTaches, idSousTache, afficherSousTache, estSelectionne);
     }
 
+    public String toString() {
+        String res = "ID: " + this.id + "\n";
+        res += "Nom: " + this.nom + "\n";
+        res += "Description: " + this.description + "\n";
+        res += "Date de création: " + this.dateCreation + "\n";
+        res += "Degré d'urgence: " + this.degreUrgence + "\n";
+        res += "Temps estimé: " + this.tempsEstime + "\n";
+        res += "Tâche réalisée: " + this.tacheRealise + "\n";
+        res += "Date début réalisation: " + this.dateDebutReal + "\n";
+        res += "Sous-tâche complète: " + this.sousTacheComplete + "\n";
+        res += "ID sous-tâche: " + this.idSousTache + "\n";
+        res += "Afficher sous-tâche: " + this.afficherSousTache + "\n";
+        res += "Est sélectionnée: " + this.estSelectionne + "\n";
+
+        return res;
+    }
+
 }
