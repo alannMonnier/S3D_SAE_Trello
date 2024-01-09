@@ -48,12 +48,20 @@ public class ModeleMenu implements Sujet {
     }
 
     /**
+     * Récupère la map des dépendances
+     */
+    public TreeMap<Tache, ArrayList<Tache>> getDependance() {
+        return dependance;
+    }
+
+    /**
      * Change type de vue
      */
     public void setTypeVue(String s) {
         typeVue = s;
         this.notifierObservateurs();
     }
+
 
     /**
      * Recupere les observateurs
@@ -154,9 +162,6 @@ public class ModeleMenu implements Sujet {
      */
     public void ajouterSousTache(int idColonneLigne, int id_tache, Tache t) {
         this.colonneLignes.get(idColonneLigne).tachelist.get(id_tache).ajouterSousTache(t);
-        /*if (!(t.getId() < tacheCompositeNumId)) {
-            tacheCompositeNumId++;
-        }*/
         this.notifierObservateurs();
     }
 

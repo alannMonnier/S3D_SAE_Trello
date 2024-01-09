@@ -51,10 +51,10 @@ public class ColonneLigne {
         Collections.sort(tachelist, new Comparator<Tache>() {
             @Override
             public int compare(Tache t1, Tache t2) {
-                if(t1.getDateCreation().equals(t2.getDateCreation())){
+                if(t1.getDateDebutReal().equals(t2.getDateDebutReal())){
                     return 0;
                 }
-                return t1.getDateCreation().isAfter(t2.getDateCreation()) ? -1 : 1;
+                return t1.getDateDebutReal().isAfter(t2.getDateDebutReal()) ? -1 : 1;
                 //return t1.getDate().compareTo(t2.getDate());
             }
         });
@@ -136,5 +136,13 @@ public class ColonneLigne {
             res += t.toString();
         }
         return res;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        ColonneLigne cl = (ColonneLigne) obj;
+        return cl.tachelist == tachelist && numero == cl.numero && nom.equals(cl.nom);
     }
 }
