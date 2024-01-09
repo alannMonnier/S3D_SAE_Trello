@@ -25,7 +25,7 @@ public class ModeleMenu implements Sujet {
     public ModeleMenu() {
         nbColonnes = 0;
         tacheCompositeNumId = 0;
-        gantt = new DiagrammeGantt("", 0);
+        gantt = new DiagrammeGantt(this);
         observateurs = new ArrayList<>();
         colonneLignes = new ArrayList<>();
         typeVue = "Colonne";
@@ -284,17 +284,10 @@ public class ModeleMenu implements Sujet {
         return null;
     }
 
-<<<<<<< HEAD
     public Tache supprimerSousTache(Tache ancienneTache, String txtSousTache){
         for (Tache sousTache : ancienneTache.getSousTaches()){
             if(sousTache.getNom().equals(txtSousTache)){
                 ancienneTache.retirerSousTache(sousTache);
-=======
-    public Tache supprimerSousTache(Tache ancienneTache, String txtSousTache) {
-        for (Tache sousTache : ancienneTache.getSousTaches()) {
-            if (sousTache.getNom().equals(txtSousTache)) {
-                ancienneTache.retirerSousTache(sousTache.getId());
->>>>>>> 8ffcf67d9f28992f1a2ceb67248c8e2fbf7f6614
                 return sousTache;
             }
             supprimerSousTache(sousTache, txtSousTache);
@@ -351,6 +344,26 @@ public class ModeleMenu implements Sujet {
             }
         }
         return listeTaches;
+    }
+
+    //Permet de récupérer les "premières mères" soit les taches qui ne possède pas de tache mère afin de créer le diagramme
+    //à partir de celles ci, en descendant petit à petit l'arborescence
+    public ArrayList<Tache> recupererPremieresMere(){
+
+        TreeMap<Tache, ArrayList<Tache>> map = this.dependance;
+
+        ArrayList<Tache> merepremiere = new ArrayList<>();
+
+        //On verifie pour chaque tache mere si elle a une dependance mere en vérifiant dans la treemap
+        for(Tache mere : map.keySet()){
+            ArrayList<Tache> fille = map.get(mere);
+            for(Tache t : map.keySet()){
+                if(!fille.contains(t)){
+                    merepremiere.add(t);
+                }
+            }
+        }
+        return merepremiere;
     }
 
     public void ajouterTacheListeTacheDependance(Tache tacheDependante) {

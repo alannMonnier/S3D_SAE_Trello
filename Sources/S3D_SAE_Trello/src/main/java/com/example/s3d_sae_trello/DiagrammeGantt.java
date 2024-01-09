@@ -1,8 +1,17 @@
 package com.example.s3d_sae_trello;
 
-public class DiagrammeGantt extends ColonneLigne {
+import java.util.ArrayList;
 
-    public DiagrammeGantt(String s, int i) {
-        super(s, i);
+public class DiagrammeGantt{
+
+    private ModeleMenu modele;
+
+    public DiagrammeGantt(ModeleMenu m) {
+        this.modele = m;
     }
+
+    public void afficherGantt(){
+
+    }
+
 }
