@@ -1,12 +1,13 @@
 package com.example.s3d_sae_trello;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
 
-public class Tache implements Comparable<Tache>{
+public class Tache implements Comparable<Tache>, Serializable {
 
     private int id;
     private String nom;

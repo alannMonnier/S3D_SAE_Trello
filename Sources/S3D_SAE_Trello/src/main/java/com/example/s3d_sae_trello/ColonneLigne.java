@@ -69,16 +69,6 @@ public class ColonneLigne {
     }
 
 
-    public Tache trouverTache(int i){
-        for(Tache t : this.tachelist){
-            if(t.getId() == i){
-                return t;
-            }
-        }
-        //La tâche recherchée n'est pas présente dans cette ColonneLigne
-        return null;
-    }
-
 
     public ArrayList<Tache> getTacheList(){
         return (ArrayList<Tache>) tachelist;
@@ -93,9 +83,7 @@ public class ColonneLigne {
         return null;
     }
 
-    public int getNumero() {
-        return numero;
-    }
+
 
     public void setNom(String s) {
         this.nom = s;

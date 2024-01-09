@@ -1,6 +1,7 @@
 package com.example.s3d_sae_trello;
 
 
+import java.io.*;
 import java.util.*;
 
 public class ModeleMenu implements Sujet {
@@ -10,6 +11,7 @@ public class ModeleMenu implements Sujet {
      */
     private ArrayList<Observateur> observateurs; // Vues
     private ArrayList<ColonneLigne> colonneLignes; // tableau de tacheComposite
+    private ArrayList<Tache> tacheSelectionee;
     private Archive archive; // Archive
     private DiagrammeGantt gantt;
     private int nbColonnes; // Nombre de colonnes crée
@@ -32,6 +34,7 @@ public class ModeleMenu implements Sujet {
         this.dependance = new TreeMap<>();
         this.archive = Archive.getInstance();
         this.tachesAjouterDependance = new ArrayList<>();
+        this.tacheSelectionee = new ArrayList<>();
     }
 
     public String getTypeVue() {
@@ -65,6 +68,10 @@ public class ModeleMenu implements Sujet {
 
     public int getTacheCompositeNumId() {
         return tacheCompositeNumId;
+    }
+
+    public ArrayList<Tache> getTacheSelectionee() {
+        return tacheSelectionee;
     }
 
     /**
@@ -355,7 +362,76 @@ public class ModeleMenu implements Sujet {
         this.tachesAjouterDependance.remove(tacheDependante);
     }
 
+
     public ArrayList<Tache> getTachesAjouterDependance() {
         return tachesAjouterDependance;
     }
+
+
+    public void ajouterTacheSelectionee(Tache t){
+        this.tacheSelectionee.add(t);
+    }
+
+    public void supprimerTacheSelectionee(Tache t){
+        this.tacheSelectionee.remove(t);
+    }
+
+    public void sauvegarderTaches(ArrayList<Tache> tacheSelectionee) throws IOException {
+
+        FileOutputStream os = new FileOutputStream("fichier.txt");
+        ObjectOutputStream oos = new ObjectOutputStream(os);
+        for (Tache t : tacheSelectionee){
+            // Ecris la tache
+            //oos.write();
+            oos.writeObject(t);
+        }
+        oos.close();
+    }
+
+    // Integer = numColonneLigne
+    public Map<Tache, Integer> recupererSauvegarde() throws IOException, ClassNotFoundException {
+        TreeMap<Tache, Integer> tacheSelectionee = new TreeMap<>();
+        FileInputStream is = new FileInputStream("fichier.txt");
+        ObjectInputStream ois = new ObjectInputStream(is);
+
+        while (is.available() > 0){
+            Tache t = (Tache)(ois.readObject());
+            tacheSelectionee.put(t, 0);
+        }
+        return tacheSelectionee;
+    }
+
+    public void supprimerListeTaches(ArrayList<Tache> tacheSelectionee){
+        for (int i = 0; i<colonneLignes.size(); i++){
+            for (int j = colonneLignes.get(i).getTacheList().size() - 1; j > -1; j--){
+                // Suppression des tâches
+                Tache tache = colonneLignes.get(i).getTacheList().get(j);
+                    if(tacheSelectionee.contains(tache)){
+                        colonneLignes.get(i).tachelist.remove(tache);
+                        tacheSelectionee.remove(tache);
+                    }
+                // Suppression des sous taches
+
+                    for (int k = tache.getSousTaches().size()-1; k > -1; k--){
+                        Tache soustache = tache.getSousTaches().get(k);
+                        if(tacheSelectionee.contains(soustache)){
+                            tacheSelectionee.remove(soustache);
+                            tache.getSousTaches().remove(soustache);
+                        }
+                    }
+                }
+
+            }
+        this.notifierObservateurs();
+    }
+
+
+    public void ajouterMapTache(Map<Tache, Integer> tacheSelectionee){
+        for (Tache t : tacheSelectionee.keySet()){
+            colonneLignes.get(tacheSelectionee.get(t)).tachelist.add(t);
+        }
+        this.notifierObservateurs();
+    }
+
+
 }

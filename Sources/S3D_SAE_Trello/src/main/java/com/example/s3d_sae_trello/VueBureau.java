@@ -9,7 +9,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-public class VueBureau extends VBox implements Observateur {
+public class VueBureau extends HBox implements Observateur {
 
     BorderStroke borderStroke = new BorderStroke(Color.BLACK,
             BorderStrokeStyle.SOLID,
