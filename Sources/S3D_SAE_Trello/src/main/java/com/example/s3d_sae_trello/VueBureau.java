@@ -54,7 +54,6 @@ public class VueBureau extends HBox implements Observateur {
         switch (modele.getTypeVue()) {
             case "Gantt":
                 VueGantt vg = new VueGantt(modele);
-
                 break;
             case "Liste":
                 // Création des listes du trello

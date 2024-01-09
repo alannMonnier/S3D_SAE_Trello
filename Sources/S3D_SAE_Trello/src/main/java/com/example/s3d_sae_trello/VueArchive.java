@@ -47,8 +47,6 @@ public class VueArchive extends VBox implements Observateur {
         this.setPadding(new Insets(10));
         this.setSpacing(10);
 
-
-
     }
 
     @Override
