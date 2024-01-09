@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 /**
  * Gestion affichage bureau
  */
-public class VueBureau extends HBox implements Observateur {
+public class VueBureau extends VBox implements Observateur {
 
     BorderStroke borderStroke = new BorderStroke(Color.BLACK,
             BorderStrokeStyle.SOLID,
@@ -65,14 +65,35 @@ public class VueBureau extends HBox implements Observateur {
                 }
 
                 // Ajout du bouton pour ajouter une nouvelle colonne
+                // Style du bouton pour ajouter une nouvelle colonne
                 Button btnAjouterColonne = new Button("+ Ajouter une nouvelle colonne");
                 btnAjouterColonne.setOnMouseClicked(new ControleurColonneLigne(modele, this.id));
-                btnAjouterColonne.setBorder(border);
-                btnAjouterColonne.setPadding(new Insets(5));
 
+                // Application d'une bordure subtile et moderne
+                BorderStroke borderStroke = new BorderStroke(
+                        Color.DARKGRAY,
+                        BorderStrokeStyle.SOLID,
+                        new CornerRadii(5),
+                        new BorderWidths(1)
+                );
+                btnAjouterColonne.setBorder(new Border(borderStroke));
+
+                // Réglage des marges internes du bouton pour un aspect plus spacieux
+                btnAjouterColonne.setPadding(new Insets(10, 20, 10, 20));
+
+                // Application de styles CSS pour un look moderne et épuré
+                btnAjouterColonne.setStyle(
+                        "-fx-font-size: 14px; " +           // taille de la police
+                                "-fx-font-family: 'Arial'; " +      // police
+                                "-fx-background-color: #F0F0F0; " + // Couleur de fond
+                                "-fx-text-fill: #333333; " +        // Couleur du texte
+                                "-fx-cursor: hand; ");              // Curseur en forme de main au survol
+
+                // ajout du bouton à la VBox
                 this.getChildren().add(btnAjouterColonne);
                 this.setPadding(new Insets(5));
-                this.setSpacing(10); // reduire l'espacement si nécessaire
+                this.setSpacing(10); // Ajuster l'espacement selon le besoin
+
                 break;
 
             case "Archive":
