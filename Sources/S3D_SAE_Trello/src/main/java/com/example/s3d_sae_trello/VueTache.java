@@ -196,7 +196,7 @@ public class VueTache extends VBox implements Observateur {
                 }
 
                 else if (dragEvent.getGestureSource() != this && dragEvent.getDragboard().hasString()
-                  && dragEvent.getGestureSource().getClass().toString().contains("VueTache")) {
+                        && dragEvent.getGestureSource().getClass().toString().contains("VueTache")) {
 
                     VueTache vt = (VueTache) dragEvent.getGestureSource();
                     idAncienneColonne = vt.tacheCourante.getIdcolonne();

@@ -1,0 +1,18 @@
+-- Itération 6
+
+Farid: 
+	- Diagramme de Gantt
+	- Erreur ajout SousTache avec une date non cohérente
+
+
+Fabien: 
+	- Diagramme de Gantt	
+	- Sauvegarde
+
+Alann: 
+	- Diagramme de Gantt
+	- Rectifaction VuePrincipale
+
+
+
+

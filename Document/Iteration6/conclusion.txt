@@ -1,0 +1,11 @@
+Lors de cette dernière itération, nous avons corriger tout les bugs présent tel que sur le drag and drop de sousTache, la sauvegarde, l'ajout de sousTache que si on a une date correcte. 
+
+Nous avons mis en place le diagramme de Gantt qui fonctionne que entre les taches qui ne prend pas en compte les soustaches. Egalement nous avons mis en place la gestion d'erreur lorsque l'on ajoutait une soustache qui n'était pas dans la période de mis en oeuvre de sa tache principale. 
+
+De plus nous avons voulu mettre en place le CSS mais cela à créer des conflits sur le drag and drop de ce faite nous l'avons retiré. 
+
+
+Les difficultés que nous avons rencontrés sont la mise en place du Gantt ainsi que sa partie graphique, egalement un autre problème que nous avons eu est lors de l'ajout de CSS le drag and drop ne fonctionne plus. 
+
+
+ 
