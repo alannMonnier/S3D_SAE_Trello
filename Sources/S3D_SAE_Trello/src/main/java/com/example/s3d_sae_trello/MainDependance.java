@@ -6,20 +6,12 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.*;
-
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.TreeSet;
 
 /**
  * Main qui nous permet de tester les dependances / Diagramme de gantt
@@ -83,38 +75,40 @@ public class MainDependance extends Application {
 
         ArrayList<ArrayList<Tache>> tachesmere = modeleMenu.recupererListTachesMere(m);
 
-
         // Gestion des coordonnées pour créer les liens sous forme de ligne
         Map<Coordonnees, Tache> coords = new HashMap<>();
-        for (int i = tachesmere.size()-1 ; i > -1; i--){
-            for (Tache tt : tachesmere.get(i)){
+        for (int i = tachesmere.size() - 1; i > -1; i--) {
+            for (Tache tt : tachesmere.get(i)) {
                 System.out.println("yyyyyyyyyyyyyyyy");
                 System.out.println(tt.getNom());
-                if(modeleMenu.getDependance().containsKey(tt)){
-                    coords.put(new Coordonnees(x1+50, y1+10), tt);
+                if (modeleMenu.getDependance().containsKey(tt)) {
+                    coords.put(new Coordonnees(x1 + 50, y1 + 10), tt);
                 }
-                for (Coordonnees coordonnees : coords.keySet()){
+                for (Coordonnees coordonnees : coords.keySet()) {
                     System.out.println(coords.get(coordonnees).getNom());
                     System.out.println(modeleMenu.getDependance().get(coords.get(coordonnees)).contains(tt));
-                    if(modeleMenu.getDependance().get(coords.get(coordonnees)).contains(tt)){
+                    if (modeleMenu.getDependance().get(coords.get(coordonnees)).contains(tt)) {
                         gc.strokeLine(coordonnees.getX(), coordonnees.getY(), x1, y1);
                         break;
                     }
                 }
                 System.out.println("-------------");
-                gc.strokeRect(x1, y1, 50, 20);
-                gc.fillText(tt.getNom(),x1+6, y1+15);
-                y1+= 25;
+                for (int j = tachesmere.size() - 1; j > -1; j--) {
+                    for (Tache ta : tachesmere.get(j)) {
+                        gc.strokeRect(x1, y1, 50, 20);
+                        gc.fillText(ta.getNom(), x1 + 6, y1 + 15);
+                        y1 += 25;
+                    }
+                    x1 += 55;
+                    y1 -= 25 + (25 / tachesmere.size());
+                }
+                p.getChildren().addAll(canvas);
+
+                Scene scene = new Scene(p, Screen.getPrimary().getBounds().getWidth() - 10, Screen.getPrimary().getBounds().getHeight() - 10);
+                stage.setScene(scene);
+                stage.show();
             }
-            x1 += 55;
-            y1 -= 25 + (25/tachesmere.size());
         }
-
-        p.getChildren().addAll(canvas);
-
-        Scene scene = new Scene(p, Screen.getPrimary().getBounds().getWidth()-10, Screen.getPrimary().getBounds().getHeight()-10);
-        stage.setScene(scene);
-        stage.show();
     }
 
 

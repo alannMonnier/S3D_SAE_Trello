@@ -41,7 +41,6 @@ public class GanttFX extends HBox{
         modeleMenu.ajouterDependance(modele.getColonneLignes().get(0).getTache("Tache 3"), meretache2, "mere");
 
 
-
         // Récupère les taches les plus au fond
         ArrayList<Tache> m = modeleMenu.recupererTacheFinal();
         ArrayList<ArrayList<Tache>> tachesmere = modeleMenu.recupererListTachesMere(m);

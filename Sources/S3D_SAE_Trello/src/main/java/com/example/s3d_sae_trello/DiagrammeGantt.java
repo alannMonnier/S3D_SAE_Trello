@@ -16,8 +16,6 @@ public class DiagrammeGantt{
     public DiagrammeGantt(ModeleMenu m) {
         this.modele = m;
     }
-
-
     public void afficherGantt(){
 
         ArrayList<Tache> tachesansmere = modele.recupererTachesSansMere();
@@ -28,11 +26,11 @@ public class DiagrammeGantt{
         }
     }
 
-
-
-
-
-
+    /**
+     * Permet de parcourir les filles d'une tache entrée en paramètre à partir d'un rang donné, méthode récursive
+     * @param mere Tache mere
+     * @param rang Rang à partir duquel on parcoure
+     */
     public void parcourirFille(Tache mere, int rang) {
         System.out.print(getRang(rang) + mere.getNom());
 

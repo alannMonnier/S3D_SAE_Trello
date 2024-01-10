@@ -53,7 +53,7 @@ public class VueBureau extends GridPane implements Observateur {
     }
 
     @Override
-    public void actualiser(Sujet s) {
+    public void actualiser(Sujet s) throws IOException {
         this.getChildren().clear();
         this.setAlignment(Pos.CENTER);
 

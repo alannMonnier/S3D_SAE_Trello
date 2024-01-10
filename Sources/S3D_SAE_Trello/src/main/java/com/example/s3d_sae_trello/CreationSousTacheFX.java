@@ -54,7 +54,7 @@ public class CreationSousTacheFX extends Application {
         // Entrez temps consacré à la tâche
         Label temps = new Label("Entrez le temps consacré à la tâche:");
         Spinner spinner = new Spinner<Integer>();
-        SpinnerValueFactory svf = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 72, 1);
+        SpinnerValueFactory svf = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10000, 1);
         spinner.setValueFactory(svf);
 
 

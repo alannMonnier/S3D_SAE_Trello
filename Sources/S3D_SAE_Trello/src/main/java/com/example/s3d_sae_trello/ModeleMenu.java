@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Gestion des données de l'application
  */
-public class ModeleMenu implements Sujet {
+public class ModeleMenu implements Sujet, Serializable {
 
     /**
      * Declarations des attributs
@@ -316,9 +316,14 @@ public class ModeleMenu implements Sujet {
      */
     @Override
     public void notifierObservateurs() {
-        for (Observateur o : this.observateurs) {
-            o.actualiser(this);
+        try{
+            for (Observateur o : this.observateurs) {
+                o.actualiser(this);
+            }
+        }catch(IOException e){
+            System.out.println("Input output exception");
         }
+
     }
 
     /**
@@ -602,6 +607,23 @@ public class ModeleMenu implements Sujet {
         notifierObservateurs();
     }
 
+    public void sauvegarderDependance() throws IOException {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("dependance.txt"))) {
+            oos.writeObject(dependance);
+        }
+    }
+
+    public void recupererDependance() throws IOException, ClassNotFoundException {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("dependance.txt"))) {
+            dependance = (TreeMap<Tache, ArrayList<Tache>>) ois.readObject();
+        } catch (EOFException e) {
+            System.out.println("Aucune donnée dans le fichier, aucun objet chargé");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        notifierObservateurs();
+    }
+
     /**
      * Permet de supprimer les tâches selectionnées
      * @param tacheSelectionee Liste des taches selectionnées sur l'interface
@@ -688,5 +710,4 @@ public class ModeleMenu implements Sujet {
         }
         return tacheMere;
     }
-
 }
