@@ -613,4 +613,56 @@ public class ModeleMenu implements Sujet {
     }
 
 
+
+
+
+    public ArrayList<Tache> recupererTacheFinal(){
+        ArrayList<Tache> tacheFinal = new ArrayList<>();
+        for (Tache tt : this.dependance.keySet()){
+            for (Tache tf : this.dependance.get(tt)){
+                if(!this.dependance.containsKey(tf)){
+                    if(!tacheFinal.contains(tf)){
+                        tacheFinal.add(tf);
+                    }
+                }
+            }
+        }
+        return tacheFinal;
+    }
+
+
+    public ArrayList<Tache> recupererTacheMere(Tache t){
+        ArrayList<Tache> tacheMere = new ArrayList<>();
+        for (Tache tt : this.dependance.keySet()) {
+            if(this.dependance.get(tt).contains(t)){
+                tacheMere.add(tt);
+            }
+        }
+        return tacheMere;
+
+    }
+
+    public ArrayList<ArrayList<Tache>> recupererListTachesMere(ArrayList<Tache> taches){
+        ArrayList<ArrayList<Tache>> tacheMere = new ArrayList<>();
+        tacheMere.add(taches);
+        while (true){
+            ArrayList<Tache> l = new ArrayList<>();
+            for (Tache t :taches){
+                ArrayList<Tache> tacheRecup = recupererTacheMere(t);
+                l.addAll(tacheRecup);
+            }
+            if(l.size() == 0){
+                break;
+            }
+            else{
+                tacheMere.add(l);
+                taches = l;
+            }
+        }
+        return tacheMere;
+    }
+
+
+
+
 }

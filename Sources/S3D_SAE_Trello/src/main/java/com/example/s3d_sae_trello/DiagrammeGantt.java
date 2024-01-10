@@ -20,8 +20,17 @@ public class DiagrammeGantt{
         }
     }
 
-    public void parcourirFille(Tache mere, int rang) {
 
+    public void  afficherGantt2(){
+
+        ArrayList<Tache> tachesansmere = modele.recupererTachesSansMere();
+
+    }
+
+
+
+
+    public void parcourirFille(Tache mere, int rang) {
         System.out.print(getRang(rang) + mere.getNom());
 
         // Iterate through the daughters of the current task and recursively call the method
