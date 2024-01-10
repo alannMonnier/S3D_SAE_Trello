@@ -93,7 +93,7 @@ public class CreationTacheFX extends Application {
         Spinner spinnerHeure = new Spinner<Integer>();
         SpinnerValueFactory svfh = new SpinnerValueFactory.IntegerSpinnerValueFactory(8, 19, 1);
         spinnerHeure.setValueFactory(svfh);
-        hheure.getChildren().addAll(lHeure,spinnerHeure);
+        hheure.getChildren().addAll(lHeure, spinnerHeure);
 
 
         // Entrez la description de la tâche
@@ -122,8 +122,9 @@ public class CreationTacheFX extends Application {
             int tempsTache = (int) spinner.getValue();
             LocalDate dateDebutReal = dp.getValue();
 
+            boolean ajoutReussi = true;
 
-            // Création d'une tâche normale si c'est depuis une colonne
+        // Création d'une tâche normale si c'est depuis une colonne
             if(this.tache == null) {
                 Tache tache = new Tache(idTache, nomTache, descriptionTache, urg, tempsTache, dateDebutReal, this.idColonne);
                 try {
@@ -131,16 +132,43 @@ public class CreationTacheFX extends Application {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            }else{
-                //Création d'une sous tâche si c'est depuis une tâche
+            } else {
+
+                // Création d'une sous-tâche si la date est valide
                 SousTache st = new SousTache(idTache, nomTache, descriptionTache, urg, tempsTache, dateDebutReal, tache.getIdSousTache());
-                tache.ajouterSousTache(st);
-                modele.setTacheCompositeNumId();
-                modele.notifierObservateurs();
+                // Vérification du nom
+                if(!tache.nomSousTacheExiste(st)){
+                    // Vérification de la date avant la création de la sous-tâche
+                    if (!st.getDateDebutReal().isAfter(tache.getDateDebutReal())) {
+                        if(tache.ajout_sous_tache_possible(st)){
+                            tache.ajouterSousTache(st);
+                            modele.setTacheCompositeNumId();
+                            modele.notifierObservateurs();
+                        } else{
+                            Alert alert = Alerte.alerteDate("Erreur", "Le temps nécessaire à la réalisation de toutes les sous tâches est superieur à la tâche " + "\"" + tache.getNom() + "\"");
+                            alert.showAndWait();
+                            ajoutReussi = false;
+                        }
+
+                    } else {
+                        // Affichage du message d'erreur si la date est invalide
+                        Alert alert = Alerte.alerteDate("Erreur", "La date de début de la sous-tâche doit être antérieure à la date de début de la tâche " + "\"" + tache.getNom() + "\"");
+                        alert.showAndWait();
+                        ajoutReussi = false;
+                    }
+                } else{
+                    // Affichage du message d'erreur s'il existe deja un nom identique
+                    Alert alert = Alerte.alerteDate("Erreur", "Ce nom est déjà associé à une tâche.");
+                    alert.showAndWait();
+                    ajoutReussi = false;
+                }
             }
 
-            // On ferme la page
-            stage.close();
+
+            // Fermer la fenêtre seulement si l'ajout est réussi
+            if (ajoutReussi) {
+                stage.close();
+            }
         });
 
         gp.add(text, 0, 0);
