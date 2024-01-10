@@ -27,19 +27,6 @@ public class GanttFX extends HBox{
     public GanttFX(ModeleMenu modele) throws IOException {
         this.modeleMenu = modele;
 
-        /**
-        ArrayList<Tache> meretache1 = new ArrayList<>();
-        meretache1.add(modele.getColonneLignes().get(0).getTache("Tache 3"));
-
-        ArrayList<Tache> meretache2 = new ArrayList<>();
-        meretache2.add(modele.getColonneLignes().get(1).getTache("Tache 4"));
-
-
-
-        // Ajouter des dépendances
-        modeleMenu.ajouterDependance(modele.getColonneLignes().get(0).getTache("Tache 0"), meretache1, "mere");
-        modeleMenu.ajouterDependance(modele.getColonneLignes().get(0).getTache("Tache 3"), meretache2, "mere");
-         */
 
         // Récupère les taches les plus au fond
         ArrayList<Tache> m = modeleMenu.recupererTacheFinal();
@@ -71,10 +58,12 @@ public class GanttFX extends HBox{
                 if(modeleMenu.getDependance().containsKey(tt)){
                     coords.put(new Coordonnees(x1+longueurTache, y1+10), tt);
                 }
+                int bonus = 0;
                 for (Coordonnees coordonnees : coords.keySet()){
                     if(modeleMenu.getDependance().get(coords.get(coordonnees)).contains(tt)){
                         gc.setFill(Color.RED);
-                        gc.strokeLine(coordonnees.getX(), coordonnees.getY(), x1, y1);
+                        gc.strokeLine(coordonnees.getX(), coordonnees.getY(), x1, y1+bonus);
+                        bonus+= 25;
                         break;
                     }
                 }
