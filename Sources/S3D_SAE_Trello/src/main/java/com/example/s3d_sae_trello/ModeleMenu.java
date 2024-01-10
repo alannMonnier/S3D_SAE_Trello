@@ -20,7 +20,9 @@ public class ModeleMenu implements Sujet {
     private int nbColonnes; // Nombre de colonnes crée
     private int tacheCompositeNumId; // Numéro de la tâcheComposite
     private String typeVue;
+    /*Attribut qui permettra de gérer les dépendances avec tache mère en clé et une liste des filles en objet*/
     private TreeMap<Tache, ArrayList<Tache>> dependance;
+    //List qui contient les taches selectionnées sur l'interface, notamment pour gérer les dépendances de celles ci
     private ArrayList<Tache> tachesAjouterDependance;
 
 
@@ -152,8 +154,8 @@ public class ModeleMenu implements Sujet {
         if (t.getIdcolonne() >= 0 && t.getIdcolonne() < colonneLignes.size()) {
             this.colonneLignes.get(t.getIdcolonne()).ajouterTache(t);
             /**if (!(t.getId() < tacheCompositeNumId)) {
-                tacheCompositeNumId++;
-            }*/
+             tacheCompositeNumId++;
+             }*/
             tacheCompositeNumId++;
             this.sauvegarderColonneLigne();
             this.notifierObservateurs();
@@ -268,7 +270,7 @@ public class ModeleMenu implements Sujet {
     }
 
     /**
-     * Supprime la tache donée
+     * Supprime la tache donnée
      * @param idColonneLigne id de la colonne
      * @param t tache donnée
      */
@@ -467,8 +469,10 @@ public class ModeleMenu implements Sujet {
         return listeTaches;
     }
 
-    //Permet de récupérer les "premières mères" soit les taches qui ne possède pas de tache mère afin de créer le diagramme
-    //à partir de celles ci, en descendant petit à petit l'arborescence
+    /**
+     * Permet de récupérer les "premières mères" soit les taches qui ne possède pas de tache mère afin de créer le diagramme
+     * à partir de celles ci, en descendant petit à petit l'arborescence
+    */
     public ArrayList<Tache> recupererTachesSansMere() {
 
         TreeMap<Tache, ArrayList<Tache>> map = this.dependance;
@@ -535,6 +539,12 @@ public class ModeleMenu implements Sujet {
         this.tacheSelectionee.remove(t);
     }
 
+    /**
+     * Cette méthode permet de sauvegarder dans un fichier les colonnes et leur données afin de pouvoir
+     * récupérer les données de l'application lors de la prochaine exécution
+     * Cette méthode est appellée à chaque modification d'une colonne
+     * @throws IOException
+     */
     public void sauvegarderColonneLigne() throws IOException {
         try (FileOutputStream os = new FileOutputStream("colonne.txt");
              ObjectOutputStream oos = new ObjectOutputStream(os)) {
@@ -542,6 +552,12 @@ public class ModeleMenu implements Sujet {
         }
     }
 
+    /**
+     * Cette méthode permet de sauvegarder dans un fichier l'archive et ses données afin de pouvoir
+     * récupérer les données de l'archive lors de la prochaine exécution
+     * Cette méthode est appellée à chaque modification de l'archive
+     * @throws IOException
+     */
     public void sauvegarderArchive() throws IOException {
         try (FileOutputStream os = new FileOutputStream("archive.txt");
              ObjectOutputStream oos = new ObjectOutputStream(os)) {
@@ -550,6 +566,12 @@ public class ModeleMenu implements Sujet {
     }
 
 
+    /**
+     * Cette méthode permet de récupérer les données stockées dans le fichier colonne, elle est appellée
+     * à l'initialisation de l'interface
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void recupererSauvegardeColonneLigne() throws IOException, ClassNotFoundException {
         try (FileInputStream is = new FileInputStream("colonne.txt");
              ObjectInputStream ois = new ObjectInputStream(is)) {
@@ -563,6 +585,12 @@ public class ModeleMenu implements Sujet {
         notifierObservateurs();
     }
 
+    /**
+     * Cette méthode permet de récupérer les données stockées dans le fichier archive, elle est appellée
+     * à l'initialisation de l'interface
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void recupererSauvegardeArchive() throws IOException, ClassNotFoundException {
         try (FileInputStream is = new FileInputStream("archive.txt");
              ObjectInputStream ois = new ObjectInputStream(is)) {
@@ -576,46 +604,37 @@ public class ModeleMenu implements Sujet {
     }
 
     /**
-     * Supprime les taches sauvegardées
+     * Permet de supprimer les tâches selectionnées
+     * @param tacheSelectionee Liste des taches selectionnées sur l'interface
      */
     public void supprimerListeTaches(ArrayList<Tache> tacheSelectionee){
         for (int i = 0; i<colonneLignes.size(); i++){
             for (int j = colonneLignes.get(i).getTacheList().size() - 1; j > -1; j--){
                 // Suppression des tâches
                 Tache tache = colonneLignes.get(i).getTacheList().get(j);
-                    if(tacheSelectionee.contains(tache)){
-                        colonneLignes.get(i).tachelist.remove(tache);
-                        tacheSelectionee.remove(tache);
-                    }
+                if(tacheSelectionee.contains(tache)){
+                    colonneLignes.get(i).tachelist.remove(tache);
+                    tacheSelectionee.remove(tache);
+                }
                 // Suppression des sous taches
 
-                    for (int k = tache.getSousTaches().size()-1; k > -1; k--){
-                        Tache soustache = tache.getSousTaches().get(k);
-                        if(tacheSelectionee.contains(soustache)){
-                            tacheSelectionee.remove(soustache);
-                            tache.getSousTaches().remove(soustache);
-                        }
+                for (int k = tache.getSousTaches().size()-1; k > -1; k--){
+                    Tache soustache = tache.getSousTaches().get(k);
+                    if(tacheSelectionee.contains(soustache)){
+                        tacheSelectionee.remove(soustache);
+                        tache.getSousTaches().remove(soustache);
                     }
                 }
-
             }
-        this.notifierObservateurs();
-    }
 
-    /**
-     * Ajoute une tache à la colonne
-     */
-    public void ajouterMapTache(Map<Tache, Integer> tacheSelectionee){
-        for (Tache t : tacheSelectionee.keySet()){
-            colonneLignes.get(tacheSelectionee.get(t)).tachelist.add(t);
         }
         this.notifierObservateurs();
     }
 
-
-
-
-
+    /**
+     * Permet de récupérer les taches filles "finales" qui ne possèdent, elles, pas de filles
+     * @return List de tache des filles "finales"
+     */
     public ArrayList<Tache> recupererTacheFinal(){
         ArrayList<Tache> tacheFinal = new ArrayList<>();
         for (Tache tt : this.dependance.keySet()){
@@ -630,7 +649,11 @@ public class ModeleMenu implements Sujet {
         return tacheFinal;
     }
 
-
+    /**
+     * Récupère les tâches mère d'une tache entrée en paramètres
+     * @param t tache dont on récupère les taches mères
+     * @return List des taches mères
+     */
     public ArrayList<Tache> recupererTacheMere(Tache t){
         ArrayList<Tache> tacheMere = new ArrayList<>();
         for (Tache tt : this.dependance.keySet()) {
@@ -642,6 +665,11 @@ public class ModeleMenu implements Sujet {
 
     }
 
+    /**
+     * Récupère les taches mère d'une liste de tache passée en paramètre
+     * @param taches liste des taches dont on veut récupérer les mères
+     * @return liste des mères des tâches
+     */
     public ArrayList<ArrayList<Tache>> recupererListTachesMere(ArrayList<Tache> taches){
         ArrayList<ArrayList<Tache>> tacheMere = new ArrayList<>();
         tacheMere.add(taches);
@@ -661,8 +689,5 @@ public class ModeleMenu implements Sujet {
         }
         return tacheMere;
     }
-
-
-
 
 }

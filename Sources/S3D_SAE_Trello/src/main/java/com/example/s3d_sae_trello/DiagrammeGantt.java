@@ -2,13 +2,21 @@ package com.example.s3d_sae_trello;
 
 import java.util.ArrayList;
 
+/**
+ * Classe qui permettra la gestion des diagramme de gantt
+ */
 public class DiagrammeGantt{
 
     private ModeleMenu modele;
 
+    /**
+     * Constructeur de la classe
+     * @param m Modele sur laquelle est basée le Gantt
+     */
     public DiagrammeGantt(ModeleMenu m) {
         this.modele = m;
     }
+
 
     public void afficherGantt(){
 
@@ -21,11 +29,6 @@ public class DiagrammeGantt{
     }
 
 
-    public void  afficherGantt2(){
-
-        ArrayList<Tache> tachesansmere = modele.recupererTachesSansMere();
-
-    }
 
 
 
@@ -41,6 +44,11 @@ public class DiagrammeGantt{
         }
     }
 
+    /**
+     * Permet de parcourir les mères d'une tache entrée en paramètre à partir d'un rang donné, méthode récursive
+     * @param tache Tache Fille
+     * @param rang Rang à partir duquel on parcoure
+     */
     public void parcourirMeres(Tache tache, int rang) {
         if (tache != null) {
             ArrayList<Tache> meres = new ArrayList<>();
@@ -60,6 +68,11 @@ public class DiagrammeGantt{
         }
     }
 
+    /**
+     * Permet de créer la distance et les liens entre les tâches
+     * @param rang int
+     * @return Un string qui correspond au lien / à l'espace entre deux taches dans le diagramme
+     */
     private String getRang(int rang) {
         String espace = "";
         for (int i = 0; i < rang; i++) {

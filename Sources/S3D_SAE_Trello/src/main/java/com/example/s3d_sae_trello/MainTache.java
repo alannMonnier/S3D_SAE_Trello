@@ -1,5 +1,8 @@
 package com.example.s3d_sae_trello;
 
+/**
+ * Main qui nous a permit de tester lors de l'itération 1 la classe Tache
+ */
 public class MainTache {
     public static void main(String[] args) {
         /**

@@ -15,6 +15,16 @@ import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.*;
 
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.TreeSet;
+
+/**
+ * Main qui nous permet de tester les dependances / Diagramme de gantt
+ */
+
 public class MainDependance extends Application {
 
     private ModeleMenu modeleMenu;
@@ -73,6 +83,7 @@ public class MainDependance extends Application {
 
         ArrayList<ArrayList<Tache>> tachesmere = modeleMenu.recupererListTachesMere(m);
 
+
         // Gestion des coordonnées pour créer les liens sous forme de ligne
         Map<Coordonnees, Tache> coords = new HashMap<>();
         for (int i = tachesmere.size()-1 ; i > -1; i--){
@@ -98,7 +109,6 @@ public class MainDependance extends Application {
             x1 += 55;
             y1 -= 25 + (25/tachesmere.size());
         }
-
 
         p.getChildren().addAll(canvas);
 

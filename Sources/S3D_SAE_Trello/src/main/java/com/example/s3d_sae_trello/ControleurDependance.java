@@ -37,14 +37,14 @@ public class ControleurDependance implements EventHandler<ActionEvent> {
         // Ouvre une Fenetre ou on va récupérer la liste des tâches mères ou filles
         if(mi.getText().equals("Ajouter dépendance Mère")){
             try {
-                new VueDependance(t, modeleMenu, modeleMenu.recupererToutesTachesSansMere(t), "mère").start(new Stage());
+                new DependanceFX(t, modeleMenu, modeleMenu.recupererToutesTachesSansMere(t), "mère").start(new Stage());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
         else if(mi.getText().equals("Ajouter dépendance Fille")){
             try {
-                new VueDependance(t, modeleMenu, modeleMenu.recupererToutesTachesSansFille(t), "fille").start(new Stage());
+                new DependanceFX(t, modeleMenu, modeleMenu.recupererToutesTachesSansFille(t), "fille").start(new Stage());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

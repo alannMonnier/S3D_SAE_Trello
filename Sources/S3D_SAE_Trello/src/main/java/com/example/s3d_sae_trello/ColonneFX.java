@@ -22,7 +22,7 @@ import java.util.ArrayList;
 /**
  * Gestion affichage colonne
  */
-public class VueColonne extends VBox implements Observateur {
+public class ColonneFX extends VBox {
 
     /**
      * Declaration attributs
@@ -51,7 +51,7 @@ public class VueColonne extends VBox implements Observateur {
      * @param id id de la colonne
      * @param nom nom de la colonne
      */
-    public VueColonne(ArrayList<Tache> taches, ModeleMenu m, int id, String nom) {
+    public ColonneFX(ArrayList<Tache> taches, ModeleMenu m, int id, String nom) {
         this.taches = taches;
         this.modele = m;
         this.idColonne = id;
@@ -132,7 +132,7 @@ public class VueColonne extends VBox implements Observateur {
             public void handle(DragEvent dragEvent) {
                 if (dragEvent.getGestureSource().getClass().toString().contains("VueColonne")) {
                     dragEvent.acceptTransferModes(TransferMode.MOVE);
-                    VueColonne vc = (VueColonne) dragEvent.getGestureSource();
+                    ColonneFX vc = (ColonneFX) dragEvent.getGestureSource();
                     idColonneADeplace = vc.idColonne;
                 }
 
@@ -154,7 +154,7 @@ public class VueColonne extends VBox implements Observateur {
                     VueTache vt = (VueTache) vmere.getParent();
 
 
-                    VueColonne vb = (VueColonne) (vt).getParent();
+                    ColonneFX vb = (ColonneFX) (vt).getParent();
                     VBox vb2 = (VBox) (vb).getChildren().get(0);
                     BorderPane bp = (BorderPane) (vb2).getChildren().get(0);
                     Label l = (Label) (bp).getChildren().get(0);
@@ -224,10 +224,5 @@ public class VueColonne extends VBox implements Observateur {
         this.setSpacing(20);
         this.setAlignment(Pos.TOP_CENTER);
         this.setId("" + this.idColonne);
-    }
-
-    @Override
-    public void actualiser(Sujet s) {
-
     }
 }
