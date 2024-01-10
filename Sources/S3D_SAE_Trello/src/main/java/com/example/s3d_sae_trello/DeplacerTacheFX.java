@@ -9,6 +9,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 /**
  * Gestion déplacement en JavaFX
  */
@@ -40,7 +42,11 @@ public class DeplacerTacheFX {
             String selectcol = colonnesComboBox.getValue();
             if (selectcol != null) {
                 int nouvellecolonne = colonnes.indexOf(selectcol);
-                modeleMenu.deplacerCompositeTache(idColonne, nouvellecolonne, t);
+                try {
+                    modeleMenu.deplacerCompositeTache(idColonne, nouvellecolonne, t);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 stage.close();
             }
         });

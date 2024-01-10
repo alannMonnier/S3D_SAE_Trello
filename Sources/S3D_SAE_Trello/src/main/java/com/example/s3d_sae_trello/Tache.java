@@ -176,6 +176,13 @@ public class Tache implements Comparable<Tache>, Serializable {
         this.estSelectionne = estSelectionne;
     }
 
+    /**
+     * Modife l'id de la colonne
+     * @param idcolonne
+     */
+    public void setIdcolonne(int idcolonne) {
+        this.idcolonne = idcolonne;
+    }
 
     /**
      * Compare de tache par rapport à la date de réalisation puis l'id
@@ -242,5 +249,38 @@ public class Tache implements Comparable<Tache>, Serializable {
 
         return res;
     }
+
+
+    /**
+     * Retourne la sous tache a partir de son nom
+     */
+    public Tache recupererSousTache(String nomSousTache){
+        for (Tache sousTache : this.getSousTaches()){
+
+            if(sousTache.getNom().equals(nomSousTache)){
+                return sousTache;
+            }
+            Tache st = sousTache.recupererSousTache(nomSousTache);
+            if(st != null){
+                return st;
+            }
+        }
+        return null;
+    }
+
+
+    public void supprimerSousTaches(Tache sousTache){
+        for (Tache st : this.getSousTaches()){
+            if(st.getNom().equals(sousTache.getNom())){
+                this.getSousTaches().remove(st);
+                break;
+            }
+            else{
+                st.supprimerSousTaches(sousTache);
+            }
+        }
+    }
+
+
 
 }

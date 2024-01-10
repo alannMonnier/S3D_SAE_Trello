@@ -191,7 +191,11 @@ public class VueListe extends VBox implements Observateur {
                     VBox hdepla = (VBox) dragEvent.getGestureSource();
                     String texteTacheDepl = ((Label) ((HBox) hdepla.getChildren().get(0)).getChildren().get(0)).getText();
                     Tache tDepl = modele.getColonneLignes().get(idAncienneColonne).getTache(texteTacheDepl);
-                    modele.supprimerTache(idAncienneColonne, tDepl);
+                    try {
+                        modele.supprimerTache(idAncienneColonne, tDepl);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     try {
                         modele.ajouterCompositeTache(tDepl);
                     } catch (IOException e) {

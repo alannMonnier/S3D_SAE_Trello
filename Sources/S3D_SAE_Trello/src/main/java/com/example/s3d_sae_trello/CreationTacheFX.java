@@ -135,6 +135,7 @@ public class CreationTacheFX extends Application {
                 //Création d'une sous tâche si c'est depuis une tâche
                 SousTache st = new SousTache(idTache, nomTache, descriptionTache, urg, tempsTache, dateDebutReal, tache.getIdSousTache());
                 tache.ajouterSousTache(st);
+                modele.setTacheCompositeNumId();
                 modele.notifierObservateurs();
             }
 

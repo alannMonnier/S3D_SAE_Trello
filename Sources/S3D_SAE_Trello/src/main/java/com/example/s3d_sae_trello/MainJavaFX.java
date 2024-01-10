@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
@@ -54,7 +55,6 @@ public class MainJavaFX extends Application {
         Button mGantt = new Button("Gantt");
         Button mArchive = new Button("Archive");
 
-
         menuBar.getChildren().addAll(mtableau, mListe, mGantt, mArchive);
         menuBar.setPadding(new Insets(10));
         menuBar.setSpacing(20);
@@ -67,19 +67,17 @@ public class MainJavaFX extends Application {
         vmenu.getChildren().addAll(vtitlemenu, menuBar);
         racine.setTop(vmenu);
 
+        GridPane gp = new VueBureau(modele);
+        modele.ajouterObservateur((Observateur) gp);
+        racine.setCenter(gp);
 
-        HBox hCOL = new VueBureau(modele);
-        modele.ajouterObservateur((Observateur) hCOL);
-        racine.setCenter(hCOL);
-        ScrollPane scrollPane = new ScrollPane(hCOL);
+        ScrollPane scrollPane = new ScrollPane(gp);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
 
         racine.setCenter(scrollPane);
 
         modele.recupererSauvegardeColonneLigne();
-        modele.recupererSauvegardeTache();
-
 
         double largeur = Screen.getPrimary().getBounds().getWidth();
         double hauteur = Screen.getPrimary().getBounds().getHeight();
@@ -87,7 +85,6 @@ public class MainJavaFX extends Application {
         Scene scene = new Scene(racine, largeur-10, hauteur-60);
         stage.setScene(scene);
         stage.show();
-
     }
 
 

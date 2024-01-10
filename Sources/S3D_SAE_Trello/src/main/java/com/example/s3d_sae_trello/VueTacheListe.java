@@ -156,7 +156,13 @@ public class VueTacheListe extends HBox implements Observateur{
         MenuItem ajouterSousTache = new MenuItem("Ajouter sous tâche");
 
         // Ajouter les actions aux éléments de menu
-        supprimer.setOnAction(e -> modele.supprimerTache(id, tache));
+        supprimer.setOnAction(e -> {
+            try {
+                modele.supprimerTache(id, tache);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         ajouterSousTache.setOnAction(new ControleurSousTache(tache, modele, id));
 
         if (modele.getTypeVue().equals("Archive")) {

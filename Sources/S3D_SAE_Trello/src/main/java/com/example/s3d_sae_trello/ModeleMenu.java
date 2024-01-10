@@ -62,6 +62,9 @@ public class ModeleMenu implements Sujet {
         this.notifierObservateurs();
     }
 
+    public void setTacheCompositeNumId() {
+        this.tacheCompositeNumId++;
+    }
 
     /**
      * Recupere les observateurs
@@ -121,8 +124,8 @@ public class ModeleMenu implements Sujet {
         ColonneLigne c = new ColonneLigne(nom, id);
         this.colonneLignes.add(c);
         nbColonnes++;
-        this.notifierObservateurs();
         this.sauvegarderColonneLigne();
+        this.notifierObservateurs();
     }
 
     /**
@@ -148,11 +151,12 @@ public class ModeleMenu implements Sujet {
     public void ajouterCompositeTache(Tache t) throws IOException {
         if (t.getIdcolonne() >= 0 && t.getIdcolonne() < colonneLignes.size()) {
             this.colonneLignes.get(t.getIdcolonne()).ajouterTache(t);
-            if (!(t.getId() < tacheCompositeNumId)) {
+            /**if (!(t.getId() < tacheCompositeNumId)) {
                 tacheCompositeNumId++;
-            }
+            }*/
+            tacheCompositeNumId++;
+            this.sauvegarderColonneLigne();
             this.notifierObservateurs();
-            this.sauvegarderTache();
         } else {
             System.out.println("Mauvais numéro de colonne: " + t.getIdcolonne());
         }
@@ -166,8 +170,9 @@ public class ModeleMenu implements Sujet {
      * @param id_tache indice de la tache mere
      * @param t              sous tache
      */
-    public void ajouterSousTache(int idColonneLigne, int id_tache, Tache t) {
+    public void ajouterSousTache(int idColonneLigne, int id_tache, Tache t) throws IOException {
         this.colonneLignes.get(idColonneLigne).tachelist.get(id_tache).ajouterSousTache(t);
+        this.sauvegarderColonneLigne();
         this.notifierObservateurs();
     }
 
@@ -181,11 +186,12 @@ public class ModeleMenu implements Sujet {
      * @param t                 tache ou sous tache
      */
 
-    public void deplacerCompositeTache(int idColonneLigne, int idNewColonneLigne, Tache t) {
+    public void deplacerCompositeTache(int idColonneLigne, int idNewColonneLigne, Tache t) throws IOException {
         // Ajoute la tâche dans la nouvelle colonneLigne
         this.colonneLignes.get(idNewColonneLigne).ajouterTache(t);
         // Supprime la tâche présente dans la colonneLigne actuel
         this.colonneLignes.get(idColonneLigne).getTacheList().remove(t);
+        this.sauvegarderColonneLigne();
         this.notifierObservateurs();
     }
 
@@ -260,19 +266,21 @@ public class ModeleMenu implements Sujet {
      * @param idColonneLigne id de la colonne
      * @param t tache donnée
      */
-    public void supprimerTache(int idColonneLigne, Tache t) {
+    public void supprimerTache(int idColonneLigne, Tache t) throws IOException {
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
         this.notifierObservateurs();
+        this.sauvegarderColonneLigne();
     }
 
     /**
      * Supprime la colonneLigne
      * @param idColonneLigne id de la colonneLigne donnée
      */
-    public void supprimerColonneLigne(int idColonneLigne) {
+    public void supprimerColonneLigne(int idColonneLigne) throws IOException {
         this.colonneLignes.remove(this.colonneLignes.get(idColonneLigne));
         this.nbColonnes--;
         this.notifierObservateurs();
+        this.sauvegarderColonneLigne();
     }
 
     /**
@@ -397,6 +405,9 @@ public class ModeleMenu implements Sujet {
     }
 
 
+
+
+
     /**
      * Récupéré toutes les tâches sans la tache passée en paramètre et les tâches filles déjà existante
      */
@@ -518,57 +529,19 @@ public class ModeleMenu implements Sujet {
         this.tacheSelectionee.remove(t);
     }
 
-    /**
-     * Sauvegarde les taches données dans un fichier.txt
-     */
-    public void sauvegarderTache() throws IOException {
-
-        ArrayList<Tache> t = recupererToutesTaches();
-        FileOutputStream os = new FileOutputStream("tache.txt");
-        ObjectOutputStream oos = new ObjectOutputStream(os);
-        // Ecris la tache
-        for(Tache tac : t){
-            oos.writeObject(tac);
-        }
-        oos.close();
-    }
-
     public void sauvegarderColonneLigne() throws IOException {
-        try (FileOutputStream os = new FileOutputStream("colonnes.txt");
+        try (FileOutputStream os = new FileOutputStream("colonne.txt");
              ObjectOutputStream oos = new ObjectOutputStream(os)) {
             oos.writeObject(this.colonneLignes);
         }
     }
 
 
-    /**
-     * Récupere Map<Tache, Integer> de tache en fonction de l'id de la colonne comme marqué dans le fichier
-     */
-    // Integer = numColonneLigne
-    public void recupererSauvegardeTache() throws IOException, ClassNotFoundException {
-        ArrayList<Tache> tacheSelectionee = new ArrayList<>();
-        try (FileInputStream is = new FileInputStream("tache.txt");
-             ObjectInputStream ois = new ObjectInputStream(is)) {
-            while (is.available() > 0) {
-                Tache t = (Tache) (ois.readObject());
-                tacheSelectionee.add(t);
-            }
-            for (Tache t : tacheSelectionee) {
-                System.out.println(t);
-                this.ajouterCompositeTache(t);
-            }
-        } catch (EOFException e) {
-            System.out.println("Aucune donnée dans le fichier, aucun objet chargé");
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        notifierObservateurs();
-    }
-
     public void recupererSauvegardeColonneLigne() throws IOException, ClassNotFoundException {
-        try (FileInputStream is = new FileInputStream("colonnes.txt");
+        try (FileInputStream is = new FileInputStream("colonne.txt");
              ObjectInputStream ois = new ObjectInputStream(is)) {
             this.colonneLignes = (ArrayList<ColonneLigne>) ois.readObject();
+            this.nbColonnes += this.colonneLignes.size();
         } catch (EOFException e) {
             System.out.println("Aucune donnée dans le fichier, aucun objet chargé");
         } catch (IOException | ClassNotFoundException e) {
