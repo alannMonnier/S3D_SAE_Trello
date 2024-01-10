@@ -227,7 +227,7 @@ public class ModeleMenu implements Sujet {
      * Archive toutes les taches de la colonneLigne donnée
      * @param idColonneLigne id de la colonneLigne
      */
-    public void archiverToutesTaches(int idColonneLigne) {
+    public void archiverToutesTaches(int idColonneLigne) throws IOException {
         List<Tache> taches = this.colonneLignes.get(idColonneLigne).getTacheList();
         Iterator<Tache> iterator = taches.iterator();
         while (iterator.hasNext()) {
@@ -236,6 +236,8 @@ public class ModeleMenu implements Sujet {
             archive.ajouterTache(t);
             iterator.remove();
         }
+        this.sauvegarderArchive();
+        this.sauvegarderColonneLigne();
         this.notifierObservateurs();
     }
 
@@ -244,9 +246,11 @@ public class ModeleMenu implements Sujet {
      * @param idColonneLigne id de la colonneLigne
      * @param t tache donnée
      */
-    public void archiverTache(int idColonneLigne, Tache t) {
+    public void archiverTache(int idColonneLigne, Tache t) throws IOException {
         archive.ajouterTache(t);
         this.colonneLignes.get(idColonneLigne).supprimerTache(t);
+        this.sauvegarderArchive();
+        this.sauvegarderColonneLigne();
         this.notifierObservateurs();
     }
 
@@ -258,6 +262,8 @@ public class ModeleMenu implements Sujet {
     public void desarchiverTache(Tache t) throws IOException {
         this.ajouterCompositeTache(t);
         this.archive.supprimerTache(t);
+        this.sauvegarderArchive();
+        this.sauvegarderColonneLigne();
         this.notifierObservateurs();
     }
 
@@ -536,12 +542,31 @@ public class ModeleMenu implements Sujet {
         }
     }
 
+    public void sauvegarderArchive() throws IOException {
+        try (FileOutputStream os = new FileOutputStream("archive.txt");
+             ObjectOutputStream oos = new ObjectOutputStream(os)) {
+            oos.writeObject(this.archive);
+        }
+    }
+
 
     public void recupererSauvegardeColonneLigne() throws IOException, ClassNotFoundException {
         try (FileInputStream is = new FileInputStream("colonne.txt");
              ObjectInputStream ois = new ObjectInputStream(is)) {
             this.colonneLignes = (ArrayList<ColonneLigne>) ois.readObject();
             this.nbColonnes += this.colonneLignes.size();
+        } catch (EOFException e) {
+            System.out.println("Aucune donnée dans le fichier, aucun objet chargé");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        notifierObservateurs();
+    }
+
+    public void recupererSauvegardeArchive() throws IOException, ClassNotFoundException {
+        try (FileInputStream is = new FileInputStream("archive.txt");
+             ObjectInputStream ois = new ObjectInputStream(is)) {
+            this.archive = (Archive) ois.readObject();
         } catch (EOFException e) {
             System.out.println("Aucune donnée dans le fichier, aucun objet chargé");
         } catch (IOException | ClassNotFoundException e) {

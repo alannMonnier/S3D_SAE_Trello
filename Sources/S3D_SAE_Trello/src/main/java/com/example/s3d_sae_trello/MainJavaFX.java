@@ -78,6 +78,7 @@ public class MainJavaFX extends Application {
         racine.setCenter(scrollPane);
 
         modele.recupererSauvegardeColonneLigne();
+        modele.recupererSauvegardeArchive();
 
         double largeur = Screen.getPrimary().getBounds().getWidth();
         double hauteur = Screen.getPrimary().getBounds().getHeight();

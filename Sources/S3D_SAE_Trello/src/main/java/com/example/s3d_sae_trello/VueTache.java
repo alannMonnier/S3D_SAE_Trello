@@ -69,7 +69,13 @@ public class VueTache extends VBox implements Observateur {
         } else {
             MenuItem archiver = new MenuItem("Archiver");
             MenuItem deplacer = new MenuItem("Déplacer Tâche");
-            archiver.setOnAction(e -> modeleMenu.archiverTache(idColonne, t));
+            archiver.setOnAction(e -> {
+                try {
+                    modeleMenu.archiverTache(idColonne, t);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
             deplacer.setOnAction(e -> DeplacerTacheFX.afficher(t, modeleMenu, idColonne));
             menuParamTache.getItems().addAll(supprimer, creerDependanceMere, creerDependanceFille, deplacer, ajouterSousTache, archiver);
         }

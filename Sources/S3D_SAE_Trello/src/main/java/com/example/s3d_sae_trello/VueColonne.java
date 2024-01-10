@@ -92,7 +92,13 @@ public class VueColonne extends VBox implements Observateur {
                 throw new RuntimeException(ex);
             }
         });
-        tarchiv.setOnAction(e -> modele.archiverToutesTaches(idColonne));
+        tarchiv.setOnAction(e -> {
+            try {
+                modele.archiverToutesTaches(idColonne);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         this.getChildren().addAll(vTitreCol);
 

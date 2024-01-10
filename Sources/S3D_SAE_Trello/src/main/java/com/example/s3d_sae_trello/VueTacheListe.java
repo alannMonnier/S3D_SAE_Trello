@@ -178,7 +178,13 @@ public class VueTacheListe extends HBox implements Observateur{
         } else {
             MenuItem archiver = new MenuItem("Archiver");
             MenuItem deplacer = new MenuItem("Déplacer Tâche");
-            archiver.setOnAction(e -> modele.archiverTache(id, tache));
+            archiver.setOnAction(e -> {
+                try {
+                    modele.archiverTache(id, tache);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
             deplacer.setOnAction(e -> {/* Logique pour déplacer la tâche */});
             menuButtonPlus.getItems().addAll(supprimer, creerDependance, deplacer, ajouterSousTache, archiver);
         }
