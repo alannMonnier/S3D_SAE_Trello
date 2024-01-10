@@ -426,11 +426,13 @@ public class ModeleMenu implements Sujet, Serializable {
      */
     public ArrayList<Tache> recupererToutesTachesSansMere(Tache t) {
         ArrayList<Tache> listeTaches = this.recupererToutesTaches();
-
         for (int i = 0; i < listeTaches.size(); i++) {
             Tache tt = listeTaches.get(i);
+            if(tt.getDateDebutReal().isAfter(t.getDateDebutReal())){
+                listeTaches.remove(tt);
+            }
             // Vérifie si la tache t n'est pas dans l'arrayList fille de la tache mère de la Map
-            if (this.dependance.containsKey(tt)) {
+            else if (this.dependance.containsKey(tt)) {
                 if (this.dependance.get(tt).contains(t)) {
                     listeTaches.remove(tt);
                     i--;
@@ -452,7 +454,12 @@ public class ModeleMenu implements Sujet, Serializable {
                 listeTaches.remove(tacheFille);
             }
         }
-
+        for (int i = 0; i < listeTaches.size(); i++) {
+            Tache tt = listeTaches.get(i);
+            if (tt.getDateDebutReal().isBefore(t.getDateDebutReal())) {
+                listeTaches.remove(tt);
+            }
+        }
         listeTaches.remove(t);
         return listeTaches;
     }
