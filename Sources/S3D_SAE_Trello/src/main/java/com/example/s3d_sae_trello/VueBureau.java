@@ -10,6 +10,8 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
+
 /**
  * Gestion affichage bureau
  */
@@ -51,7 +53,7 @@ public class VueBureau extends GridPane implements Observateur {
     }
 
     @Override
-    public void actualiser(Sujet s) {
+    public void actualiser(Sujet s) throws IOException {
         this.getChildren().clear();
         this.setAlignment(Pos.CENTER);
 

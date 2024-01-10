@@ -79,6 +79,15 @@ public class MainJavaFX extends Application {
 
         modele.recupererSauvegardeColonneLigne();
         modele.recupererSauvegardeArchive();
+        modele.recupererDependance();
+
+        stage.setOnCloseRequest(windowEvent -> {
+            try {
+                modele.sauvegarderDependance(); // Appel lors de la fermeture pour sauvegarder la TreeMap
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
         double largeur = Screen.getPrimary().getBounds().getWidth();
         double hauteur = Screen.getPrimary().getBounds().getHeight();

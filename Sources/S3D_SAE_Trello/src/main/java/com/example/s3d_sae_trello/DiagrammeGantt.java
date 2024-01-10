@@ -17,13 +17,22 @@ public class DiagrammeGantt{
         this.modele = m;
     }
 
+    public void afficherGantt(){
+
+        ArrayList<Tache> tachesansmere = modele.recupererTachesSansMere();
+
+        for (Tache mere : tachesansmere) {
+            parcourirFille(mere, 0);
+            System.out.println("\n");
+        }
+    }
+
     /**
      * Permet de parcourir les filles d'une tache entrée en paramètre à partir d'un rang donné, méthode récursive
      * @param mere Tache mere
      * @param rang Rang à partir duquel on parcoure
      */
     public void parcourirFille(Tache mere, int rang) {
-
         System.out.print(getRang(rang) + mere.getNom());
 
         // Iterate through the daughters of the current task and recursively call the method

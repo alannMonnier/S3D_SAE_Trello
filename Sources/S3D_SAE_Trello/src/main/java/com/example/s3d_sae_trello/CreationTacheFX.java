@@ -67,7 +67,7 @@ public class CreationTacheFX extends Application {
         // Entrez temps consacré à la tâche
         Label temps = new Label("Entrez le temps consacré à la tâche:");
         Spinner spinner = new Spinner<Integer>();
-        SpinnerValueFactory svf = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 72, 1);
+        SpinnerValueFactory svf = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 1);
         spinner.setValueFactory(svf);
 
 
@@ -143,7 +143,7 @@ public class CreationTacheFX extends Application {
                         if(tache.ajout_sous_tache_possible(st)){
                             tache.ajouterSousTache(st);
                             modele.setTacheCompositeNumId();
-                            modele.notifierObservateurs();
+                                modele.notifierObservateurs();
                         } else{
                             Alert alert = Alerte.alerteDate("Erreur", "Le temps nécessaire à la réalisation de toutes les sous tâches est superieur à la tâche " + "\"" + tache.getNom() + "\"");
                             alert.showAndWait();

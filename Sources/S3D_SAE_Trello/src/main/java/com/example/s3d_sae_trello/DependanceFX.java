@@ -7,10 +7,12 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -43,7 +45,9 @@ public class DependanceFX extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        ScrollPane scrollPane = new ScrollPane();
         GridPane gp = new GridPane();
+        scrollPane.setContent(gp);
 
         int colonne = 0;
         int ligne = 1;
@@ -94,8 +98,10 @@ public class DependanceFX extends Application {
             }
         });
         gp.add(bValider, colonne, ligne);
+        double largeur = Screen.getPrimary().getBounds().getWidth();
+        double hauteur = Screen.getPrimary().getBounds().getHeight();
 
-        Scene scene = new Scene(gp, 600, 350);
+        Scene scene = new Scene(scrollPane, largeur-10, hauteur-60);
         stage.setScene(scene);
         stage.show();
     }
