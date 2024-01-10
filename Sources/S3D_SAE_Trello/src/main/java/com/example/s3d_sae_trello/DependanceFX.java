@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Affichage des dépendances
  */
-public class VueDependance extends Application {
+public class DependanceFX extends Application {
     private Tache t;
     private ModeleMenu modeleMenu;
     private ArrayList<Tache> tachesSelectionnee;
@@ -32,7 +32,7 @@ public class VueDependance extends Application {
      * @param taches taches à ajouter dépendance
      * @param type type de dépandance mere ou fille
      */
-    public VueDependance(Tache t, ModeleMenu modeleMenu, ArrayList<Tache> taches, String type) {
+    public DependanceFX(Tache t, ModeleMenu modeleMenu, ArrayList<Tache> taches, String type) {
         this.t = t;
         this.modeleMenu = modeleMenu;
         this.tachesSelectionnee = new ArrayList<>();

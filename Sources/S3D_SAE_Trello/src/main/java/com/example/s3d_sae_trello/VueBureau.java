@@ -58,7 +58,7 @@ public class VueBureau extends GridPane implements Observateur {
 
         switch (modele.getTypeVue()) {
             case "Gantt":
-                VueGantt vg = new VueGantt(modele);
+                GanttFX vg = new GanttFX(modele);
                 this.add(vg, 0, 0);
                 break;
             case "Liste":
@@ -113,7 +113,7 @@ public class VueBureau extends GridPane implements Observateur {
                 int j = 0;
                 while (j < modele.getNbColonnes()) {
                     ColonneLigne cl = modele.getColonneLignes().get(j);
-                    VBox col = new VueColonne(cl.getTacheList(), modele, j, cl.getNom());
+                    VBox col = new ColonneFX(cl.getTacheList(), modele, j, cl.getNom());
                     this.add(col, j , 0);
                     this.id++;
                     j++;

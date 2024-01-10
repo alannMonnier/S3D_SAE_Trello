@@ -1,13 +1,10 @@
 package com.example.s3d_sae_trello;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
-import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -18,7 +15,7 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class VueTacheListe extends HBox implements Observateur{
+public class TacheListeFX extends HBox{
 
     private ModeleMenu modele;
     private int id;
@@ -91,7 +88,7 @@ public class VueTacheListe extends HBox implements Observateur{
     private Border border = createElegantBorder();
 
 
-    public VueTacheListe(Tache t, ModeleMenu m, int ident) {
+    public TacheListeFX(Tache t, ModeleMenu m, int ident) {
         modele = m;
         id = ident;
         ancienId = -999;
@@ -286,7 +283,7 @@ public class VueTacheListe extends HBox implements Observateur{
         ArrayList<HBox> tabSousTaches = new ArrayList<>();
         for (Tache sousTache : tache.getSousTaches()) {
             // Créer une nouvelle instance de VueTacheListe pour chaque sous-tâche
-            VueTacheListe vueSousTache = new VueTacheListe(sousTache, modele, id);
+            TacheListeFX vueSousTache = new TacheListeFX(sousTache, modele, id);
 
             // Ajouter la VueTacheListe à la liste de sous-tâches
             tabSousTaches.add(vueSousTache);
@@ -295,11 +292,5 @@ public class VueTacheListe extends HBox implements Observateur{
             sousTache(sousTache, vueSousTache);
         }
         return tabSousTaches;
-    }
-
-
-    @Override
-    public void actualiser(Sujet s) {
-
     }
 }

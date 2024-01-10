@@ -5,18 +5,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -71,17 +64,6 @@ public class VueListe extends VBox implements Observateur {
         creerListe();
     }
 
-    public VueListe(ModeleMenu m, String nom, int id) {
-        this.modele = m;
-        //this.modele.ajouterObservateur(this);
-        this.nom = nom;
-        this.taches = new ArrayList<>();
-        accordion = new Accordion();
-        this.idColonne = id;
-
-        creerListe();
-    }
-
     public void creerListe() {
         this.setAlignment(Pos.CENTER_LEFT);
         this.setBorder(createElegantBorder());
@@ -98,7 +80,7 @@ public class VueListe extends VBox implements Observateur {
         for (int i = 0; i < this.taches.size(); i++) {
             if(this.taches.get(i) != null){
                 if(i == this.taches.size() - 1){
-                    VueTacheListe vtacheliste = new VueTacheListe(this.taches.get(i), modele, idColonne);
+                    TacheListeFX vtacheliste = new TacheListeFX(this.taches.get(i), modele, idColonne);
                     this.getChildren().add(vtacheliste);
                 } else {
                     Separator separator = new Separator(Orientation.VERTICAL);
@@ -108,7 +90,7 @@ public class VueListe extends VBox implements Observateur {
                     separatorBox.setAlignment(Pos.CENTER_LEFT); // Caler le séparateur à droite
                     HBox.setHgrow(separatorBox, Priority.ALWAYS); // Pousser le séparateur vers la droite
 
-                    VueTacheListe vtacheliste = new VueTacheListe(this.taches.get(i), modele, idColonne);
+                    TacheListeFX vtacheliste = new TacheListeFX(this.taches.get(i), modele, idColonne);
                     this.getChildren().addAll(vtacheliste, separatorBox);
                 }
             }
@@ -143,7 +125,7 @@ public class VueListe extends VBox implements Observateur {
                 } else if (dragEvent.getGestureSource() != this && dragEvent.getDragboard().hasString()
                         && dragEvent.getGestureSource().getClass().toString().contains("VueTacheListe")) {
                     dragEvent.acceptTransferModes(TransferMode.MOVE);
-                    VueTacheListe vtl = (VueTacheListe) dragEvent.getGestureSource();
+                    TacheListeFX vtl = (TacheListeFX) dragEvent.getGestureSource();
                     VueListe vl = (VueListe) (vtl).getParent();
                     VBox vb2 = (VBox) (vl).getChildren().get(0);
                     BorderPane bp = (BorderPane) (vb2).getChildren().get(0);
@@ -156,7 +138,7 @@ public class VueListe extends VBox implements Observateur {
                     while (!(vmere.getParent().getClass().toString().contains("VueTacheListe"))) {
                         vmere = (VBox) vmere.getParent();
                     }
-                    VueTacheListe vtl = (VueTacheListe) vmere.getParent();
+                    TacheListeFX vtl = (TacheListeFX) vmere.getParent();
 
 
                     VueListe vb = (VueListe) (vtl).getParent();
