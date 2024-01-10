@@ -534,15 +534,10 @@ public class ModeleMenu implements Sujet {
     }
 
     public void sauvegarderColonneLigne() throws IOException {
-
-        FileOutputStream os = new FileOutputStream("colonne.txt");
-        ObjectOutputStream oos = new ObjectOutputStream(os);
-        ArrayList<ColonneLigne> t = this.colonneLignes;
-        // Ecris la ColonneLigne
-        for(ColonneLigne col : t){
-            oos.writeObject(col);
+        try (FileOutputStream os = new FileOutputStream("colonnes.txt");
+             ObjectOutputStream oos = new ObjectOutputStream(os)) {
+            oos.writeObject(this.colonneLignes);
         }
-        oos.close();
     }
 
 
@@ -571,13 +566,9 @@ public class ModeleMenu implements Sujet {
     }
 
     public void recupererSauvegardeColonneLigne() throws IOException, ClassNotFoundException {
-        try (FileInputStream is = new FileInputStream("colonne.txt");
+        try (FileInputStream is = new FileInputStream("colonnes.txt");
              ObjectInputStream ois = new ObjectInputStream(is)) {
-            while (is.available() > 0) {
-                ColonneLigne t = (ColonneLigne) (ois.readObject());
-                System.out.println(t);
-                this.ajouterColonneLigne(t.getNom(), this.nbColonnes);
-            }
+            this.colonneLignes = (ArrayList<ColonneLigne>) ois.readObject();
         } catch (EOFException e) {
             System.out.println("Aucune donnée dans le fichier, aucun objet chargé");
         } catch (IOException | ClassNotFoundException e) {
