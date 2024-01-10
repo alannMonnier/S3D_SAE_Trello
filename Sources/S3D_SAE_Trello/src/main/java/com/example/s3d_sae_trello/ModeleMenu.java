@@ -474,7 +474,6 @@ public class ModeleMenu implements Sujet {
      * à partir de celles ci, en descendant petit à petit l'arborescence
     */
     public ArrayList<Tache> recupererTachesSansMere() {
-
         TreeMap<Tache, ArrayList<Tache>> map = this.dependance;
 
         // On stock les taches sans mere ici pour retour

@@ -10,6 +10,8 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
+
 /**
  * Gestion affichage bureau
  */
@@ -58,7 +60,12 @@ public class VueBureau extends GridPane implements Observateur {
 
         switch (modele.getTypeVue()) {
             case "Gantt":
-                GanttFX vg = new GanttFX(modele);
+                GanttFX vg = null;
+                try {
+                    vg = new GanttFX(modele);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 this.add(vg, 0, 0);
                 break;
             case "Liste":
