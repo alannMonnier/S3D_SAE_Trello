@@ -15,6 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class VueTacheListe extends HBox implements Observateur{
@@ -160,7 +161,13 @@ public class VueTacheListe extends HBox implements Observateur{
 
         if (modele.getTypeVue().equals("Archive")) {
             MenuItem desarchiver = new MenuItem("Enlever des archives");
-            desarchiver.setOnAction(e -> modele.desarchiverTache(tache));
+            desarchiver.setOnAction(e -> {
+                try {
+                    modele.desarchiverTache(tache);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
             menuButtonPlus.getItems().addAll(supprimer, creerDependance, ajouterSousTache, desarchiver);
         } else {
             MenuItem archiver = new MenuItem("Archiver");
@@ -190,136 +197,7 @@ public class VueTacheListe extends HBox implements Observateur{
 
         this.getChildren().add(vBox);
 
-        // Récupère l'objet à déplacer ainsi qu'une image qui apparaît au déplacement
-        this.setOnDragDetected(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                Dragboard db = startDragAndDrop(TransferMode.MOVE);
-                ClipboardContent content = new ClipboardContent();
-                content.putImage(snapshot(new SnapshotParameters(), null));
-                content.putString("White");
-                db.setContent(content);
-                mouseEvent.consume();
-            }
-        });
 
-        // Permet de déposer la tâche dans cette zone précise
-        this.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                if (event.getGestureSource() != this && event.getDragboard().hasString()) {
-                    event.acceptTransferModes(TransferMode.MOVE);
-                }
-                event.consume();
-            }
-        });
-
-
-        // On survol la VBox de la tâche à l'endroit où on l'a placé
-        this.setOnDragEntered(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                if (dragEvent.getGestureSource().getClass().toString().contains("VBox")) {
-                    VBox vmere = (VBox) dragEvent.getGestureSource();
-                    while (!(vmere.getParent().getClass().toString().contains("VueTacheListe"))) {
-                        vmere = (VBox) vmere.getParent();
-                    }
-                    VueTacheListe vt = (VueTacheListe) vmere.getParent();
-
-                    VueListe vl = (VueListe) (vt).getParent();
-                    VBox vb2 = (VBox) (vl).getChildren().get(0);
-                    BorderPane bp = (BorderPane) (vb2).getChildren().get(0);
-                    Label l = (Label) (bp).getChildren().get(0);
-                    String txtCol = l.getText();
-                    // Récupère l'ancienne colonne de la sous tache
-                    idAncienneColonne = modele.recupererColonneLigneID(txtCol);
-
-                    // Récupère le texte marqué sur la tâche mère
-                    HBox hb = (HBox) vt.getChildren().get(0);
-                    Label lT = (Label) hb.getChildren().get(0);
-                    String txtTache = lT.getText();
-
-
-                    // Récupère l'id de la tâche
-                    ancienneTache = modele.recupererTache(idAncienneColonne, txtTache);
-                } else if (dragEvent.getGestureSource() != this && dragEvent.getDragboard().hasString()) {
-                    VueTacheListe vt = (VueTacheListe) dragEvent.getGestureSource();
-                    VueListe vl = (VueListe) (vt).getParent();
-                    VBox vb2 = (VBox) (vl).getChildren().get(0);
-                    BorderPane bp = (BorderPane) (vb2).getChildren().get(0);
-                    Label l = (Label) (bp).getChildren().get(0);
-                    String txtCol = l.getText();
-                    idAncienneColonne = modele.recupererColonneLigneID(txtCol);
-                }
-                dragEvent.consume();
-            }
-        });
-
-
-
-       /* this.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                Dragboard db = event.getDragboard();
-                boolean success = false;
-                if (db.hasString()) {
-                    // Récupérer le nom de la tâche déplacée à partir des données du Dragboard
-                    String nomTache = db.getString();
-
-                    // Trouver la tâche à déplacer dans le modèle
-                    Tache tacheADeplacer = modele.recupererTache(id, nomTache);
-                    if (tacheADeplacer != null) {
-                        // ID de la colonne cible (ici, 'id' est l'ID de la colonne actuelle dans VueTacheListe)
-                        int targetColonneId = id;
-
-                        // Appeler la méthode du modèle pour déplacer la tâche
-                        modele.deplacerCompositeTache(id, targetColonneId, tacheADeplacer);
-
-                        success = true; // Marquer l'opération comme réussie
-                    }
-                }
-                event.setDropCompleted(success);
-                event.consume();
-            }
-        });*/
-
-        // Action lorsqu'on dépose la tâche à un autre endroit
-        this.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                Dragboard db = dragEvent.getDragboard();
-                boolean success = false;
-
-                if (db.hasString() && dragEvent.getGestureSource().getClass().toString().contains("VueTacheListe")) {
-                    // Récupère le conteneur de la tâche
-                    VueTache hdepla = (VueTache) dragEvent.getGestureSource();
-                    // Récupère le texte déplacé
-                    String texteTacheDepl = ((Label) ((HBox) hdepla.getChildren().get(0)).getChildren().get(0)).getText();
-
-                    // Vérifie si la tâche source est différente de la tâche cible
-                    if (!texteTacheDepl.equals(tacheCourante.getNom())) {
-                        // Récupère la tâche ou on a déplacé
-                        Tache tache = modele.getColonneLignes().get(idAncienneColonne).getTache(texteTacheDepl);
-                        t.ajouterSousTache(tache);
-                        success = true;
-                        // supprime la vbox contenant la tâche
-                        modele.supprimerTache(idAncienneColonne, tache);
-                    }
-                }
-
-                dragEvent.setDropCompleted(success);
-                dragEvent.consume();
-            }
-        });
-
-
-        this.setOnDragDone(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                // Nettoyage après le glissement
-                event.consume();
-            }
-        });
     }
 
 

@@ -10,6 +10,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 /**
  * Création d'une colonneLigne en Javafx
  */
@@ -45,7 +47,11 @@ public class CreationColonneFX extends Application {
         Button b = new Button("Valider");
         b.setOnAction(actionEvent -> {
             String nomColonne = tf.getText();
-            this.modele.ajouterColonneLigne(nomColonne, this.idColonne);
+            try {
+                this.modele.ajouterColonneLigne(nomColonne, this.idColonne);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
             stage.close();
         });

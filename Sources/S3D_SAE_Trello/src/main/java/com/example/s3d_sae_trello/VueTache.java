@@ -18,8 +18,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class VueTache extends VBox implements Observateur {
+import java.io.IOException;
 
+public class VueTache extends VBox implements Observateur {
 
     BorderStroke borderStroke = new BorderStroke(Color.BLACK,
             BorderStrokeStyle.SOLID,
@@ -33,6 +34,8 @@ public class VueTache extends VBox implements Observateur {
     private int idAncienneColonne;
     private Tache ancienneTache;
     private Tache tacheCourante;
+    private Tache tacheEnMouvement;
+    private Tache sousTacheEnMouvement;
 
 
     public VueTache(Tache t, ModeleMenu modeleMenu, int idColonne) {
@@ -55,7 +58,13 @@ public class VueTache extends VBox implements Observateur {
 
         if (modeleMenu.getTypeVue().equals("Archive")) {
             MenuItem desarchiver = new MenuItem("Enlever des archives");
-            desarchiver.setOnAction(e -> modeleMenu.desarchiverTache(t));
+            desarchiver.setOnAction(e -> {
+                try {
+                    modeleMenu.desarchiverTache(t);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
             menuParamTache.getItems().addAll(supprimer, creerDependanceMere, creerDependanceFille, ajouterSousTache, desarchiver);
         } else {
             MenuItem archiver = new MenuItem("Archiver");
@@ -91,9 +100,7 @@ public class VueTache extends VBox implements Observateur {
         ajouterSousTache.setOnAction(new ControleurSousTache(t, modeleMenu, idColonne));
 
         HBox hb2 = new HBox();
-
         Label nbHeures = new Label("" + t.getTempsEstime() + "h");
-
 
         HBox hb3 = new HBox();
         int urg = t.getDegreUrgence();
@@ -119,8 +126,6 @@ public class VueTache extends VBox implements Observateur {
         Button details = new Button("Détails");
 
         details.setOnAction(e -> afficherDetails(t));
-
-
         hb1.getChildren().addAll(text, bSelect, paramTache);
         hb2.getChildren().addAll(nbHeures);
         hb3.getChildren().addAll(circle, df, bsoustache, details);
@@ -152,7 +157,8 @@ public class VueTache extends VBox implements Observateur {
             }
         });
 
-        // Permet de déposer la tâche dans cette zone précise
+
+        // La tache peut être drag sur une autre tache et accepte de recevoir un transfert
         this.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent dragEvent) {
@@ -163,7 +169,8 @@ public class VueTache extends VBox implements Observateur {
             }
         });
 
-        // On survol la VBox de la tâche à l'endroit où on l'a placé
+
+        // Survole d'une Tache
         this.setOnDragEntered(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent dragEvent) {
@@ -173,68 +180,46 @@ public class VueTache extends VBox implements Observateur {
                         vmere = (VBox) vmere.getParent();
                     }
                     VueTache vt = (VueTache) vmere.getParent();
+                    ancienneTache = vt.tacheCourante;
+                }
 
-                    VueColonne vb = (VueColonne) (vt).getParent();
-                    VBox vb2 = (VBox) (vb).getChildren().get(0);
-                    BorderPane bp = (BorderPane) (vb2).getChildren().get(0);
-                    Label l = (Label) (bp).getChildren().get(0);
-                    String txtCol = l.getText();
-                    // Récupère l'ancienne colonne de la sous tache
-                    idAncienneColonne = modeleMenu.recupererColonneLigneID(txtCol);
+                else if (dragEvent.getGestureSource() != this && dragEvent.getDragboard().hasString()
+                  && dragEvent.getGestureSource().getClass().toString().contains("VueTache")) {
 
-                    // Récupère le texte marqué sur la tâche mère
-                    HBox hb = (HBox) vt.getChildren().get(0);
-                    Label lT = (Label) hb.getChildren().get(0);
-                    String txtTache = lT.getText();
-
-
-                    // Récupère l'id de la tâche
-                    ancienneTache = modeleMenu.recupererTache(idAncienneColonne, txtTache);
-                } else if (dragEvent.getGestureSource() != this && dragEvent.getDragboard().hasString()) {
                     VueTache vt = (VueTache) dragEvent.getGestureSource();
-                    VueColonne vb = (VueColonne) (vt).getParent();
-                    VBox vb2 = (VBox) (vb).getChildren().get(0);
-                    BorderPane bp = (BorderPane) (vb2).getChildren().get(0);
-                    Label l = (Label) (bp).getChildren().get(0);
-                    String txtCol = l.getText();
-                    idAncienneColonne = modeleMenu.recupererColonneLigneID(txtCol);
+                    idAncienneColonne = vt.tacheCourante.getIdcolonne();
+                    tacheEnMouvement = vt.tacheCourante;
                 }
                 dragEvent.consume();
             }
         });
 
 
-        // Action lorsqu'on dépose la tâche à un autre endroit
+        // Action lorsqu'on dépose l'élément sur une tache
         this.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent dragEvent) {
                 Dragboard db = dragEvent.getDragboard();
                 boolean success = false;
-
                 if (db.hasString() && dragEvent.getGestureSource().getClass().toString().contains("VueTache")) {
-                    // Récupère le conteneur de la tâche
-                    VueTache hdepla = (VueTache) dragEvent.getGestureSource();
-                    // Récupère le texte déplacé
-                    String texteTacheDepl = ((Label) ((HBox) hdepla.getChildren().get(0)).getChildren().get(0)).getText();
-
-                    // Vérifie si la tâche source est différente de la tâche cible
-                    if (!texteTacheDepl.equals(tacheCourante.getNom())) {
-                        // Récupère la tâche ou on a déplacé
-                        Tache tache = modeleMenu.getColonneLignes().get(idAncienneColonne).getTache(texteTacheDepl);
-                        t.ajouterSousTache(tache);
-                        success = true;
-                        // supprime la vbox contenant la tâche
-                        modeleMenu.supprimerTache(idAncienneColonne, tache);
+                    if(!tacheEnMouvement.getNom().equals(tacheCourante.getNom())){
+                        tacheCourante.ajouterSousTache(tacheEnMouvement);
+                        modeleMenu.supprimerTache(idAncienneColonne, tacheEnMouvement);
                     }
                 }
+                else if(dragEvent.getGestureSource().getClass().toString().contains("VBox")){
 
+                    VBox vb = (VBox) dragEvent.getGestureSource();
+                    String nomSousTache = vb.getId();
+                    Tache sousTacheCourante = ancienneTache.recupererSousTache(nomSousTache);
+                    ancienneTache.getSousTaches().remove(sousTacheCourante);
+                    tacheCourante.ajouterSousTache(sousTacheCourante);
+                    modeleMenu.notifierObservateurs();
+                }
                 dragEvent.setDropCompleted(success);
                 dragEvent.consume();
             }
         });
-
-
-        //this.getChildren().addAll(vb);
 
         this.setPadding(new Insets(5));
         this.setBorder(border);
@@ -277,7 +262,8 @@ public class VueTache extends VBox implements Observateur {
 
     public void vBoxSousTache(Tache st, VBox vb){
         for (Tache sousTache : st.getSousTaches()){
-            VBox vsousTache = new VBox();
+            VBox vsousTache =  new VBox();
+            vsousTache.setId(sousTache.getNom());
             Label l = new Label(sousTache.getNom());
 
             // Création du menu
@@ -380,22 +366,7 @@ public class VueTache extends VBox implements Observateur {
                             vmere = (VBox) vmere.getParent();
                         }
                         VueTache vt = (VueTache) vmere.getParent();
-
-                        VueColonne vb = (VueColonne) (vt).getParent();
-                        VBox vb2 = (VBox) (vb).getChildren().get(0);
-                        BorderPane bp = (BorderPane) (vb2).getChildren().get(0);
-                        Label l = (Label) (bp).getChildren().get(0);
-                        String txtCol = l.getText();
-                        // Récupère l'ancienne colonne de la sous tache
-                        idAncienneColonne = modeleMenu.recupererColonneLigneID(txtCol);
-
-                        // Récupère le texte marqué sur la tâche mère
-                        HBox hb = (HBox) vt.getChildren().get(0);
-                        Label lT = (Label) hb.getChildren().get(0);
-                        String txtTache = lT.getText();
-
-                        // Récupère l'id de la tâche
-                        ancienneTache = modeleMenu.recupererTache(idAncienneColonne, txtTache);
+                        ancienneTache = vt.tacheCourante;
                     }
                     dragEvent.consume();
                 }
@@ -407,15 +378,18 @@ public class VueTache extends VBox implements Observateur {
                     Dragboard db = dragEvent.getDragboard();
                     boolean success = false;
                     if (db.hasString()) {
-                        // Récupère la sous tâche que l'on déplace dans une tâche
                         VBox vb = (VBox) dragEvent.getGestureSource();
-                        Label l = (Label) vb.getChildren().get(0);
-                        String txtSousTache = l.getText();
-                        // Supprimer l'ancienne sous taches
-                        Tache st = modeleMenu.supprimerSousTache(ancienneTache, txtSousTache);
+                        String nomSousTache = vb.getId();
+                        while (!(vb.getParent().getClass().toString().contains("VueTache"))) {
+                            vb = (VBox) vb.getParent();
+                        }
+                        VueTache vt = (VueTache) vb.getParent();
 
-                        // Ajouter la sous tâche à la sous tâche
-                        sousTache.ajouterSousTache(st);
+
+                        Tache sousTacheCourante = ancienneTache.recupererSousTache(nomSousTache);
+                        ancienneTache.supprimerSousTaches(sousTacheCourante);
+                        sousTache.ajouterSousTache(sousTacheCourante);
+
                         modeleMenu.notifierObservateurs();
                     }
                     dragEvent.setDropCompleted(success);
@@ -428,4 +402,6 @@ public class VueTache extends VBox implements Observateur {
     public Tache getTacheCourante() {
         return tacheCourante;
     }
+
+
 }

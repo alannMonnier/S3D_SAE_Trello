@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
@@ -53,11 +54,8 @@ public class MainJavaFX extends Application {
         Button mListe = new Button("Liste tâche");
         Button mGantt = new Button("Gantt");
         Button mArchive = new Button("Archive");
-        Button mSauvegarder = new Button("Sauvegarder");
-        Button mCharger = new Button("Charger Sauvegarde");
 
-
-        menuBar.getChildren().addAll(mtableau, mListe, mGantt, mArchive, mSauvegarder, mCharger);
+        menuBar.getChildren().addAll(mtableau, mListe, mGantt, mArchive);
         menuBar.setPadding(new Insets(10));
         menuBar.setSpacing(20);
 
@@ -66,57 +64,21 @@ public class MainJavaFX extends Application {
         mGantt.setOnAction(new ControleurActionMenu(modele));
         mArchive.setOnAction(new ControleurActionMenu(modele));
 
-        // Sauvegarde les taches sélectionnées
-        mSauvegarder.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                // Récupère les tâches sélectionnée
-                ArrayList<Tache> tacheSelectionee = modele.getTacheSelectionee();
-
-                // Sauvegarde les taches et sous taches sélectionnées dans un fichier en sérialisant
-                try {
-                    modele.sauvegarderTaches(tacheSelectionee);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-                // Supprime les tâches à sauvegarder
-                modele.supprimerListeTaches(tacheSelectionee);
-            }
-        });
-
-        // Méthode de la récupération d'une sauvegarde
-        mCharger.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    Map<Tache, Integer> tacheSelectionee = modele.recupererSauvegarde();
-                    // Ajouter les Taches aux bons endroits
-                    modele.ajouterMapTache(tacheSelectionee);
-                }
-                catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-
-
         vmenu.getChildren().addAll(vtitlemenu, menuBar);
         racine.setTop(vmenu);
 
+        GridPane gp = new VueBureau(modele);
+        modele.ajouterObservateur((Observateur) gp);
+        racine.setCenter(gp);
 
-        HBox hCOL = new VueBureau(modele);
-        modele.ajouterObservateur((Observateur) hCOL);
-        racine.setCenter(hCOL);
-        ScrollPane scrollPane = new ScrollPane(hCOL);
+        ScrollPane scrollPane = new ScrollPane(gp);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
 
         racine.setCenter(scrollPane);
 
+        //modele.recupererSauvegardeColonneLigne();
+        //modele.recupererSauvegardeTache();
 
         double largeur = Screen.getPrimary().getBounds().getWidth();
         double hauteur = Screen.getPrimary().getBounds().getHeight();
@@ -124,7 +86,6 @@ public class MainJavaFX extends Application {
         Scene scene = new Scene(racine, largeur-10, hauteur-60);
         stage.setScene(scene);
         stage.show();
-
     }
 
 

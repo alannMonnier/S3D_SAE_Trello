@@ -29,6 +29,8 @@ public class Tache implements Comparable<Tache>, Serializable {
     private boolean afficherSousTache;
     private boolean estSelectionne;
 
+    private int idcolonne;
+
 
     /**
      * Constructeur
@@ -39,7 +41,7 @@ public class Tache implements Comparable<Tache>, Serializable {
      * @param tempsEstime temps pour réaliser la tache
      * @param dateDebutReal date début réalisation de la tache
      */
-    public Tache(int id, String nom, String description, int degreUrgence, int tempsEstime, LocalDate dateDebutReal){
+    public Tache(int id, String nom, String description, int degreUrgence, int tempsEstime, LocalDate dateDebutReal, int idcolonne){
         this.id = id;
         this.nom = nom;
         this.description = description;
@@ -53,6 +55,7 @@ public class Tache implements Comparable<Tache>, Serializable {
         this.idSousTache = 0;
         this.afficherSousTache = false;
         this.estSelectionne = false;
+        this.idcolonne = idcolonne;
     }
 
     /**
@@ -84,6 +87,8 @@ public class Tache implements Comparable<Tache>, Serializable {
     public String getNom() {
         return nom;
     }
+
+    public int getIdcolonne(){return this.idcolonne;};
 
     /**
      * Recupere date de création
@@ -171,6 +176,13 @@ public class Tache implements Comparable<Tache>, Serializable {
         this.estSelectionne = estSelectionne;
     }
 
+    /**
+     * Modife l'id de la colonne
+     * @param idcolonne
+     */
+    public void setIdcolonne(int idcolonne) {
+        this.idcolonne = idcolonne;
+    }
 
     /**
      * Compare de tache par rapport à la date de réalisation puis l'id
@@ -237,5 +249,38 @@ public class Tache implements Comparable<Tache>, Serializable {
 
         return res;
     }
+
+
+    /**
+     * Retourne la sous tache a partir de son nom
+     */
+    public Tache recupererSousTache(String nomSousTache){
+        for (Tache sousTache : this.getSousTaches()){
+
+            if(sousTache.getNom().equals(nomSousTache)){
+                return sousTache;
+            }
+            Tache st = sousTache.recupererSousTache(nomSousTache);
+            if(st != null){
+                return st;
+            }
+        }
+        return null;
+    }
+
+
+    public void supprimerSousTaches(Tache sousTache){
+        for (Tache st : this.getSousTaches()){
+            if(st.getNom().equals(sousTache.getNom())){
+                this.getSousTaches().remove(st);
+                break;
+            }
+            else{
+                st.supprimerSousTaches(sousTache);
+            }
+        }
+    }
+
+
 
 }

@@ -16,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -31,7 +32,6 @@ public class VueColonne extends VBox implements Observateur {
     private int idColonne;
     private String nom;
     private int idAncienneColonne;
-
     private int idColonneADeplace;
     private Tache ancienneTache;
 
@@ -119,24 +119,21 @@ public class VueColonne extends VBox implements Observateur {
             @Override
             public void handle(DragEvent dragEvent) {
                 if (dragEvent.getGestureSource().getClass().toString().contains("VueColonne")) {
-                    VueColonne vc = (VueColonne) dragEvent.getGestureSource();
-                    VBox vb = (VBox) (vc).getChildren().get(0);
-                    BorderPane bp = (BorderPane) (vb).getChildren().get(0);
-                    Label l = (Label) (bp).getChildren().get(0);
-                    String txt = l.getText();
-                    idColonneADeplace = modele.recupererColonneLigneID(txt);
                     dragEvent.acceptTransferModes(TransferMode.MOVE);
-                } else if (dragEvent.getGestureSource() != this && dragEvent.getDragboard().hasString()
-                        && dragEvent.getGestureSource().getClass().toString().contains("VueTache")) {
+                    VueColonne vc = (VueColonne) dragEvent.getGestureSource();
+                    idColonneADeplace = vc.idColonne;
+                }
+
+                else if (dragEvent.getGestureSource() != this && dragEvent.getDragboard().hasString()
+                  && dragEvent.getGestureSource().getClass().toString().contains("VueTache")) {
+
                     dragEvent.acceptTransferModes(TransferMode.MOVE);
                     VueTache vt = (VueTache) dragEvent.getGestureSource();
-                    VueColonne vb = (VueColonne) (vt).getParent();
-                    VBox vb2 = (VBox) (vb).getChildren().get(0);
-                    BorderPane bp = (BorderPane) (vb2).getChildren().get(0);
-                    Label l = (Label) (bp).getChildren().get(0);
-                    String txtCol = l.getText();
-                    idAncienneColonne = modele.recupererColonneLigneID(txtCol);
-                } else if (dragEvent.getGestureSource().getClass().toString().contains("VBox")) {
+                    idAncienneColonne = vt.getTacheCourante().getIdcolonne();
+                    ancienneTache = vt.getTacheCourante();
+                }
+
+                else if (dragEvent.getGestureSource().getClass().toString().contains("VBox")) {
                     dragEvent.acceptTransferModes(TransferMode.MOVE);
                     VBox vmere = (VBox) dragEvent.getGestureSource();
                     while (!(vmere.getParent().getClass().toString().contains("VueTache"))) {
@@ -173,15 +170,19 @@ public class VueColonne extends VBox implements Observateur {
                 Dragboard db = dragEvent.getDragboard();
                 boolean success = false;
                 if (db.hasString() && dragEvent.getGestureSource().getClass().toString().contains("VueTache")) {
-                    // Récupère le conteneur de la tâche
-                    VBox hdepla = (VBox) dragEvent.getGestureSource();
-                    String texteTacheDepl = ((Label) ((HBox) hdepla.getChildren().get(0)).getChildren().get(0)).getText();
-                    Tache tDepl = modele.getColonneLignes().get(idAncienneColonne).getTache(texteTacheDepl);
-                    modele.supprimerTache(idAncienneColonne, tDepl);
-                    modele.ajouterCompositeTache(idColonne, tDepl);
-                } else if (dragEvent.getGestureSource().getClass().toString().contains("VueColonne")) {
+                    modele.getColonneLignes().get(idAncienneColonne).getTacheList().remove(ancienneTache);
+                    ancienneTache.setIdcolonne(id);
+                    try {
+                        modele.ajouterCompositeTache(ancienneTache);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else if (dragEvent.getGestureSource().getClass().toString().contains("VueColonne")) {
                     modele.echangerColonneLigne(idColonneADeplace, idColonne);
-                } else if (dragEvent.getGestureSource().getClass().toString().contains("VBox")) {
+                }
+
+                else if (dragEvent.getGestureSource().getClass().toString().contains("VBox")) {
                     // Récupère la sous tâche que l'on déplace dans une tâche
                     VBox vb = (VBox) dragEvent.getGestureSource();
                     Label l = (Label) vb.getChildren().get(0);
@@ -190,7 +191,11 @@ public class VueColonne extends VBox implements Observateur {
                     Tache st = modele.supprimerSousTache(ancienneTache, txtSousTache);
 
                     // Ajouter la sous tâche à la colonne
-                    modele.ajouterCompositeTache(idColonne, st);
+                    try {
+                        modele.ajouterCompositeTache(st);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 dragEvent.setDropCompleted(success);
                 dragEvent.consume();
@@ -201,7 +206,6 @@ public class VueColonne extends VBox implements Observateur {
         // Ajouter une tâche
         Button laddtache = new Button("+ Ajouter une tâche");
         laddtache.setOnAction(new ControleurAjoutTache(modele));
-
         this.getChildren().addAll(laddtache);
         this.setBorder(border);
         this.setPadding(new Insets(5));

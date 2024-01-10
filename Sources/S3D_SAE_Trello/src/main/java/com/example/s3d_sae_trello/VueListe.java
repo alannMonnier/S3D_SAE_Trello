@@ -17,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class VueListe extends VBox implements Observateur {
@@ -191,7 +192,11 @@ public class VueListe extends VBox implements Observateur {
                     String texteTacheDepl = ((Label) ((HBox) hdepla.getChildren().get(0)).getChildren().get(0)).getText();
                     Tache tDepl = modele.getColonneLignes().get(idAncienneColonne).getTache(texteTacheDepl);
                     modele.supprimerTache(idAncienneColonne, tDepl);
-                    modele.ajouterCompositeTache(idColonne, tDepl);
+                    try {
+                        modele.ajouterCompositeTache(tDepl);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 } else if (dragEvent.getGestureSource().getClass().toString().contains("VueListe")) {
                     modele.echangerColonneLigne(idColonneADeplace, idColonne);
                 } else if (dragEvent.getGestureSource().getClass().toString().contains("VBox")) {
@@ -203,7 +208,11 @@ public class VueListe extends VBox implements Observateur {
                     Tache st = modele.supprimerSousTache(ancienneTache, txtSousTache);
 
                     // Ajouter la sous tâche à la colonne
-                    modele.ajouterCompositeTache(idColonne, st);
+                    try {
+                        modele.ajouterCompositeTache(st);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 dragEvent.setDropCompleted(success);
                 dragEvent.consume();

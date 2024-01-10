@@ -12,6 +12,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 /**
@@ -124,12 +125,17 @@ public class CreationTacheFX extends Application {
 
             // Création d'une tâche normale si c'est depuis une colonne
             if(this.tache == null) {
-                Tache tache = new Tache(idTache, nomTache, descriptionTache, urg, tempsTache, dateDebutReal);
-                modele.ajouterCompositeTache(this.idColonne, tache);
+                Tache tache = new Tache(idTache, nomTache, descriptionTache, urg, tempsTache, dateDebutReal, this.idColonne);
+                try {
+                    modele.ajouterCompositeTache(tache);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }else{
                 //Création d'une sous tâche si c'est depuis une tâche
                 SousTache st = new SousTache(idTache, nomTache, descriptionTache, urg, tempsTache, dateDebutReal, tache.getIdSousTache());
                 tache.ajouterSousTache(st);
+                modele.setTacheCompositeNumId();
                 modele.notifierObservateurs();
             }
 
