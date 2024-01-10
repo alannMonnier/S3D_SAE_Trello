@@ -283,4 +283,48 @@ public class Tache implements Comparable<Tache>, Serializable {
 
 
 
+    /**
+     * Calcule la somme des temps estimés de toutes les sous-tâches.
+     *
+     * @return La somme des temps estimés des sous-tâches.
+     */
+    private int sommeTempsEstimeSousTaches() {
+        int somme = 0;
+        for (Tache sousTache : sousTaches) {
+            somme += sousTache.getTempsEstime();
+        }
+        return somme;
+    }
+
+    /**
+     * Vérifie si l'ajout d'une nouvelle sous-tâche est possible sans dépasser
+     * le temps estimé de la tâche mère.
+     *
+     * @param nouvelleSousTache La sous-tâche à ajouter.
+     * @return true si l'ajout est possible, false sinon.
+     */
+    public boolean ajout_sous_tache_possible(Tache nouvelleSousTache) {
+        int tempsTotalSousTaches = sommeTempsEstimeSousTaches();
+        return (tempsTotalSousTaches + nouvelleSousTache.getTempsEstime()) <= this.tempsEstime;
+    }
+
+    /**
+     * Vérifie si une sous-tâche avec le nom spécifié existe déjà.
+     *
+     * @param nomSousTache Le nom de la sous-tâche à vérifier.
+     * @return true si une sous-tâche avec ce nom existe, false sinon.
+     */
+    public boolean nomSousTacheExiste(Tache nomSousTache) {
+        for (Tache sousTache : sousTaches) {
+            if (sousTache.getNom().equals(nomSousTache.getNom())) {
+                return true;
+            }
+            // Vérifie également les sous-tâches des sous-tâches (récursion)
+            if (sousTache.nomSousTacheExiste(nomSousTache)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
