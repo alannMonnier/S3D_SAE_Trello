@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -26,7 +27,7 @@ public class GanttFX extends HBox{
     public GanttFX(ModeleMenu modele) throws IOException {
         this.modeleMenu = modele;
 
-        /**
+
         ArrayList<Tache> meretache1 = new ArrayList<>();
         meretache1.add(modele.getColonneLignes().get(0).getTache("Tache 3"));
 
@@ -38,13 +39,20 @@ public class GanttFX extends HBox{
         // Ajouter des dépendances
         modeleMenu.ajouterDependance(modele.getColonneLignes().get(0).getTache("Tache 0"), meretache1, "mere");
         modeleMenu.ajouterDependance(modele.getColonneLignes().get(0).getTache("Tache 3"), meretache2, "mere");
-        */
+
 
 
         // Récupère les taches les plus au fond
         ArrayList<Tache> m = modeleMenu.recupererTacheFinal();
         ArrayList<ArrayList<Tache>> tachesmere = modeleMenu.recupererListTachesMere(m);
 
+        LocalDate dateDebut = tachesmere.get(0).get(0).getDateDebutReal();
+        LocalDate dateFin = tachesmere.get(tachesmere.size()-1).get(tachesmere.get(tachesmere.size()-1).size()-1).getDateDebutReal();
+
+
+        // Création de la barre de temps
+        gc.fillText(String.valueOf(dateDebut), x1, 18, x1+25*tachesmere.size());
+        gc.strokeLine(x1, 10, x1+25*tachesmere.size(), 10);
 
         // Gestion des coordonnées pour créer les liens sous forme de ligne
         Map<Coordonnees, Tache> coords = new HashMap<>();
