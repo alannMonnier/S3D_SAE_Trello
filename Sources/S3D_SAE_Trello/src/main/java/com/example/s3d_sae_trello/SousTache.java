@@ -1,5 +1,6 @@
 package com.example.s3d_sae_trello;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -7,7 +8,7 @@ import java.util.Objects;
 /**
  * Gestion des soustaches
  */
-public class SousTache extends Tache{
+public class SousTache extends Tache implements Serializable {
 
     /**
      * Declaration attributs
