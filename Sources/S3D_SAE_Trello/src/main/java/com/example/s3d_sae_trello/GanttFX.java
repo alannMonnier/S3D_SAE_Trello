@@ -17,7 +17,6 @@ import java.util.Map;
 public class GanttFX extends HBox{
 
     private ModeleMenu modeleMenu;
-
     private int x1 = 200;
     private int y1 = 200;
     private final double largueur = Screen.getPrimary().getBounds().getWidth();
@@ -26,6 +25,20 @@ public class GanttFX extends HBox{
     private GraphicsContext gc = canvas.getGraphicsContext2D();
     public GanttFX(ModeleMenu modele) throws IOException {
         this.modeleMenu = modele;
+
+        /**
+        ArrayList<Tache> meretache1 = new ArrayList<>();
+        meretache1.add(modele.getColonneLignes().get(0).getTache("Tache 3"));
+
+        ArrayList<Tache> meretache2 = new ArrayList<>();
+        meretache2.add(modele.getColonneLignes().get(1).getTache("Tache 4"));
+
+
+
+        // Ajouter des dépendances
+        modeleMenu.ajouterDependance(modele.getColonneLignes().get(0).getTache("Tache 0"), meretache1, "mere");
+        modeleMenu.ajouterDependance(modele.getColonneLignes().get(0).getTache("Tache 3"), meretache2, "mere");
+        */
 
         // Récupère les taches les plus au fond
         ArrayList<Tache> m = modeleMenu.recupererTacheFinal();

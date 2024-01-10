@@ -16,6 +16,7 @@ import java.util.ArrayList;
 /**
  * Main qui nous permet de tester les dependances / Diagramme de gantt
  */
+
 public class MainDependance extends Application {
 
     private ModeleMenu modeleMenu;

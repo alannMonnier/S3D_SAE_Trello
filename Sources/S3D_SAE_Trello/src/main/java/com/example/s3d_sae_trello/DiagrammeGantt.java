@@ -16,7 +16,6 @@ public class DiagrammeGantt{
     public DiagrammeGantt(ModeleMenu m) {
         this.modele = m;
     }
-
     public void afficherGantt(){
 
         ArrayList<Tache> tachesansmere = modele.recupererTachesSansMere();
