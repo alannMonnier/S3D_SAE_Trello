@@ -65,6 +65,42 @@ class TacheListeFX{
  + afficherDetails(Tache)
 }
 
+class GanttFX{
+  + GanttFX(ModeleMenu)
+}
+
+class DependanceFX{
+  - Tache t;
+  - ModeleMenu modeleMenu;
+  - tachesAjouterDependance, tachesSelectionnee : ArrayList<Tache>;
+  - String type;
+  + DependanceFX(Tache, ModeleMenu, ArrayList<Tache>, String)
+}
+
+class CreationTacheFX{
+
+    - ModeleMenu modele;
+    - int idColonne;
+    - Tache tache;
+    + CreationTacheFX(ModeleMenu, int)
+    + CreationTacheFX(ModeleMenu, int, Tache)
+}
+
+class CreationSousTacheFX{
+
+    - ModeleMenu modele;
+    - int idColonne;
+    - int id_tache_mere;
+    + CreationTacheFX(ModeleMenu, int, int)
+}
+
+class CreationColonneFX{
+
+    - ModeleMenu modele;
+    - int idColonne;
+    + CreationColonneFX(ModeleMenu, int)
+}
+
 class VueTache implements Observateur {
     - ModeleMenu;
     - id, ancienid id anciencolonne : int;
@@ -98,18 +134,6 @@ class VueBureau implements Observateur {
     - int id;
   + VueBureau(ModeleMenu)
   + actualiser(Sujet): void
-}
-
-class GanttFX{
-  + GanttFX(ModeleMenu)
-}
-
-class DependanceFX{
-  - Tache t;
-  - ModeleMenu modeleMenu;
-  - tachesAjouterDependance, tachesSelectionnee : ArrayList<Tache>;
-  - String type;
-  + DependanceFX(Tache, ModeleMenu, ArrayList<Tache>, String)
 }
 
 class ControleurTache {
@@ -229,15 +253,16 @@ ColonneLigne  "\n\n\n\n+ taches" ---> "0..*"Tache
 Tache -left--> "0..*" Tache
 Archive "instance"---> "1" Archive
 SousTache ---> "0..*" Tache
-ControleurTache --> "0..1" ModeleMenu
-ControleurAjoutColonne --> "0..1" ModeleMenu
-ControleurAjoutTache --> "0..1" ModeleMenu
-ControleurColonneLigne --> "0..1" ModeleMenu
-ControleurCreationTache --> "0..1" ModeleMenu
-ControleurSelectionTache --> "0..1" ModeleMenu
-ControleurSousTache --> "0..1" ModeleMenu
-ControleurActionMenu --> "0..1" ModeleMenu
-ControleurDependance --> "0..1" ModeleMenu
+ControleurTache --> "1" ModeleMenu
+ControleurAjoutColonne --> "1" ModeleMenu
+ControleurAjoutTache --> "1" ModeleMenu
+ControleurColonneLigne --> "1" ModeleMenu
+ControleurCreationTache --> "1" ModeleMenu
+ControleurSelectionTache --> "1" ModeleMenu
+ControleurSousTache --> "1" ModeleMenu
+ControleurAjoutSousTache --> "1" ModeleMenu
+ControleurActionMenu --> "1" ModeleMenu
+ControleurDependance --> "1" ModeleMenu
 VueArchive --> "1" ModeleMenu
 VueListe --> "1" ModeleMenu
 VueTache --> "1" ModeleMenu
@@ -251,5 +276,9 @@ ColonneFX --> "1" ModeleMenu
 GanttFX --> "1" ModeleMenu
 TacheListeFX --> "0..1" Tache
 TacheListeFX --> "1" ModeleMenu
+CreationTacheFX --> "1" ModeleMenu
+CreationTacheFX --> "1" Tache
+CreationSousTacheFX --> "1" ModeleMenu
+CreationColonneFX --> "1" ModeleMenu
 
 @enduml
