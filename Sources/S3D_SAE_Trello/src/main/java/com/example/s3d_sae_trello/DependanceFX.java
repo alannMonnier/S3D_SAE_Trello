@@ -123,7 +123,7 @@ public class DependanceFX extends Application {
                 stage.close();
             }
         });
-        gp.add(bValider, colonne, ligne);
+        gp.add(bValider, colonne+4, ligne);
         double largeur = Screen.getPrimary().getBounds().getWidth();
         double hauteur = Screen.getPrimary().getBounds().getHeight();
 

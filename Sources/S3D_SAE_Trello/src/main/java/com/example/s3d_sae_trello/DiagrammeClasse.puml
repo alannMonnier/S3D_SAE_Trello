@@ -1,203 +1,198 @@
 @startuml
 
-
-class SousTache <<A>> extends Tache {
+package "Classes Tache" {
+  class SousTache <<A>> extends Tache {
     + SousTache(id : int, String n, urgence: int, tempsEstime : int)
     + equals(Object obj) : boolean
+  }
+
+  class Tache <<Nouv>> {
+    - id, idSousTache, degreUrgence, tempsEstime : int
+    - nom, description : String
+    - tacheRealise, afficherSousTache, estSelectionee : boolean
+    + Tache(id : int, String n, urgence: int, tempsEstime : int)
+    + ajouterSousTache(CompositeTache : ct)) : boolean
+    + retirerSousTache(id : int) : boolean
+    + getAttributs() : typeAttributs
+    + equals(Object obj) : boolean
+    + hashCode()
+  }
 }
 
-class Tache <<Nouv>> {
-     - id, idSousTache, degreUrgence, tempsEstime : int
-     - nom, description : String
-     - tacheRealise, afficherSousTache, estSelectionee : boolean
-     + Tache(id : int, String n, urgence: int, tempsEstime : int)
-     + ajouterSousTache(CompositeTache : ct)) : boolean
-     + retirerSousTache(id : int) : boolean
-     + getAttributs() : typeAttributs
-     + equals(Object obj) : boolean
-     + hashCode()
-}
+package "Classes FX" <<Color #FFD700>> {
 
+  class ColonneFX {
+    - ArrayList<Tache> taches;
+    - ModeleMenu modele;
+    - int idColonne;
+    - String nom;
+    - int idAncienneColonne;
+    - int idColonneADeplace;
+    - Tache ancienneTache;
+    + ColonneFX(ArrayList<Tache>, ModeleMenu, int, String)
+  }
 
+  class TacheListeFX {
+    - ModeleMenu modele;
+    - int id;
+    - int ancienId;
+    - Tache tache;
+    - int idAncienneColonne;
+    - Tache ancienneTache;
+    - Tache tacheCourante;
+    + sousTache(Tache tache, HBox vboxParent) : ArrayList<HBox>
+    + afficherDetails(Tache)
+  }
 
+  class GanttFX {
+    + GanttFX(ModeleMenu)
+  }
 
-class ColonneLigne <<Nouv>> {
-  - numero: int
-  - Nom: String
+  class DependanceFX {
+    - Tache t;
+    - ModeleMenu modeleMenu;
+    - tachesAjouterDependance, tachesSelectionnee : ArrayList<Tache>;
+    - String type;
+    + DependanceFX(Tache, ModeleMenu, ArrayList<Tache>, String)
+  }
 
-  + ColonneLigne(String, int)
-  + ajouterTache(Tache t): void
-  + supprimerTache(Tache t) : void
-  + trierDate() : void
-  + trierUrgence() : void
-  + trierAlphabetique() : void
-  + getTacheList() : List<Tache>
-  + getTache(nomTache : String)
-  + getNom() : String
-  + setNom(s : String) : void
-}
-
-interface Observateur {
-  + actualiser(): void
-}
-
-class ColonneFX{
-
-  - ArrayList<Tache> taches;
-  - ModeleMenu modele;
-  - int idColonne;
-  - String nom;
-  - int idAncienneColonne;
-  - int idColonneADeplace;
-  - Tache ancienneTache;
-  + ColonneFX(ArrayList<Tache>, ModeleMenu, int, String)
-}
-
-class TacheListeFX{
-        - ModeleMenu modele;
-        - int id;
-        - int ancienId;
-        - Tache tache;
-        - int idAncienneColonne;
-        - Tache ancienneTache;
-        - Tache tacheCourante;
- + sousTache(Tache tache, HBox vboxParent) : ArrayList<HBox>
- + afficherDetails(Tache)
-}
-
-class GanttFX{
-  + GanttFX(ModeleMenu)
-}
-
-class DependanceFX{
-  - Tache t;
-  - ModeleMenu modeleMenu;
-  - tachesAjouterDependance, tachesSelectionnee : ArrayList<Tache>;
-  - String type;
-  + DependanceFX(Tache, ModeleMenu, ArrayList<Tache>, String)
-}
-
-class CreationTacheFX{
-
+  class CreationTacheFX {
     - ModeleMenu modele;
     - int idColonne;
     - Tache tache;
     + CreationTacheFX(ModeleMenu, int)
     + CreationTacheFX(ModeleMenu, int, Tache)
-}
+  }
 
-class CreationSousTacheFX{
-
+  class CreationSousTacheFX {
     - ModeleMenu modele;
     - int idColonne;
     - int id_tache_mere;
     + CreationTacheFX(ModeleMenu, int, int)
-}
+  }
 
-class CreationColonneFX{
-
+  class CreationColonneFX {
     - ModeleMenu modele;
     - int idColonne;
     + CreationColonneFX(ModeleMenu, int)
+  }
 }
 
-class VueTache implements Observateur {
+package "Classes Vue" <<Color #98FB98>> {
+  class VueTache implements Observateur {
     - ModeleMenu;
     - id, ancienid id anciencolonne : int;
     - tache, anciennetache, tachecourante : Tache
-  + VueTache(Tache, ModeleMenu, int)
-  + afficherDetails(Tache)
-  + actualiser(Sujet): void
-  + getTacheCourante() : Tache
-  + vBoxSousTache(Tache, VBox) : void
-}
+    + VueTache(Tache, ModeleMenu, int)
+    + afficherDetails(Tache)
+    + actualiser(Sujet): void
+    + getTacheCourante() : Tache
+    + vBoxSousTache(Tache, VBox) : void
+  }
 
-class VueListe implements Observateur {
+  class VueListe implements Observateur {
     - ModeleMenu;
     - idColonne, idColonneADeplace, idAncienneColonne : int;
     - String nom;
     - Tache ancienneTache;
-  + VueListe(ArrayList<Tache>, ModeleMenu, int, String)
-  + creerListe(): void
-  + actualiser(Sujet): void
-}
+    + VueListe(ArrayList<Tache>, ModeleMenu, int, String)
+    + creerListe(): void
+    + actualiser(Sujet): void
+  }
 
-class VueArchive implements Observateur {
-  - ModeleMenu
-  + VueArchive(ModeleMenu)
-  + creerArchive() : void
-  + actualiser(Sujet): void
-}
+  class VueArchive implements Observateur {
+    - ModeleMenu
+    + VueArchive(ModeleMenu)
+    + creerArchive() : void
+    + actualiser(Sujet): void
+  }
 
-class VueBureau implements Observateur {
+  class VueBureau implements Observateur {
     - ModeleMenu;
     - int id;
-  + VueBureau(ModeleMenu)
-  + actualiser(Sujet): void
+    + VueBureau(ModeleMenu)
+    + actualiser(Sujet): void
+  }
 }
 
+package "Controleurs" {
 class ControleurTache {
   + ControleurTache(ModeleMenu)
   + handle(ActionEvent): void
 }
 
-class ControleurCreationTache{
+
+class ControleurCreationTache {
   + ControleurCreationTache(ModeleMenu)
   + handle(ActionEvent): void
 }
 
-
-class ControleurColonneLigne{
-    - ModeleMenu modeleMenu;
-    - int idColonne;
+class ControleurColonneLigne {
+  - ModeleMenu modeleMenu;
+  - int idColonne;
   + ControleurColonneLigne(ModeleMenu, idColonne : int)
   + handle(ActionEvent): void
 }
 
-class ControleurDependance{
-    - ModeleMenu modele;
-    - Tache t;
+class ControleurDependance {
+  - ModeleMenu modele;
+  - Tache t;
   + ControleurDependance(ModeleMenu, tache : Tache)
   + handle(ActionEvent): void
 }
 
-class ControleurSelectionTache{
+class ControleurSelectionTache {
   + ControleurSelectionTache(ModeleMenu)
   + handle(ActionEvent): void
 }
 
-class ControleurSousTache{
-    - ModeleMenu modele;
-    - Tache ct;
-    - int idColonne;
+class ControleurSousTache {
+  - ModeleMenu modele;
+  - Tache ct;
+  - int idColonne;
   + ControleurSousTache(ModeleMenu, tache: Tache, idColonne : int)
   + handle(ActionEvent): void
 }
 
-class ControleurAjoutTache{
+class ControleurAjoutTache {
   - ModeleMenu modele;
   + ControleurAjoutTache(ModeleMenu)
   + handle(ActionEvent): void
 }
 
-
-class ControleurActionMenu{
-- ModeleMenu modele;
-    + ControleurActionMenu(ModeleMenu)
-    + handle(ActionEvent) : void
+class ControleurActionMenu {
+  - ModeleMenu modele;
+  + ControleurActionMenu(ModeleMenu)
+  + handle(ActionEvent) : void
 }
 
-class ControleurAjoutColonne{
+class ControleurAjoutColonne {
   + ControleurAjoutColonne(ModeleMenu)
   + handle(ActionEvent): void
 }
 
-class ControleurAjoutSousTache{
-    - ModeleMenu modele;
-    - idTacheMere, idColonne : int;
+class ControleurAjoutSousTache {
+  - ModeleMenu modele;
+  - idTacheMere, idColonne : int;
   + ControleurAjoutSousTache(ModeleMenu, int, int)
   + handle(ActionEvent): void
 }
+}
+
+class ColonneLigne {
+    - numero: int
+    - Nom: String
+    + ColonneLigne(String, int)
+    + ajouterTache(Tache t): void
+    + supprimerTache(Tache t) : void
+    + trierDate() : void
+    + trierUrgence() : void
+    + trierAlphabetique() : void
+    + getTacheList() : List<Tache>
+    + getTache(nomTache : String)
+    + getNom() : String
+    + setNom(s : String) : void
+  }
 
 class ModeleMenu <<Nouv>> implements Sujet {
   + nbColonnes : int
@@ -208,7 +203,6 @@ class ModeleMenu <<Nouv>> implements Sujet {
   + typeVue : String
   + dependance : TreeMap<Tache, ArrayList<Tache>>
   + tachesAjouterDependance : List<Tache>
-
   + ModeleMenu()
   + setTypeVue(s : String) : void
   + ajouterColonneLigne(nom : String, id : int) : void
@@ -237,19 +231,16 @@ class ModeleMenu <<Nouv>> implements Sujet {
   + recupererSauvegarde() : Map<Tache, Integer>
 }
 
-
 class Archive extends ColonneLigne {
   - Singleton()
   - Archive(s : String, i : int)
-  + getInstance():Archive
+  + getInstance(): Archive
 }
-
-
 
 ModeleMenu "archive"---> "1" Archive
 ModeleMenu "observateurs"--down-> "0..*" Observateur : observateurs
-ModeleMenu "colonnesLignes"--left-> "0..*" ColonneLigne
-ColonneLigne  "\n\n\n\n+ taches" ---> "0..*"Tache
+ModeleMenu "colonnesLignes"---> "0..*" ColonneLigne
+ColonneLigne---> "0..*"Tache
 Tache -left--> "0..*" Tache
 Archive "instance"---> "1" Archive
 SousTache ---> "0..*" Tache
