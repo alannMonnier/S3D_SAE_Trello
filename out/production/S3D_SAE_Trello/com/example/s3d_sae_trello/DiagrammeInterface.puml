@@ -1,0 +1,23 @@
+@startuml
+actor Utilisateur
+participant Interface
+participant ModeleMenu
+participant DiagrammeGantt
+
+Utilisateur -> Interface: Crée tâche A
+Interface -> ModeleMenu: Ajoute tâche A
+Interface -> Utilisateur: Affiche tâche A
+
+Utilisateur -> Interface: Crée tâche B
+Interface -> ModeleMenu: Ajoute tâche B
+Interface -> Utilisateur: Affiche tâche B
+
+Utilisateur -> Interface: Crée dépendance entre tâche A et tâche B
+Interface -> ModeleMenu: Ajoute dépendance entre tâche A et tâche B
+Interface -> Utilisateur: Affiche dépendance entre tâche A et tâche B
+
+Utilisateur -> Interface: Génère diagramme de Gantt
+Interface -> DiagrammeGantt: Génère diagramme de Gantt
+DiagrammeGantt -> Interface: Affiche diagramme de Gantt
+
+@enduml
