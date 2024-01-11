@@ -48,14 +48,12 @@ public class VueBureau extends GridPane implements Observateur {
         hvide.setId("" + this.id);
 
         this.add(hvide, 0, 0);
-        this.setPadding(new Insets(5));
-        this.setAlignment(Pos.CENTER);
     }
 
     @Override
     public void actualiser(Sujet s) throws IOException {
         this.getChildren().clear();
-        this.setAlignment(Pos.CENTER);
+        this.setAlignment(Pos.TOP_LEFT);
 
 
         switch (modele.getTypeVue()) {
@@ -83,7 +81,7 @@ public class VueBureau extends GridPane implements Observateur {
                 Button btnAjouterColonne = new Button("+ Ajouter une nouvelle colonne");
                 btnAjouterColonne.setOnMouseClicked(new ControleurColonneLigne(modele, this.id));
 
-                // Application d'une bordure subtile et moderne
+                // Application d'une bordure
                 BorderStroke borderStroke = new BorderStroke(
                         Color.DARKGRAY,
                         BorderStrokeStyle.SOLID,
@@ -96,22 +94,21 @@ public class VueBureau extends GridPane implements Observateur {
                 btnAjouterColonne.setPadding(new Insets(10, 20, 10, 20));
 
                 // Application de styles CSS pour un look moderne et épuré
-                btnAjouterColonne.setStyle(
-                        "-fx-font-size: 14px; " +           // taille de la police
-                                "-fx-font-family: 'Arial'; " +      // police
-                                "-fx-background-color: #F0F0F0; " + // Couleur de fond
-                                "-fx-text-fill: #333333; " +        // Couleur du texte
-                                "-fx-cursor: hand; ");              // Curseur en forme de main au survol
+                btnAjouterColonne.setStyle("-fx-background-color: #8439FF;" +
+                        "-fx-text-fill: white; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-font-size: 16px; " +
+                        "-fx-border-radius: 10; " +
+                        "-fx-background-radius: 20; " +
+                        "-fx-padding: 10 20;");
 
                 // ajout du bouton à la VBox
-                //this.getChildren().add(btnAjouterColonne);
                 this.add(btnAjouterColonne, 0, i);
                 this.setPadding(new Insets(5));
                 break;
 
             case "Archive":
                 VueArchive vueArchive = new VueArchive(modele);
-                //this.getChildren().add(vueArchive);
                 this.add(vueArchive, 0, 0);
                 break;
 
@@ -127,14 +124,31 @@ public class VueBureau extends GridPane implements Observateur {
                 }
 
                 HBox hvide = new HBox();
-                BorderPane bp = new BorderPane();
-                Button btn = new Button("+ Ajouter une nouvelle colonne");
-                bp.setCenter(btn);
-                btn.setOnMouseClicked(new ControleurColonneLigne(modele, this.id));
-                hvide.getChildren().addAll(bp);
-                hvide.setBorder(border);
+                hvide.setAlignment(Pos.CENTER); // Centre le contenu de HBox
                 hvide.setPadding(new Insets(5));
-                hvide.setId("" + this.id);
+
+                BorderPane bp = new BorderPane();
+
+                Button btn = new Button("+ Ajouter une nouvelle colonne");
+                btn.setMaxWidth(Double.MAX_VALUE);
+                btn.setOnMouseClicked(new ControleurColonneLigne(modele, this.id));
+
+                HBox.setHgrow(btn, Priority.ALWAYS); // Assure que le bouton peut s'étendre
+
+
+                btn.setStyle("-fx-background-color: #8439FF;" +
+                        "-fx-text-fill: white; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-font-size: 16px; " +
+                        "-fx-border-radius: 10; " +
+                        "-fx-background-radius: 20; " +
+                        "-fx-padding: 10 20;");
+
+                bp.setCenter(btn);
+                bp.setStyle("-fx-background-color: none; ");  // couleur de fond
+                btn.setMinWidth(200); // largeur minimale en pixels
+
+                hvide.getChildren().addAll(bp);
 
                 this.add(hvide, j, 0);
                 this.setPadding(new Insets(5));

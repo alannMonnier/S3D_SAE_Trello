@@ -64,6 +64,7 @@ public class ColonneFX extends VBox {
         VBox vTitreCol = new VBox();
         BorderPane bpHeader = new BorderPane();
         Label lTitreCol = new Label(this.nom);
+        lTitreCol.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #8439FF;"); // Texte en violet
         MenuBar paramCol = new MenuBar();
         Menu menuParamCol = new Menu("...");
         MenuItem tUrgence = new MenuItem("Trier tâche par urgence");
@@ -73,11 +74,18 @@ public class ColonneFX extends VBox {
         MenuItem tarchiv = new MenuItem("Archiver les tâches de cette liste");
         menuParamCol.getItems().addAll(tUrgence, tAlphabetique, tDate, tsuppr, tarchiv);
         paramCol.getMenus().add(menuParamCol);
+        paramCol.setStyle("-fx-background-color: transparent;"); // Fond du MenuBar transparent
+
         Line lineCol = new Line(0, 0, 200, 0);
+        lineCol.setStroke(Color.web("#957DAD")); // Couleur de la ligne assortie au texte
+        lineCol.setStrokeWidth(1.5);
 
         bpHeader.setLeft(lTitreCol);
         bpHeader.setRight(paramCol);
         bpHeader.setPadding(new Insets(5));
+        bpHeader.setStyle("-fx-background-color: transparent; -fx-padding: 10; -fx-border-radius: 5;");
+
+
         vTitreCol.getChildren().addAll(bpHeader, lineCol);
         vTitreCol.setSpacing(6);
 
@@ -101,6 +109,9 @@ public class ColonneFX extends VBox {
         });
 
         this.getChildren().addAll(vTitreCol);
+        this.setMinWidth(250);
+        this.setStyle("-fx-background-color: #F2F2F2;");
+
 
         // -------Création des taches ------------
 
@@ -217,12 +228,29 @@ public class ColonneFX extends VBox {
 
         // Ajouter une tâche
         Button laddtache = new Button("+ Ajouter une tâche");
+
+// Style CSS pour le bouton
+        String styleBouton = "-fx-background-color: #4CAF50; " +  // Couleur de fond verte
+                "-fx-text-fill: white; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-radius: 10; " +
+                "-fx-padding: 10 20; " +
+                "-fx-font-size: 14px;";
+
+        laddtache.setStyle(styleBouton);
+
+// Effet de survol pour le bouton
+        laddtache.setOnMouseEntered(e -> laddtache.setStyle(styleBouton + "-fx-background-color: #66BB6A;")); // Couleur légèrement plus claire au survol
+        laddtache.setOnMouseExited(e -> laddtache.setStyle(styleBouton));
+
         laddtache.setOnAction(new ControleurAjoutTache(modele));
+
         this.getChildren().addAll(laddtache);
-        this.setBorder(border);
-        this.setPadding(new Insets(5));
+// finition d'un padding plus large
+        this.setPadding(new Insets(10, 8, 10, 8)); // Haut, Droit, Bas, Gauche
         this.setSpacing(20);
         this.setAlignment(Pos.TOP_CENTER);
         this.setId("" + this.idColonne);
+
     }
 }

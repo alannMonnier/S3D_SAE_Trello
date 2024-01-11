@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 
@@ -21,11 +22,15 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 
 public class VueTache extends VBox implements Observateur {
+    // Couleur hexadécimale pour le violet clair (par exemple, "#C8A2C8")
+    Color lightVioletColor = Color.web("#C8A2C8");
 
-    BorderStroke borderStroke = new BorderStroke(Color.BLACK,
-            BorderStrokeStyle.SOLID,
-            CornerRadii.EMPTY,
-            BorderWidths.DEFAULT);
+    BorderStroke borderStroke = new BorderStroke(
+            lightVioletColor,              // Utilisation de la couleur violet clair
+            BorderStrokeStyle.SOLID,       // Style de bordure solide
+            CornerRadii.EMPTY,             // Coins non arrondis
+            BorderWidths.DEFAULT           // Largeur de bordure par défaut
+    );
 
     private Border border = new Border(borderStroke);
 
@@ -46,9 +51,22 @@ public class VueTache extends VBox implements Observateur {
         this.ancienneTache = null;
         this.tacheCourante = t;
 
+        // Style général
+        this.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10;");
 
-        HBox hb1 = new HBox();
+
+        // Créer l'effet d'ombre
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setColor(Color.GRAY);
+        dropShadow.setRadius(2.0);
+        //dropShadow.setOffsetX(1.0);
+        dropShadow.setOffsetY(1.0);
+
+        this.setEffect(dropShadow);
+
+
         Label text = new Label(t.getNom());
+        text.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #854684;");
         MenuBar paramTache = new MenuBar();
         Menu menuParamTache = new Menu("...");
         MenuItem supprimer = new MenuItem("Supprimer tâche");
@@ -111,19 +129,6 @@ public class VueTache extends VBox implements Observateur {
         });
         ajouterSousTache.setOnAction(new ControleurSousTache(t, modeleMenu, idColonne));
 
-        HBox hb2 = new HBox();
-        Label nbHeures = new Label("" + t.getTempsEstime() + "h");
-
-        HBox hb3 = new HBox();
-        int urg = t.getDegreUrgence();
-        Circle circle;
-        if (urg == 1) {
-            circle = new Circle(10, Color.BLUE);
-        } else if (urg == 2) {
-            circle = new Circle(10, Color.ORANGE);
-        } else {
-            circle = new Circle(10, Color.RED);
-        }
 
         Label df = new Label(t.getDateDebutReal().toString());
         Button bsoustache = new Button("↓");
@@ -138,17 +143,23 @@ public class VueTache extends VBox implements Observateur {
         Button details = new Button("Détails");
 
         details.setOnAction(e -> afficherDetails(t));
-        hb1.getChildren().addAll(text, bSelect, paramTache);
-        hb2.getChildren().addAll(nbHeures);
-        hb3.getChildren().addAll(circle, df, bsoustache, details);
 
-        hb1.setSpacing(10);
-        hb2.setSpacing(10);
-        hb3.setSpacing(10);
+        Circle circle = new Circle(5); // Taille réduite pour un look plus subtil
+        circle.setFill(getUrgencyColor(t.getDegreUrgence()));
 
+        HBox hb1 = new HBox(10, text, bSelect, paramTache);
+        HBox hb2 = new HBox(10, new Label("Temps estimé: " + t.getTempsEstime() + "h"));
+        HBox hb3 = new HBox(10, circle, df, bsoustache, details);
 
-        this.getChildren().addAll(hb1, new Line(0, 0, 200, 0), hb2, hb3);
+        // Configuration du style des boutons
+        String buttonStyle = "-fx-background-radius: 5; -fx-padding: 5 10;";
+        bSelect.setStyle(buttonStyle);
+        bsoustache.setStyle(buttonStyle);
+        details.setStyle(buttonStyle);
 
+        this.getChildren().addAll(hb1, hb2, hb3);
+
+        this.setStyle("-fx-background-color: white;");
 
         if (t.isAfficherSousTache()) {
             // Création sous tâches
@@ -238,39 +249,70 @@ public class VueTache extends VBox implements Observateur {
         });
 
         this.setPadding(new Insets(5));
-        this.setBorder(border);
+       // this.setBorder(border);
         this.setSpacing(5);
 
     }
 
+    private Color getUrgencyColor(int urgencyLevel) {
+        switch (urgencyLevel) {
+            case 1: return Color.GREEN;
+            case 2: return Color.ORANGE;
+            default: return Color.RED;
+        }
+    }
+
     private void afficherDetails(Tache t) {
         Stage detailStage = new Stage();
-        //Permet d'obliger l'utilisateur à choisir avant de changer de fenetre
         detailStage.initModality(Modality.APPLICATION_MODAL);
         detailStage.initStyle(StageStyle.UTILITY);
         detailStage.setTitle("Détails de la tâche");
 
-        VBox detail = new VBox();
-        detail.setPadding(new Insets(10));
+        VBox detailVBox = new VBox();
+        detailVBox.setPadding(new Insets(20));
+        detailVBox.setSpacing(10); // Espacement entre les composants
+        detailVBox.setStyle("-fx-background-color: #FAFAFA;"); // Couleur de fond
 
         Label titleLabel = new Label("Détails de la tâche");
-        Label nomLabel = new Label("Nom: " + t.getNom());
-        Label dateLabel = new Label("Date: " + t.getDateDebutReal());
-        Label urgenceLabel = new Label("Degré d'urgence: " + t.getDegreUrgence());
-        Label tempsEstimeLabel = new Label("Temps estimé: " + t.getTempsEstime() + "h");
-        Label realiseLabel = new Label("Réalisée: " + t.getTacheRealise());
-        Label dateDebutRealLabel = new Label("Date début réalisation: " + t.getDateDebutReal());
-        Label descriptionLabel = new Label("Description: " + t.getDescription());
+        titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-underline: true; -fx-text-fill: #333333;"); // Style du titre
 
-        detail.getChildren().addAll(
+        Label nomLabel = new Label("Nom: " + t.getNom());
+        nomLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #666666;"); // Style
+
+        Label dateLabel = new Label("Date: " + t.getDateDebutReal());
+        Label urgenceLabel = new Label("Degré d'urgence : " + t.getDegreUrgence());
+        urgenceLabel.setTextFill(getUrgencyColor(t.getDegreUrgence())); // Couleur de l'urgence
+        Label tempsEstimeLabel = new Label("Temps estimé : " + t.getTempsEstime() + "h");
+
+        String realise = "";
+
+        if (t.getTacheRealise()){
+            realise = "oui";
+        } else{
+            realise = "non";
+        }
+        Label realiseLabel = new Label("Réalisée : " + realise);
+        Label dateDebutRealLabel = new Label("Date début réalisation : " + t.getDateDebutReal());
+        Label descriptionLabel = new Label("Description : " + t.getDescription());
+        descriptionLabel.setWrapText(true); // Permet au texte de revenir à la ligne
+
+        for (Label label : new Label[]{nomLabel, dateLabel, urgenceLabel, tempsEstimeLabel, realiseLabel, dateDebutRealLabel, descriptionLabel}) {
+            VBox.setMargin(label, new Insets(0, 0, 0, 10));
+            label.setStyle("-fx-font-size: 16px; -fx-text-fill: #333;");
+        }
+
+        // Ajout de tous les éléments à la VBox
+        detailVBox.getChildren().addAll(
                 titleLabel, nomLabel, dateLabel, urgenceLabel, tempsEstimeLabel, realiseLabel,
                 dateDebutRealLabel, descriptionLabel
         );
 
-        Scene detailScene = new Scene(detail, 300, 400);
+        Scene detailScene = new Scene(detailVBox, 400, 500); // Taille ajustée
         detailStage.setScene(detailScene);
-        detailStage.show();
+        detailStage.showAndWait(); // showAndWait
     }
+
+
 
     @Override
     public void actualiser(Sujet s) {
@@ -279,6 +321,7 @@ public class VueTache extends VBox implements Observateur {
     public void vBoxSousTache(Tache st, VBox vb){
         for (Tache sousTache : st.getSousTaches()){
             VBox vsousTache =  new VBox();
+            vsousTache.setBorder(border);
             vsousTache.setId(sousTache.getNom());
             Label l = new Label(sousTache.getNom());
 
@@ -311,14 +354,8 @@ public class VueTache extends VBox implements Observateur {
                 }
             });
 
-            Circle circle;
-            if (sousTache.getDegreUrgence() == 1) {
-                circle = new Circle(10, Color.BLUE);
-            } else if (sousTache.getDegreUrgence() == 2) {
-                circle = new Circle(10, Color.ORANGE);
-            } else {
-                circle = new Circle(10, Color.RED);
-            }
+            Circle circle = new Circle(5); // Taille réduite
+            circle.setFill(getUrgencyColor(st.getDegreUrgence()));
 
             // Bouton pour afficher les détails
             Button details = new Button("Détails");
@@ -350,10 +387,11 @@ public class VueTache extends VBox implements Observateur {
 
             vsousTache.getChildren().addAll(l, hb);
             vsousTache.setPadding(new Insets(5));
-            vsousTache.setBorder(border);
             vsousTache.setSpacing(5);
 
+
             vb.getChildren().addAll(vsousTache);
+
 
             if (sousTache.isAfficherSousTache()) {
                 vBoxSousTache(sousTache, vsousTache);

@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -24,6 +25,17 @@ public class TacheListeFX extends HBox{
     private int idAncienneColonne;
     private Tache ancienneTache;
     private Tache tacheCourante;
+
+    Color lightVioletColor = Color.web("#C8A2C8");
+
+    BorderStroke borderStroke = new BorderStroke(
+            lightVioletColor,
+            BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY,
+            BorderWidths.DEFAULT
+    );
+
+    private Border borderV = new Border(borderStroke);
 
 
     private Border createElegantBorderRouge() {
@@ -50,12 +62,9 @@ public class TacheListeFX extends HBox{
     private Border createElegantBorderBleu() {
         Color borderColor = Color.BLUE;
         BorderStrokeStyle borderStyle = BorderStrokeStyle.SOLID;
-        // Coins arrondis
-        CornerRadii cornerRadii = new CornerRadii(5); // ajuster la valeur pour l'arrondi des coins
-        // Largeur de bordure
-        BorderWidths borderWidths = new BorderWidths(3); // bordure fine
+        CornerRadii cornerRadii = new CornerRadii(5);
+        BorderWidths borderWidths = new BorderWidths(3);
 
-        // créer la bordure (pour éviter l erreur)
         BorderStroke borderStroke = new BorderStroke(
                 borderColor,
                 borderStyle,
@@ -69,19 +78,21 @@ public class TacheListeFX extends HBox{
 
     private Border createElegantBorder() {
         Color borderColor = Color.LIGHTGRAY;
-        BorderStrokeStyle borderStyle = BorderStrokeStyle.SOLID;
-        // Coins arrondis
-        CornerRadii cornerRadii = new CornerRadii(5); // ajuster la valeur pour l'arrondi des coins
-        // Largeur de bordure
-        BorderWidths borderWidths = new BorderWidths(1); // bordure fine
 
-        // créer la bordure (pour éviter l erreur)
+        BorderStrokeStyle borderStyle = BorderStrokeStyle.SOLID;
+
+        CornerRadii cornerRadii = new CornerRadii(5);
+
+        BorderWidths borderWidths = new BorderWidths(3);
+
         BorderStroke borderStroke = new BorderStroke(
                 borderColor,
                 borderStyle,
                 cornerRadii,
                 borderWidths
         );
+
+        // Appliquer la bordure à un objet Border pour l'utiliser plus tard
         return new Border(borderStroke);
     }
 
@@ -100,12 +111,9 @@ public class TacheListeFX extends HBox{
         hbooox.setPadding(new Insets(5, 10, 5, 10));
         hbooox.setSpacing(10);
         hbooox.setStyle("-fx-border-color: lightgray; -fx-border-width: 1; -fx-background-color: white;");
-        hbooox.setBorder(borderBleu);
 
         VBox vBox = new VBox();
         vBox.setSpacing(10);
-
-        Accordion accordion = new Accordion();
 
         TitledPane titledPaneSousTaches = new TitledPane();
         titledPaneSousTaches.setText("Sous-tâches");
@@ -126,14 +134,13 @@ public class TacheListeFX extends HBox{
             vBox_sous_taches.getChildren().add(sousTache);
             vBox_sous_taches.setMargin(sousTache, new Insets(0, 0, 0, 35)); // Ajoute une marge de 20 pixels à gauche du label
 
-            //sousTache.setBorder(borderBleu);
         }
 
         titledPaneSousTaches.setContent(vBox_sous_taches);
         titledPaneSousTaches.setExpanded(true);
 
         Label titreTache = new Label(tache.getNom());
-        titreTache.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+        titreTache.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #854684;");
 
         Separator separator1 = new Separator(Orientation.VERTICAL);
         separator1.setPrefHeight(20); // Hauteur du séparateur
@@ -145,7 +152,16 @@ public class TacheListeFX extends HBox{
 
         Label dateDuJour = new Label(tache.getDateDebutReal().toString());
 
-        Circle urgenceCircle = new Circle(5, getColorByUrgency(tache.getDegreUrgence()));
+
+// Créer le bandeau d'urgence
+        Rectangle bandeau = new Rectangle(50, 15);
+        bandeau.setFill(getUrgencyColor(t.getDegreUrgence()));
+        // Définir l'arrondi des coins
+        bandeau.setArcWidth(10); // Largeur de l'arc pour les coins arrondis
+        bandeau.setArcHeight(10); // Hauteur de l'arc pour les coins arrondis
+        StackPane bandeauContainer = new StackPane(bandeau);
+        bandeauContainer.setAlignment(Pos.CENTER_LEFT);
+
 
         MenuButton menuButtonPlus = new MenuButton("...");
         MenuItem supprimer = new MenuItem("Supprimer tâche");
@@ -182,18 +198,21 @@ public class TacheListeFX extends HBox{
                     throw new RuntimeException(ex);
                 }
             });
-            deplacer.setOnAction(e -> {/* Logique pour déplacer la tâche */});
+            deplacer.setOnAction(e -> DeplacerTacheFX.afficher(t, modele, id));
             menuButtonPlus.getItems().addAll(supprimer, creerDependance, deplacer, ajouterSousTache, archiver);
         }
 
-        Button boutonDetails = new Button("Détails");
-        boutonDetails.setOnAction(e -> afficherDetails(tache));
+
+        Button detailsButton = new Button("Détails");
+        detailsButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;");
+        detailsButton.setOnAction(e -> afficherDetails(tache));
+
 
         // utiliser un Pane vide et HBox comme avant pour aligner les boutons à droite
         Pane spacer = new Pane();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        HBox buttonBox = new HBox(menuButtonPlus, boutonDetails);
+        HBox buttonBox = new HBox(menuButtonPlus, detailsButton);
         buttonBox.setAlignment(Pos.CENTER_RIGHT);
         buttonBox.setSpacing(10);
 
@@ -202,14 +221,21 @@ public class TacheListeFX extends HBox{
 
         vBox.getChildren().addAll(hbooox, titledPaneSousTaches);
 
-        hbooox.getChildren().addAll(titreTache, separator1, tempsEstime, separator2, dateDuJour, urgenceCircle, spacer, buttonBox);
+        hbooox.getChildren().addAll(titreTache, separator1, tempsEstime, separator2, dateDuJour, bandeauContainer, spacer, buttonBox);
 
         this.getChildren().add(vBox);
 
 
     }
 
-
+    // Méthode pour obtenir la couleur du bandeau en fonction du degré d'urgence
+    private Color getUrgencyColor(int urgency) {
+        switch (urgency) {
+            case 1: return Color.GREEN;
+            case 2: return Color.ORANGE;
+            default: return Color.RED;
+        }
+    }
 
     private Color getColorByUrgency(int urgency) {
         switch (urgency) {
@@ -270,7 +296,7 @@ public class TacheListeFX extends HBox{
                 dateDebutRealLabel, descriptionLabel
         );
 
-        Scene detailScene = new Scene(detailVBox, 400, 500); // Taille ajustée pour mieux s'adapter au contenu
+        Scene detailScene = new Scene(detailVBox, 400, 500); // Taille ajustée
         detailStage.setScene(detailScene);
         detailStage.showAndWait(); // showAndWait pour bloquer les autres fenêtres jusqu'à ce que celle-ci soit fermée
     }
